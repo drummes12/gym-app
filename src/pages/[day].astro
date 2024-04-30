@@ -1,0 +1,58 @@
+---
+import WorkoutCard from '@/components/workout-card.astro'
+import Layout from '@/layouts/Layout.astro'
+
+import { TRAINING } from '@/data/training'
+import { DAYS } from '@/const/days'
+
+export const getStaticPaths = () => {
+  return [
+    { params: { day: 'monday' } },
+    { params: { day: 'tuesday' } },
+    { params: { day: 'wednesday' } },
+    { params: { day: 'thursday' } },
+    { params: { day: 'friday' } },
+    { params: { day: 'saturday' } },
+    { params: { day: 'sunday' } },
+  ]
+}
+
+const { day } = Astro.params
+
+const training = TRAINING.filter((workout) => workout.day === day)
+const dayColor = DAYS[day].color
+const accentColor = `var(--accent-${dayColor})`
+---
+
+<Layout title='Gym App'>
+  {
+    training.map((workout) => {
+      return (
+        <section class={`pt-4 pb-8 [--accent:var(--accent-${dayColor})]`}>
+          <h2 class='text-lg font-bold text-zinc-400 mb-2'>{workout.zone}</h2>
+          <ul class='flex flex-col gap-6 [&>div]:flex [&>div]:gap-0.5 [&>div]:flex-col'>
+            {workout.workouts.map((workout) => {
+              if (Array.isArray(workout)) {
+                return (
+                  <div class='!flex-row justify-between flex-wrap'>
+                    {workout.map((workout) => {
+                      return <WorkoutCard {...workout} color={dayColor} />
+                    })}
+                  </div>
+                )
+              }
+              return <WorkoutCard {...workout} color={dayColor} />
+            })}
+          </ul>
+        </section>
+      )
+    })
+  }
+</Layout>
+
+<style define:vars={{ accentColor }}>
+  h1 {
+    @apply text-xl font-bold;
+    color: rgb(var(--accentColor));
+  }
+</style>
