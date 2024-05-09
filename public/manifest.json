@@ -1,0 +1,10 @@
+{
+  "name": "Gym App",
+  "short_name": "Gym App",
+  "theme_color": "#A062EE",
+  "background_color": "#13151a",
+  "display": "browser",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/"
+}

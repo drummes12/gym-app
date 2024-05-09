@@ -1,5 +1,6 @@
 ---
 import NavBar from '@/components/navbar.astro'
+import { PlayerBar } from '@/components/player-bar.jsx'
 import { ViewTransitions } from 'astro:transitions'
 
 interface Props {
@@ -16,15 +17,37 @@ const { title } = Astro.props
     <meta name='description' content='Gym app for tracking workouts' />
     <meta name='viewport' content='width=device-width' />
     <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
+    <link rel='manifest' href='/manifest.json' />
     <meta name='generator' content={Astro.generator} />
     <title>{title}</title>
     <ViewTransitions />
   </head>
   <body>
-    <NavBar />
-    <main class='max-w-3xl mx-auto px-8'>
-      <slot />
-    </main>
+    <div id='app' class='relative h-svh p-2 gap-2'>
+      <header class='[grid-area:header] h-20'>
+        <NavBar />
+      </header>
+
+      <main class='[grid-area:main] rounded-lg overflow-y-auto w-full'>
+        <slot />
+      </main>
+
+      <footer class='[grid-area:footer] h-20'>
+        <PlayerBar client:load transition:name='gym-player' transition:persist />
+      </footer>
+    </div>
+    <style>
+      #app {
+        display: grid;
+        grid-template-areas:
+          'header'
+          'main'
+          'footer';
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr auto;
+      }
+    </style>
+
     <style is:global>
       :root {
         --accent: 136, 58, 234;
@@ -117,6 +140,21 @@ const { title } = Astro.props
           Bitstream Vera Sans Mono,
           Courier New,
           monospace;
+      }
+
+      #bg-player {
+        opacity: 0.5;
+        list-style: none;
+        display: flex;
+        padding: 1px;
+        background-color: transparent;
+        background-image: none;
+        background-size: 100%;
+        border-radius: 7px;
+        background-position: 100%;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+        background-position: 0;
+        background-image: linear-gradient(to right, transparent, gray);
       }
     </style>
   </body>
