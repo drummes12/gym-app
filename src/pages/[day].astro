@@ -1,6 +1,6 @@
 ---
-import WorkoutCard from '@/components/workout-card.astro'
 import Layout from '@/layouts/Layout.astro'
+import WorkoutDay from '@/components/workout-day.astro'
 
 import { TRAINING } from '@/data/training'
 import { DAYS } from '@/const/days'
@@ -26,24 +26,11 @@ const accentColor = `var(--accent-${dayColor})`
 
 <Layout title='Gym App'>
   {
-    training.map((workout) => {
+    training.map(({ zone, workouts }) => {
       return (
         <section class={`pt-4 pb-8 [--accent:var(--accent-${dayColor})]`}>
-          <h2 class='text-lg font-bold text-zinc-400 mb-2'>{workout.zone}</h2>
-          <ul class='flex flex-col gap-6 [&>div]:flex [&>div]:gap-0.5 [&>div]:flex-col'>
-            {workout.workouts.map((workout) => {
-              if (Array.isArray(workout)) {
-                return (
-                  <div class='!flex-row justify-between flex-wrap'>
-                    {workout.map((workout) => {
-                      return <WorkoutCard {...workout} color={dayColor} />
-                    })}
-                  </div>
-                )
-              }
-              return <WorkoutCard {...workout} color={dayColor} />
-            })}
-          </ul>
+          <h2 class='text-lg font-bold text-zinc-400 mb-2'>{zone}</h2>
+          <WorkoutDay workouts={workouts} dayColor={dayColor} />
         </section>
       )
     })

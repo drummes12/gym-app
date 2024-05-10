@@ -1,0 +1,61 @@
+---
+import type { Workouts } from '@/types/Training'
+import { WorkoutCard } from './workout-card'
+
+interface Props {
+  workouts: Array<Workouts | Workouts[]>
+  dayColor?: string
+}
+
+const { workouts, dayColor = 'purple' } = Astro.props
+
+const lightColor = `var(--accent-light-${dayColor})`
+const darkColor = `var(--accent-dark-${dayColor})`
+const gradientColor = `var(--accent-gradient-${dayColor})`
+---
+
+<ul class='flex flex-col gap-6 [&>div]:flex [&>div]:gap-0.5 [&>div]:flex-col'>
+  {
+    workouts.map((workout) => {
+      if (Array.isArray(workout)) {
+        return (
+          <div class='!flex-row justify-between flex-wrap'>
+            {workout.map((workout) => {
+              return <WorkoutCard client:load {...workout} />
+            })}
+          </div>
+        )
+      }
+      return <WorkoutCard client:load {...workout} />
+    })
+  }
+</ul>
+
+<style is:global define:vars={{ lightColor, darkColor, gradientColor }}>
+  .link-card {
+    @apply flex-1 flex flex-col min-w-52 w-full p-3 list-none opacity-80;
+    color: white;
+    background-color: #23262d;
+    background-image: none;
+    background-size: 400%;
+    border-radius: 7px;
+    background-position: 100%;
+    transition: background-position 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+  .link-card h3,
+  .link-card h4 {
+    transition: color 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .link-card:is(:hover, :focus-within) {
+    background-position: 0;
+    background-image: var(--gradientColor);
+  }
+  .link-card:is(:hover, :focus-within) h3 {
+    color: rgb(var(--lightColor));
+  }
+  .link-card:is(:hover, :focus-within) h4,
+  .link-card:is(:hover, :focus-within) span {
+    color: rgb(var(--darkColor));
+  }
+</style>
