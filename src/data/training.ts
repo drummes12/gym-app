@@ -4,16 +4,14 @@ export const TRAINING: Training[] = [
   {
     day: 'monday',
     zone: 'Pectoral',
-    break: 90,
     workouts: [
       {
         title: 'Press de banca',
         variation: 'Unilateral',
-        sets: 4,
+        sets: 3,
         reps: 12,
         weight: 15,
         weightUnit: 'k/mancuerna',
-        rest: 10,
       },
       [
         {
@@ -131,14 +129,23 @@ export const TRAINING: Training[] = [
         weight: 45,
         weightUnit: 'lb/lado',
       },
-      {
-        title: 'Prensa de piernas',
-        variation: 'Unilateral',
-        sets: 4,
-        reps: 12,
-        weight: 45,
-        weightUnit: 'k',
-      },
+      [
+        {
+          title: 'Prensa de piernas',
+          variation: 'Unilateral',
+          sets: 4,
+          reps: 12,
+          weight: 45,
+          weightUnit: 'k',
+        },
+        {
+          title: 'Prensa de piernas',
+          sets: 4,
+          reps: 12,
+          weight: 90,
+          weightUnit: 'k',
+        },
+      ],
       {
         title: 'Sentadilla libre',
         sets: 4,
@@ -189,6 +196,8 @@ export const TRAINING: Training[] = [
           variation: 'Abiertas',
           sets: 4,
           reps: 8,
+          rest: 120,
+          breakRest: 120,
         },
         {
           title: 'Dominadas',
@@ -219,7 +228,7 @@ export const TRAINING: Training[] = [
           reps: 10,
           weight: 4,
           weightUnit: ' discos',
-        }
+        },
       ],
       {
         title: 'Fondos',
@@ -234,7 +243,7 @@ export const TRAINING: Training[] = [
         reps: 15,
         weight: 20,
         weightUnit: 'k',
-      }
+      },
     ],
   },
   {
@@ -257,7 +266,7 @@ export const TRAINING: Training[] = [
           reps: 12,
           weight: 80,
           weightUnit: 'k',
-        }
+        },
       ],
       [
         {
@@ -272,7 +281,7 @@ export const TRAINING: Training[] = [
           variation: 'Unilateral',
           weight: 10,
           weightUnit: ' pasos',
-        }
+        },
       ],
       {
         title: 'Hip thrust',
@@ -286,7 +295,7 @@ export const TRAINING: Training[] = [
         title: 'Prensa abierta',
         sets: 4,
         reps: 12,
-        weight: 45*3,
+        weight: 45 * 3,
         weightUnit: 'lb/lado',
       },
       {
@@ -329,7 +338,7 @@ export const TRAINING: Training[] = [
           title: 'Press militar con barra',
           sets: 4,
           reps: 10,
-        }
+        },
       ],
       {
         title: 'Elevación frontal con polea',
@@ -343,7 +352,7 @@ export const TRAINING: Training[] = [
         sets: 4,
         weight: 1,
         weightUnit: ' minuto',
-      }
-    ]
-  }
+      },
+    ],
+  },
 ]
