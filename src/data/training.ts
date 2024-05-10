@@ -4,6 +4,7 @@ export const TRAINING: Training[] = [
   {
     day: 'monday',
     zone: 'Pectoral',
+    break: 90,
     workouts: [
       {
         title: 'Press de banca',
@@ -12,6 +13,7 @@ export const TRAINING: Training[] = [
         reps: 12,
         weight: 15,
         weightUnit: 'k/mancuerna',
+        rest: 10,
       },
       [
         {

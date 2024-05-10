@@ -8,10 +8,19 @@ export interface Workouts {
   weight?: number;
   weightUnit?: string;
   additionalInfo?: string;
+  rest?: number;
+}
+
+export interface CurrentExcercise {
+  title: string;
+  currentSet: number;
+  totalSets: number;
+  nextWorkout: string;
 }
 
 export interface Training {
   day: DaysWeek
   zone: string;
+  break?: number;
   workouts: Array<Workouts | Workouts[]>;
 }
