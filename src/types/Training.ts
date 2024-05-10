@@ -9,9 +9,10 @@ export interface Workouts {
   weightUnit?: string;
   additionalInfo?: string;
   rest?: number;
+  breakRest?: number;
 }
 
-export interface CurrentExcercise {
+export interface CurrentExercise {
   title: string;
   currentSet: number;
   totalSets: number;
@@ -21,6 +22,5 @@ export interface CurrentExcercise {
 export interface Training {
   day: DaysWeek
   zone: string;
-  break?: number;
   workouts: Array<Workouts | Workouts[]>;
 }

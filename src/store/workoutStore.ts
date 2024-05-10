@@ -1,11 +1,16 @@
-import type { CurrentExcercise } from '@/types/Training'
+import type { CurrentExercise } from '@/types/Training'
 import { create } from 'zustand'
 
 export const useWorkoutStore = create((set) => ({
-  currentRestTime: 5,
   isRest: false,
-  currentExercise: {title: 'Press de Banca', currentSet: 0, totalSets: 0, nextWorkout: 'Press de Banca Inclinado'},
-  setCurrentRestTime: (currentRestTime: number) => set({ currentRestTime }),
+  currentExercise: {
+    title: 'Selecciona un ejercicio',
+    currentSet: 0,
+    totalSets: 0,
+    nextWorkout: 'Selecciona un ejercicio',
+    breakRest: 0,
+    rest: 0,
+  },
   setIsRest: (isRest: boolean) => set({ isRest }),
-  setCurrentExercise: (currentExercise: CurrentExcercise) => set({ currentExercise })
+  setCurrentExercise: (currentExercise: CurrentExercise) => set({ currentExercise }),
 }))
