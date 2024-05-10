@@ -1,7 +1,14 @@
 import type { CurrentExercise } from '@/types/Training'
 import { create } from 'zustand'
 
-export const useWorkoutStore = create((set) => ({
+export interface WorkoutStoreState {
+  isRest: boolean
+  currentExercise: CurrentExercise
+  setIsRest: (isRest: boolean) => void
+  setCurrentExercise: (currentExercise: CurrentExercise) => void
+}
+
+export const useWorkoutStore = create<WorkoutStoreState>((set) => ({
   isRest: false,
   currentExercise: {
     title: 'Selecciona un ejercicio',

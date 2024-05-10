@@ -13,10 +13,12 @@ export interface Workouts {
 }
 
 export interface CurrentExercise {
-  title: string;
-  currentSet: number;
-  totalSets: number;
-  nextWorkout: string;
+  title: string
+  currentSet: number
+  totalSets: number
+  nextWorkout: string
+  breakRest: number
+  rest: number
 }
 
 export interface Training {
