@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
+import confetti from 'canvas-confetti'
+
 import { useWorkoutStore } from '@/store/workoutStore'
 import { timeFormatted } from '@/lib/time'
-import { Pause } from '@/icons/pause'
-import { Play } from '@/icons/play'
+import { PlayRest } from './play-rest'
 
 export function PlayerBar() {
-  const { currentExercise, isRest, setIsRest, setCurrentExercise } = useWorkoutStore((state) => state)
+  const { currentExercise, isRest, dialogElement, setIsRest, setCurrentExercise } = useWorkoutStore((state) => state)
 
   const [currentRestTime, setCurrentRestTime] = useState(currentExercise.rest)
   const [time, setTime] = useState(currentExercise.rest)
@@ -47,6 +48,8 @@ export function PlayerBar() {
       const newRestTime = currentSet === totalSets - 2 ? breakRest ?? rest : rest
       setCurrentRestTime(newRestTime)
       setTime(newRestTime)
+      dialogElement?.showModal()
+      confetti()
     } else {
       setCurrentExercise({
         ...currentExercise,
@@ -57,12 +60,8 @@ export function PlayerBar() {
     }
   }
 
-  const handleClick = () => {
-    if (currentSet > totalSets || time === 0) return
-    setIsRest(!isRest)
-  }
-
   const { title, nextWorkout, currentSet, totalSets } = currentExercise
+
   return (
     <div className='relative flex items-center gap-2 px-4 w-full h-full rounded-lg overflow-hidden text-white/80'>
       <div
@@ -70,9 +69,7 @@ export function PlayerBar() {
         className='absolute left-0 top-0 -z-10 bg-white/50 h-full'
         style={{ width: `${(100 * time) / currentRestTime}%` }}
       ></div>
-      <button className='bg-zinc-800/70 rounded-full p-4' onClick={handleClick}>
-        {isRest ? <Pause /> : <Play />}
-      </button>
+      <PlayRest />
 
       <div className='w-1/2'>
         {currentSet < totalSets - 1 ? (

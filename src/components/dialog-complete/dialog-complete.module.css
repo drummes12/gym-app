@@ -1,7 +1,7 @@
 dialog {
-  @apply p-0 border-0;
+  @apply relative overflow-visible p-4 border-0 bg-zinc-900/90 text-white rounded-lg shadow-md shadow-neon/50;
 
   &::backdrop {
-    @apply bg-black bg-opacity-50 backdrop-blur-sm;
+    @apply bg-black bg-opacity-20 backdrop-blur-sm;
   }
 }
