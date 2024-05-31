@@ -1,6 +1,6 @@
 import type { DaysWeek } from "@/types/Days";
 
-export interface Workouts {
+export interface Workout {
   title: string;
   variation?: string;
   sets?: number;
@@ -12,17 +12,12 @@ export interface Workouts {
   breakRest?: number;
 }
 
-export interface CurrentExercise {
-  title: string
+export interface CurrentExercise extends Workout {
   currentSet: number
-  totalSets: number
-  nextWorkout: string
-  breakRest: number
-  rest: number
 }
 
 export interface Training {
   day: DaysWeek
   zone: string;
-  workouts: Array<Workouts | Workouts[]>;
+  workouts: Array<Workout | Workout[]>;
 }

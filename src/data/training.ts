@@ -8,7 +8,7 @@ export const TRAINING: Training[] = [
       {
         title: 'Press de banca',
         variation: 'Unilateral',
-        sets: 3,
+        sets: 4,
         reps: 12,
         weight: 15,
         weightUnit: 'k/mancuerna',
