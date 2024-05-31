@@ -1,90 +1,40 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+
 import { useWorkoutStore } from '@/store/workoutStore'
 import { timeFormatted } from '@/lib/time'
-import { Pause } from '@/icons/pause'
-import { Play } from '@/icons/play'
+import { PlayRest } from './play-rest'
 
 export function PlayerBar() {
-  const { currentExercise, isRest, setIsRest, setCurrentExercise } = useWorkoutStore((state) => state)
-
-  const [currentRestTime, setCurrentRestTime] = useState(currentExercise.rest)
-  const [time, setTime] = useState(currentExercise.rest)
-
-  useEffect(() => {
-    setCurrentRestTime(currentExercise.rest)
-    setTime(currentExercise.rest)
-  }, [currentExercise.rest])
+  const { timeRest, currentRestDuration, currentExercise, nextExercise, isRest, startTimer } = useWorkoutStore(
+    (state) => state
+  )
 
   useEffect(() => {
-    let intervalId = null
-    if (isRest) {
-      intervalId = setInterval(() => {
-        setTime((currentTime) => currentTime - 1)
-      }, 1000)
-    } else if (!isRest) {
-      clearInterval(intervalId)
-    }
+    if (isRest) startTimer()
+  }, [isRest, startTimer])
 
-    return () => clearInterval(intervalId)
-  }, [isRest])
+  const { title, currentSet, sets } = currentExercise ?? {}
 
-  useEffect(() => {
-    if (time === 0) {
-      setIsRest(false)
-      handleSetCompletion()
-    }
-  }, [time])
-
-  function handleSetCompletion() {
-    const { currentSet, totalSets, rest, breakRest } = currentExercise
-
-    if (currentSet < totalSets - 1) {
-      const newCurrentSet = currentSet + 1
-      setCurrentExercise({
-        ...currentExercise,
-        currentSet: newCurrentSet,
-      })
-      const newRestTime = currentSet === totalSets - 2 ? breakRest ?? rest : rest
-      setCurrentRestTime(newRestTime)
-      setTime(newRestTime)
-    } else {
-      setCurrentExercise({
-        ...currentExercise,
-        currentSet: 0,
-      })
-      setCurrentRestTime(rest)
-      setTime(rest)
-    }
-  }
-
-  const handleClick = () => {
-    if (currentSet > totalSets || time === 0) return
-    setIsRest(!isRest)
-  }
-
-  const { title, nextWorkout, currentSet, totalSets } = currentExercise
   return (
     <div className='relative flex items-center gap-2 px-4 w-full h-full rounded-lg overflow-hidden text-white/80'>
       <div
         id='bg-player'
         className='absolute left-0 top-0 -z-10 bg-white/50 h-full'
-        style={{ width: `${(100 * time) / currentRestTime}%` }}
+        style={{ width: `${(100 * timeRest) / currentRestDuration}%` }}
       ></div>
-      <button className='bg-zinc-800/70 rounded-full p-4' onClick={handleClick}>
-        {isRest ? <Pause /> : <Play />}
-      </button>
+      <PlayRest />
 
       <div className='w-1/2'>
-        {currentSet < totalSets - 1 ? (
+        {currentSet < sets - 1 ? (
           <>
             <p className='font-semibold text-xl leading-none'>{title}</p>
             <p className='text-xs'>
-              {currentSet} de {totalSets}
+              {currentSet} de {sets}
             </p>
           </>
         ) : (
           <>
-            <p className='font-semibold text-xl leading-none'>{nextWorkout}</p>
+            <p className='font-semibold text-xl leading-none'>{nextExercise?.title}</p>
             <p className='text-xs'>Siguiente Ejercicio</p>
           </>
         )}
@@ -96,11 +46,11 @@ export function PlayerBar() {
       >
         <p>
           <span className='text-base leading-none'>min</span>
-          {timeFormatted(time).minutesFormatted}
+          {timeFormatted(timeRest).minutesFormatted}
         </p>
         <p className='flex'>
           <span className='text-base leading-none'>seg</span>
-          {timeFormatted(time).secondsFormatted}
+          {timeFormatted(timeRest).secondsFormatted}
         </p>
       </div>
     </div>

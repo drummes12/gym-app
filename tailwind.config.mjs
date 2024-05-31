@@ -5,6 +5,9 @@ export default {
 		extend: {
 			fontFamily: {
 				dseg14: ['DSEG14 Classic', 'sans-serif'],
+			},
+			colors: {
+				neon: '#ffff00',
 			}
 		},
 	},

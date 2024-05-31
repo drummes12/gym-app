@@ -1,42 +1,20 @@
-import { TRAINING } from '@/data/training'
 import { useWorkoutStore } from '@/store/workoutStore'
-import type { Workouts } from '@/types/Training'
+import type { Workout } from '@/types/Training'
 
-const REST = 60
-const BREAK = 90
-
-export function WorkoutCard({
-  title,
-  variation,
-  sets,
-  reps,
-  weight,
-  weightUnit,
-  additionalInfo,
-  rest,
-  breakRest,
-}: Workouts) {
+export function WorkoutCard(workout: Workout) {
+  const { title, variation, sets, reps, weight, weightUnit, additionalInfo } = workout
   const { isRest, currentExercise, setCurrentExercise } = useWorkoutStore((state) => state)
 
   const handleClick = () => {
-    const { currentSet, totalSets } = currentExercise
-    if (isRest || (currentSet !== 0 && currentSet <= totalSets)) return
+    if (currentExercise === null) {
+      setCurrentExercise({ ...workout, currentSet: 0 })
+      return
+    }
 
-    const flattenedWorkouts = TRAINING.flatMap(training => 
-      training.workouts.flatMap(workout => 
-        Array.isArray(workout) ? workout.slice(0, 1) : [workout]
-      )
-    )
-    const nextWorkoutIndex = flattenedWorkouts.findIndex(workout => workout.title === title) + 1
-    
-    setCurrentExercise({
-      title,
-      currentSet: 0,
-      totalSets: sets ?? 1,
-      nextWorkout: flattenedWorkouts[nextWorkoutIndex]?.title ?? 'Terminaste 🦾',
-      breakRest: breakRest ?? BREAK,
-      rest: rest ?? REST,
-    })
+    const { currentSet, sets = 0 } = currentExercise
+    if (isRest || (currentSet !== 0 && currentSet <= sets)) return
+
+    setCurrentExercise({ ...workout, currentSet: 0 })
   }
 
   return (
