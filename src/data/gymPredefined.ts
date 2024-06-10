@@ -261,7 +261,7 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
 export const WORKOUT_DAY: WorkoutDay[] = [
   {
     id: 'f4e9b3d7-1b1f-4d9b-8f5d-8d4b5f3d8f4d',
-    day: 'Day 1',
+    day: 'day1',
     zone_ids: [
       '352969cd-1884-48cb-9b41-b1193a70346c',
       'd6265f7c-1441-4610-8def-ad7399874462'
