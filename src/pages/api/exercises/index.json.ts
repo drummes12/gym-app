@@ -1,47 +1,64 @@
-import { EXERCISES } from '@/data/gymPredefined'
+import { EXERCISES, BODY_ZONES } from '@/data/gymPredefined'
+import { createResponse, sanitizeString } from '@/lib/utils'
 import type { Exercises } from '@/types/GymTracker'
 
 export async function GET({ request }: { request: Request }) {
   const url = new URL(request.url)
   const params = new URLSearchParams(url.search)
 
-  const filters: Partial<Record<keyof Exercises, string>> = {
+  const exerciseSearchParams: Partial<Record<keyof Exercises, string>> = {
     title: sanitizeString(params.get('title')),
-    zone_id: sanitizeString(params.get('zone_id')),
+    zone_id: params.get('zone_id') ?? undefined,
     variation: sanitizeString(params.get('variation'))
   }
 
-  const filteredExercises = EXERCISES.filter((exercise) =>
-    Object.entries(filters).some(
-      ([key, value]) =>
-        value != null &&
-        sanitizeString(exercise[key as keyof Exercises])?.includes(value)
+  const filterByZone = sanitizeString(params.get('zone'))
+  if (filterByZone) {
+    const zone = BODY_ZONES.find((zone) =>
+      sanitizeString(zone.name)?.includes(filterByZone)
     )
-  )
-
-  if (filteredExercises.length < 1) {
-    return new Response(JSON.stringify(EXERCISES), {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
+    if (zone) {
+      exerciseSearchParams.zone_id = zone.id
+    }
   }
 
-  return new Response(JSON.stringify(filteredExercises), {
-    status: 200,
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
+  if (
+    Object.values(exerciseSearchParams).every((value) => value == null) &&
+    filterByZone == null
+  ) {
+    return createResponse(EXERCISES)
+  }
+
+  const filteredExercises = filterExercises(exerciseSearchParams)
+
+  if (filteredExercises.length < 1) {
+    return createResponse(
+      {
+        error: 'No exercises found',
+        filters: exerciseSearchParams
+      },
+      404
+    )
+  }
+
+  const response = {
+    exercises: filteredExercises,
+    total: filteredExercises.length,
+    filters: exerciseSearchParams
+  }
+  return createResponse(response)
 }
 
-function sanitizeString(str: any | null) {
-  if (typeof str !== 'string') return str ?? undefined
-  return (
-    str
-      .toString()
-      .replaceAll(/[^a-zA-Z0-9]/g, '')
-      .toLowerCase() ?? undefined
+function filterExercises(
+  searchParams: Partial<Record<keyof Exercises, string>>
+) {
+  return EXERCISES.filter((exercise) =>
+    Object.entries(searchParams).some(([key, value]) => {
+      if (value == null) return false
+      if (key.includes('id')) {
+        return exercise[key as keyof Exercises] === value
+      }
+      return sanitizeString(exercise[key as keyof Exercises])?.includes(value)
+    })
   )
 }

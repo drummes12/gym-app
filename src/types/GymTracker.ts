@@ -2,7 +2,7 @@ export type UUID = string
 
 export const MODE_SERIES = {
   SUPER_SETS: 'super_sets',
-  ALTERNATING_SETS: 'aternating_sets'
+  ALTERNATING_SETS: 'alternating_sets'
 }
 
 export interface BodyZones {
@@ -26,6 +26,7 @@ export interface Exercises {
 
 export interface GroupedExercises {
   id: UUID
+  series_id: UUID
   exercise_id: UUID
   order: number
   repetitions?: number
@@ -36,7 +37,6 @@ export interface GroupedExercises {
 
 export interface ExercisesSeries {
   id: UUID
-  grouped_exercises_id: UUID
   mode: string
   sets?: number
   rest_between_sets?: number
@@ -47,6 +47,7 @@ export interface WorkoutSession {
   id: UUID
   exercises_series: Array<{
     exercise_series_id: UUID
+    type: 'individual' | 'series'
     additional_info?: string
   }>
 }
