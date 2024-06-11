@@ -4,7 +4,7 @@ import { useWorkoutStore } from '@/store/workoutStore'
 
 export function PlayRest() {
   const { currentExercise, isRest, setIsRest } = useWorkoutStore((state) => state)
-  const { currentSet, sets } = currentExercise ?? {}
+  const { currentSet = 0, sets = 0 } = currentExercise ?? {}
 
   const handleClick = () => {
     if (currentSet > sets || sets === 0) return

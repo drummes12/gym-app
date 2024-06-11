@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 import { useWorkoutStore } from '@/store/workoutStore'
 import { timeFormatted } from '@/lib/time'
-import { PlayRest } from './play-rest'
+import { PlayRest } from '@/components/play-rest'
 
 export function PlayerBar() {
   const { timeRest, currentRestDuration, currentExercise, nextExercise, isRest, startTimer } = useWorkoutStore(
@@ -13,7 +13,7 @@ export function PlayerBar() {
     if (isRest) startTimer()
   }, [isRest, startTimer])
 
-  const { title, currentSet, sets } = currentExercise ?? {}
+  const { title, currentSet = 0, sets = 0 } = currentExercise ?? {}
 
   return (
     <div className='relative flex items-center gap-2 px-4 w-full h-full rounded-lg overflow-hidden text-white/80'>

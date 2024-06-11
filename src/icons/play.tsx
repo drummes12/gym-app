@@ -1,4 +1,4 @@
-export const Play = ({ className }) => (
+export const Play = ({ className }: { className?: string }) => (
   <svg className={className} role='img' height='24' width='24' aria-hidden='true' viewBox='0 0 16 16'>
     <path
       fill='currentColor'

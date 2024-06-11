@@ -2,13 +2,14 @@ import { useEffect } from 'react'
 import styles from '@/components/dialog-complete/dialog-complete.module.css'
 import { useWorkoutStore } from '@/store/workoutStore'
 import { Close } from '@/icons/close.jsx'
-import { PlayRest } from '../play-rest'
+import { PlayRest } from '@/components/play-rest'
 
 export function DialogComplete() {
   const { currentExercise, nextExercise, setDialogElement } = useWorkoutStore((state) => state)
 
   useEffect(() => {
     const $dialog = document.querySelector('dialog')
+    if (!$dialog) return
 
     $dialog.addEventListener('mousedown', (e) => {
       if (e.target === $dialog) {
@@ -18,7 +19,7 @@ export function DialogComplete() {
     setDialogElement($dialog)
   }, [])
 
-  const { title, currentSet, sets } = currentExercise ?? {}
+  const { title, currentSet = 0, sets = 0 } = currentExercise ?? {}
   return (
     <dialog>
       <form method='dialog' className={styles.dialog}>
