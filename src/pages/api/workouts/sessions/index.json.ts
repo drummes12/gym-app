@@ -1,10 +1,6 @@
 import { WORKOUT_SESSION } from '@/data/gymPredefined'
+import { createResponse } from '@/lib/utils'
 
 export async function GET() {
-  return new Response(JSON.stringify(WORKOUT_SESSION), {
-    status: 200,
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
+  return createResponse(WORKOUT_SESSION)
 }

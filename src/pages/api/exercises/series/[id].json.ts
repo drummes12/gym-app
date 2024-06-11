@@ -8,7 +8,7 @@ export async function GET({ params }: { params: { id: string } }) {
   if (!matchingExercisesSerie) {
     return createResponse(
       {
-        error: 'No exercises serie found',
+        error: 'Exercises serie not found',
         filters: params
       },
       404

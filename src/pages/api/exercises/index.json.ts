@@ -34,7 +34,7 @@ export async function GET({ request }: { request: Request }) {
   if (filteredExercises.length < 1) {
     return createResponse(
       {
-        error: 'No exercises found',
+        error: 'Exercises not found',
         filters: exerciseSearchParams
       },
       404
