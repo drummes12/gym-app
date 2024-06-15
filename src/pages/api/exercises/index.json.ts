@@ -1,8 +1,10 @@
+import type { APIRoute } from 'astro'
+
 import { EXERCISES, BODY_ZONES } from '@/data/gymPredefined'
 import { createResponse, sanitizeString } from '@/lib/utils'
 import type { Exercises } from '@/types/GymTracker'
 
-export async function GET({ request }: { request: Request }) {
+export const GET: APIRoute = async ({ request }) => {
   const url = new URL(request.url)
   const params = new URLSearchParams(url.search)
 

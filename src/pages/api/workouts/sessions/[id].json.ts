@@ -1,7 +1,9 @@
+import type { APIRoute } from 'astro'
+
 import { WORKOUT_SESSION } from '@/data/gymPredefined'
 import { createResponse } from '@/lib/utils'
 
-export async function GET({ params }: { params: { id: string } }) {
+export const GET: APIRoute = async ({ params }) => {
   const matchingSession = WORKOUT_SESSION.find(
     (workout) => workout.id === params.id
   )
