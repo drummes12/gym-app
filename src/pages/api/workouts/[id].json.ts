@@ -4,9 +4,8 @@ import { WORKOUT_DAY } from '@/data/gymPredefined'
 import { createResponse } from '@/lib/utils'
 
 export const GET: APIRoute = async ({ params }) => {
-  const targetWorkout = WORKOUT_DAY.find(
-    (workout) => workout.day === params.day
-  )
+  const targetWorkout = WORKOUT_DAY.find((workout) => workout.id === params.id)
+  console.log('🚀 ~ targetWorkout:', targetWorkout)
   if (!targetWorkout) {
     return createResponse({ error: 'Day not found' }, 404)
   }

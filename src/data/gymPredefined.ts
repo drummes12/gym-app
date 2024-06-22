@@ -4,7 +4,7 @@ import {
   type Exercises,
   type ExercisesSeries,
   type GroupedExercises,
-  type WorkoutDay,
+  type WorkoutDays,
   type WorkoutSession
 } from '@/types/GymTracker'
 
@@ -235,23 +235,28 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
     exercises_series: [
       {
         exercise_series_id: 'd8ac623e-c8de-479d-b2be-0b8183bc4eed',
+        sequence: 1,
         type: 'individual',
         additional_info: 'Unilateral'
       },
       {
         exercise_series_id: 'ac198865-f463-481e-8e73-f09f7ab20eef',
+        sequence: 2,
         type: 'series'
       },
       {
         exercise_series_id: '341cae74-3554-4e49-985a-26fb91244dfe',
+        sequence: 3,
         type: 'series'
       },
       {
         exercise_series_id: '6eec856e-f45b-4596-bf89-b8311ccb5cd3',
+        sequence: 4,
         type: 'series'
       },
       {
         exercise_series_id: '1e8d3353-f51e-49d6-8e02-d1ac1684a7e2',
+        sequence: 5,
         type: 'individual'
       }
     ]
@@ -261,20 +266,24 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
     exercises_series: [
       {
         exercise_series_id: '90b4caac-99a2-4f2d-834a-87123fb8ac16',
+        sequence: 1,
         additional_info: 'Barra',
         type: 'individual'
       },
       {
         exercise_series_id: 'bff2ccb0-f85f-47e6-b1b4-e481c509b7e9',
+        sequence: 2,
         additional_info: 'Unilateral',
         type: 'individual'
       },
       {
         exercise_series_id: '3c05f312-df60-4f16-808b-74439b85a115',
+        sequence: 3,
         type: 'individual'
       },
       {
         exercise_series_id: 'e83e7df5-0c78-4ecb-9042-1ad3043a6061',
+        sequence: 4,
         additional_info: '10 + 10 + 10',
         type: 'individual'
       }
@@ -282,17 +291,20 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
   }
 ]
 
-export const WORKOUT_DAY: WorkoutDay[] = [
+export const WORKOUT_DAY: WorkoutDays[] = [
   {
     id: 'f4e9b3d7-1b1f-4d9b-8f5d-8d4b5f3d8f4d',
     day: 'day1',
-    zone_ids: [
-      '352969cd-1884-48cb-9b41-b1193a70346c',
-      'd6265f7c-1441-4610-8def-ad7399874462'
-    ],
-    workout_session_ids: [
-      'ee29b3da-c078-4f3a-8e68-c32a09cd0271',
-      '7aeb0448-a9e2-4586-a847-cbd12c3d8d7d'
+    title: 'Dia 1',
+    workout_sessions: [
+      {
+        zone_id: '352969cd-1884-48cb-9b41-b1193a70346c',
+        workout_session_id: 'ee29b3da-c078-4f3a-8e68-c32a09cd0271'
+      },
+      {
+        zone_id: 'd6265f7c-1441-4610-8def-ad7399874462',
+        workout_session_id: '7aeb0448-a9e2-4586-a847-cbd12c3d8d7d'
+      }
     ]
   }
 ]

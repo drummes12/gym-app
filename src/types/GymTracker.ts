@@ -47,14 +47,18 @@ export interface WorkoutSession {
   id: UUID
   exercises_series: Array<{
     exercise_series_id: UUID
+    sequence: number
     type: 'individual' | 'series'
     additional_info?: string
   }>
 }
 
-export interface WorkoutDay {
+export interface WorkoutDays {
   id: UUID
   day: string
-  zone_ids: UUID[]
-  workout_session_ids: UUID[]
+  title: string
+  workout_sessions: {
+    zone_id: UUID
+    workout_session_id: UUID
+  }[]
 }

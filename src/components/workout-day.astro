@@ -7,11 +7,7 @@ interface Props {
   dayColor?: string
 }
 
-const { workouts, dayColor = 'purple' } = Astro.props
-
-const lightColor = `var(--accent-light-${dayColor})`
-const darkColor = `var(--accent-dark-${dayColor})`
-const gradientColor = `var(--accent-gradient-${dayColor})`
+const { workouts } = Astro.props
 ---
 
 <ul class='flex flex-col gap-6 [&>div]:flex [&>div]:gap-0.5 [&>div]:flex-col'>
@@ -31,7 +27,7 @@ const gradientColor = `var(--accent-gradient-${dayColor})`
   }
 </ul>
 
-<style is:global define:vars={{ lightColor, darkColor, gradientColor }}>
+<style>
   .link-card {
     @apply flex-1 flex flex-col min-w-52 w-full p-3 list-none opacity-80;
     color: white;
@@ -42,20 +38,21 @@ const gradientColor = `var(--accent-gradient-${dayColor})`
     background-position: 100%;
     transition: background-position 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-  }
-  .link-card h3,
-  .link-card h4 {
-    transition: color 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .link-card:is(:hover, :focus-within) {
-    background-position: 0;
-    background-image: var(--gradientColor);
-  }
-  .link-card:is(:hover, :focus-within) h3 {
-    color: rgb(var(--lightColor));
-  }
-  .link-card:is(:hover, :focus-within) h4,
-  .link-card:is(:hover, :focus-within) span {
-    color: rgb(var(--darkColor));
+
+    h3,
+    h4 {
+      transition: color 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    &:is(:hover, :focus-within) {
+      background-position: 0;
+      background-image: rgb(var(--accent-gradient-purple));
+    }
+    &:is(:hover, :focus-within) h3 {
+      color: rgb(var(--accent-light-purple));
+    }
+    &:is(:hover, :focus-within) h4,
+    &:is(:hover, :focus-within) span {
+      color: rgb(var(--accent-dark-purple));
+    }
   }
 </style>

@@ -1,0 +1,98 @@
+---
+import Layout from '@/layouts/Layout.astro'
+
+import type { Exercises, WorkoutDays, WorkoutSession } from '@/types/GymTracker'
+import { ExerciseCard } from '@/components/exercise-card/exercise-card'
+
+type WorkoutDayResponse = WorkoutDays | { error?: string }
+
+const { day_id } = Astro.params
+
+const endpointWorkout = new URL(`/api/workouts/${day_id}.json`, Astro.url)
+const workoutDay: WorkoutDayResponse = await fetch(endpointWorkout).then(
+  (res) => res.json()
+)
+
+if (!('workout_sessions' in workoutDay)) {
+  return new Response(null, {
+    status: 404,
+    statusText: 'Not found'
+  })
+}
+
+const workoutSessions = []
+for (const workoutSession of workoutDay.workout_sessions) {
+  const { workout_session_id: sessionId } = workoutSession
+  const endpointWorkoutSession = new URL(
+    `/api/workouts/sessions/${sessionId}.json`,
+    Astro.url
+  )
+  const workoutSessionData: WorkoutSession = await fetch(
+    endpointWorkoutSession
+  ).then((res) => res.json())
+  const { exercises_series } = workoutSessionData
+
+  const series = []
+  for (const exercise of exercises_series) {
+    const { exercise_series_id, type, ...serie } = exercise
+    if (type === 'series') {
+      const endpointExercise = new URL(
+        `/api/exercises/series/${exercise_series_id}.json`,
+        Astro.url
+      )
+      const serieData = await fetch(endpointExercise).then((res) => res.json())
+
+      let exercises = []
+      for (const serieInfo of serieData.exercises) {
+        const endpointExercise = new URL(
+          `/api/exercises/${serieInfo.exercise_id}.json`,
+          Astro.url
+        )
+        const exerciseData = await fetch(endpointExercise).then((res) =>
+          res.json()
+        )
+        exercises.push({ ...exerciseData, ...serieInfo })
+      }
+      series.push({ ...serieData, ...serie, exercises })
+    }
+    if (type === 'individual') {
+      const endpointExercise = new URL(
+        `/api/exercises/${exercise_series_id}.json`,
+        Astro.url
+      )
+      const exerciseData = await fetch(endpointExercise).then((res) =>
+        res.json()
+      )
+      series.push({ ...exerciseData, ...serie })
+    }
+  }
+  workoutSessions.push({ ...workoutSession, exercises_series: series })
+}
+---
+
+<Layout title='Gym App'>
+  {
+    workoutSessions.map((workoutSession) => {
+      return (
+        <section class='pt-4 pb-8'>
+          <h1>{workoutSession.zone_id}</h1>
+          <ul class='flex flex-col gap-2 [&>div]:flex [&>div]:gap-1 [&>div]:flex-col'>
+            {workoutSession.exercises_series.map((serie) => {
+              if (serie?.mode) {
+                return (
+                  <div class='flex !flex-row justify-between flex-wrap'>
+                    {serie.exercises.map((exercise: Exercises) => {
+                      return <ExerciseCard client:load exercise={exercise} />
+                    })}
+                  </div>
+                )
+              }
+
+              return <ExerciseCard client:load exercise={serie} />
+            })}
+          </ul>
+        </section>
+      )
+    })
+  }
+</Layout>
