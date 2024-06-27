@@ -45,12 +45,7 @@ export interface ExercisesSeries {
 
 export interface WorkoutSession {
   id: UUID
-  exercises_series: Array<{
-    exercise_series_id: UUID
-    sequence: number
-    type: 'individual' | 'series'
-    additional_info?: string
-  }>
+  exercises_series: Array<ExerciseSeriesWorkout>
 }
 
 export interface WorkoutDays {
@@ -61,4 +56,21 @@ export interface WorkoutDays {
     zone_id: UUID
     workout_session_id: UUID
   }[]
+}
+
+export type WorkoutDayResponse = WorkoutDays | { error?: string }
+
+export interface ExercisesSeriesResponse extends ExercisesSeries {
+  exercises: GroupedExercises[]
+}
+
+export interface ExerciseSeriesWorkout {
+  exercise_series_id: UUID
+  sequence: number
+  type: 'individual' | 'series'
+  additional_info?: string
+}
+
+export interface CurrentExercise extends Exercises {
+  currentSet: number
 }

@@ -1,9 +1,11 @@
+import { useEffect, useState } from "react"
+import { useWorkoutStore } from "@/store/workoutStore"
 import type { Exercises } from "@/types/GymTracker"
 
 import styles from './exercise-card.module.css'
-import { useWorkoutStore } from "@/store/workoutStore"
 
 export function ExerciseCard({ exercise }: { exercise: Exercises }) {
+  const [isActive, setIsActive] = useState(false)
   const { title, variation, sets, repetitions, weight, weight_unit: weightUnit, additional_info: additionalInfo } = exercise
 
   const { isRest, currentExercise, setCurrentExercise } = useWorkoutStore((state) => state)
@@ -20,8 +22,12 @@ export function ExerciseCard({ exercise }: { exercise: Exercises }) {
     setCurrentExercise({ ...exercise, currentSet: 0 })
   }
 
+  useEffect(() => {
+    setIsActive(currentExercise?.id === exercise.id)
+  }, [currentExercise])
+
   return (
-  <li className={styles['link-card']}>
+  <li className={`${styles['link-card']} ${isActive ? 'current-exercise' : ''}`}>
     <button className='w-full' onClick={handleClick}>
       <header className='flex gap-2 items-center justify-between'>
         <h3 className='text-left mr-1 font-semibold text-xl'>{title}</h3>

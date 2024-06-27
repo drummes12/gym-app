@@ -14,7 +14,6 @@ const [, day] = href.split('/')
   <a href={href}>
     <h2 transition:name={`title-page-${day}`}>
       {title}
-      <span>&rarr;</span>
     </h2>
     <p>
       {body}
@@ -43,14 +42,29 @@ const [, day] = href.split('/')
       background-color: #23262d;
       opacity: 0.8;
     }
-    &:is(:hover, :focus-within) {
-      background-position: 0;
-      background-image: var(--accent-gradient);
+
+    h3,
+    h4 {
+      transition: color 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    &:is(:hover, :focus-within) h2 {
-      color: rgb(var(--accent-light));
+
+    @media (min-width: 640px) {
+      &:is(:hover, :focus-within) {
+        background-position: 0;
+        background-image: var(--accent-gradient);
+        box-shadow: inset 0 0 0 2px rgb(var(--accent-light));
+      }
+      &:is(:hover, :focus-within) h3,
+      &:is(:hover, :focus-within) p {
+        color: rgb(var(--accent-light));
+      }
+      &:is(:hover, :focus-within) h4,
+      &:is(:hover, :focus-within) span {
+        color: rgb(var(--accent-dark));
+      }
     }
   }
+
   h2 {
     margin: 0;
     font-size: 1.25rem;

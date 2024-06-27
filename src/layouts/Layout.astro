@@ -69,6 +69,16 @@ const { title } = Astro.props
           rgb(var(--accent-light)) 30%,
           white 60%
         );
+
+        --accent-neon: 255, 255, 0;
+        --accent-neon-light: 255, 255, 200;
+        --accent-neon-dark: 30, 30, 0;
+        --accent-neon-gradient: linear-gradient(
+          45deg,
+          rgb(var(--accent-neon), 0.5),
+          rgb(var(--accent-neon-light), 0.5) 30%,
+          white 60%
+        );
       }
       html {
         font-family: system-ui, sans-serif;
@@ -87,6 +97,21 @@ const { title } = Astro.props
           monospace;
       }
 
+      li.current-exercise {
+        background-position: 0;
+        background-image: var(--accent-neon-gradient);
+        box-shadow: inset 0 0 0 2px rgb(var(--accent-neon-light));
+
+        & h3,
+        & p {
+          color: rgb(var(--accent-neon-light));
+        }
+        & h4,
+        & span {
+          color: rgb(var(--accent-neon-dark));
+        }
+      }
+
       #bg-player {
         opacity: 0.3;
         list-style: none;
@@ -99,7 +124,12 @@ const { title } = Astro.props
         background-position: 100%;
         box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
         background-position: 0;
-        background-image: linear-gradient(to right, transparent, #ffff00);
+        background-image: linear-gradient(
+          to right,
+          #ffff00,
+          transparent,
+          #ffff00
+        );
       }
 
       #timer-rest {

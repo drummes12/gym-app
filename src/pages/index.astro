@@ -5,7 +5,7 @@ import type { WorkoutDays } from '@/types/GymTracker'
 
 const title = 'Gym App'
 
-const endpointWorkout = new URL('/api/workouts.json', Astro.url)
+const endpointWorkout = new URL('/api/workouts', Astro.url)
 const workoutsDay: WorkoutDays[] = await fetch(endpointWorkout).then((res) =>
   res.json()
 )

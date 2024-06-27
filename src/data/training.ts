@@ -11,7 +11,7 @@ export const TRAINING: Training[] = [
         sets: 4,
         reps: 12,
         weight: 15,
-        weightUnit: 'k/mancuerna',
+        weightUnit: 'k/DB'
       },
       [
         {
@@ -20,16 +20,16 @@ export const TRAINING: Training[] = [
           sets: 4,
           reps: 12,
           weight: 15,
-          weightUnit: 'k/lado',
+          weightUnit: 'k/lado'
         },
         {
           title: 'Press de banca inclinado',
-          variation: 'Mancuerna',
+          variation: 'DB',
           sets: 4,
           reps: 12,
           weight: 20,
-          weightUnit: 'k',
-        },
+          weightUnit: 'k'
+        }
       ],
       [
         {
@@ -38,7 +38,7 @@ export const TRAINING: Training[] = [
           sets: 4,
           reps: 15,
           weight: 15,
-          weightUnit: 'k/lado',
+          weightUnit: 'k/lado'
         },
         {
           title: 'Press de banca declinado',
@@ -46,40 +46,40 @@ export const TRAINING: Training[] = [
           sets: 4,
           reps: 15,
           weight: 20,
-          weightUnit: 'k',
-        },
+          weightUnit: 'k'
+        }
       ],
       [
         {
           title: 'Pec Deck (P&D)',
           reps: 20,
           weight: 4,
-          weightUnit: ' discos',
+          weightUnit: ' discos'
         },
         {
           title: 'Pec Deck (P&D)',
           reps: 15,
           weight: 6,
-          weightUnit: ' discos',
+          weightUnit: ' discos'
         },
         {
           title: 'Pec Deck (P&D)',
           reps: 12,
           weight: 8,
-          weightUnit: ' discos',
+          weightUnit: ' discos'
         },
         {
           title: 'Pec Deck (P&D)',
           reps: 8,
           weight: 10,
-          weightUnit: ' discos',
-        },
+          weightUnit: ' discos'
+        }
       ],
       {
         title: 'Flexiones de pecho',
-        additionalInfo: 'Al fallo',
-      },
-    ],
+        additionalInfo: 'Al fallo'
+      }
+    ]
   },
   {
     day: 'monday',
@@ -91,7 +91,7 @@ export const TRAINING: Training[] = [
         sets: 4,
         reps: 24,
         weight: 5,
-        weightUnit: 'k',
+        weightUnit: 'k'
       },
       {
         title: 'Curl predicador con polea',
@@ -99,14 +99,14 @@ export const TRAINING: Training[] = [
         sets: 4,
         reps: 12,
         weight: 25,
-        weightUnit: 'k',
+        weightUnit: 'k'
       },
       {
         title: 'Curl predicador libre',
         sets: 4,
         reps: 15,
         weight: 10,
-        weightUnit: 'k',
+        weightUnit: 'k'
       },
       {
         title: 'Curl de bíceps',
@@ -114,9 +114,9 @@ export const TRAINING: Training[] = [
         sets: 4,
         reps: 30,
         weight: 10,
-        weightUnit: 'k',
-      },
-    ],
+        weightUnit: 'k'
+      }
+    ]
   },
   {
     day: 'tuesday',
@@ -127,7 +127,7 @@ export const TRAINING: Training[] = [
         sets: 4,
         reps: 12,
         weight: 45,
-        weightUnit: 'lb/lado',
+        weightUnit: 'lb/lado'
       },
       [
         {
@@ -136,33 +136,33 @@ export const TRAINING: Training[] = [
           sets: 4,
           reps: 12,
           weight: 45,
-          weightUnit: 'k',
+          weightUnit: 'k'
         },
         {
           title: 'Prensa de piernas',
           sets: 4,
           reps: 12,
           weight: 90,
-          weightUnit: 'k',
-        },
+          weightUnit: 'k'
+        }
       ],
       {
         title: 'Sentadilla libre',
         sets: 4,
         reps: 15,
         weight: 45,
-        weightUnit: 'lb/lado',
+        weightUnit: 'lb/lado'
       },
       {
         title: 'Caminata',
         weight: 25,
-        weightUnit: 'k/recorrido',
+        weightUnit: 'k/recorrido'
       },
       {
         title: 'Pantorrilla',
-        additionalInfo: 'Al fallo',
-      },
-    ],
+        additionalInfo: 'Al fallo'
+      }
+    ]
   },
   {
     day: 'wednesday',
@@ -174,21 +174,21 @@ export const TRAINING: Training[] = [
         reps: 12,
         weight: 8,
         weightUnit: ' discos',
-        additionalInfo: 'Recorrido corto',
+        additionalInfo: 'Recorrido corto'
       },
       {
         title: 'Jalón al pecho cerrado',
         sets: 4,
         reps: 15,
         weight: 7,
-        weightUnit: ' discos',
+        weightUnit: ' discos'
       },
       {
         title: 'Remo con polea',
         sets: 4,
         reps: 12,
         weight: 110,
-        weightUnit: 'lb',
+        weightUnit: 'lb'
       },
       [
         {
@@ -197,16 +197,16 @@ export const TRAINING: Training[] = [
           sets: 4,
           reps: 8,
           rest: 120,
-          breakRest: 120,
+          breakRest: 120
         },
         {
           title: 'Dominadas',
           variation: 'Neutras',
           sets: 4,
-          reps: 8,
-        },
-      ],
-    ],
+          reps: 8
+        }
+      ]
+    ]
   },
   {
     day: 'wednesday',
@@ -219,7 +219,7 @@ export const TRAINING: Training[] = [
           sets: 4,
           reps: 30,
           weight: 4,
-          weightUnit: ' discos',
+          weightUnit: ' discos'
         },
         {
           title: 'Extensión de tríceps con polea',
@@ -227,24 +227,24 @@ export const TRAINING: Training[] = [
           sets: 4,
           reps: 10,
           weight: 4,
-          weightUnit: ' discos',
-        },
+          weightUnit: ' discos'
+        }
       ],
       {
         title: 'Fondos',
         sets: 4,
         reps: 15,
         weight: 15,
-        weightUnit: 'k',
+        weightUnit: 'k'
       },
       {
         title: 'Copa de tríceps',
         sets: 4,
         reps: 15,
         weight: 20,
-        weightUnit: 'k',
-      },
-    ],
+        weightUnit: 'k'
+      }
+    ]
   },
   {
     day: 'thursday',
@@ -257,7 +257,7 @@ export const TRAINING: Training[] = [
           sets: 4,
           reps: 15,
           weight: 55,
-          weightUnit: 'k',
+          weightUnit: 'k'
         },
         {
           title: 'Peso muerto',
@@ -265,8 +265,8 @@ export const TRAINING: Training[] = [
           sets: 4,
           reps: 12,
           weight: 80,
-          weightUnit: 'k',
-        },
+          weightUnit: 'k'
+        }
       ],
       [
         {
@@ -274,14 +274,14 @@ export const TRAINING: Training[] = [
           sets: 4,
           reps: 12,
           weight: 45,
-          weightUnit: 'lb/lado',
+          weightUnit: 'lb/lado'
         },
         {
           title: 'Caminata',
           variation: 'Unilateral',
           weight: 10,
-          weightUnit: ' pasos',
-        },
+          weightUnit: ' pasos'
+        }
       ],
       {
         title: 'Hip thrust',
@@ -289,22 +289,22 @@ export const TRAINING: Training[] = [
         sets: 4,
         reps: 30,
         weight: 25,
-        weightUnit: 'lb/disco',
+        weightUnit: 'lb/disco'
       },
       {
         title: 'Prensa abierta',
         sets: 4,
         reps: 12,
         weight: 45 * 3,
-        weightUnit: 'lb/lado',
+        weightUnit: 'lb/lado'
       },
       {
         title: 'Caminata',
         variation: 'Unilateral con banda de glúteos',
         sets: 4,
-        reps: 15,
-      },
-    ],
+        reps: 15
+      }
+    ]
   },
   {
     day: 'friday',
@@ -317,7 +317,7 @@ export const TRAINING: Training[] = [
           sets: 4,
           reps: 10,
           weight: 10,
-          weightUnit: 'lb/mancuerna',
+          weightUnit: 'lb/DB'
         },
         {
           title: 'Elevaciones frontales',
@@ -325,34 +325,34 @@ export const TRAINING: Training[] = [
           sets: 4,
           reps: 10,
           weight: 10,
-          weightUnit: 'k',
+          weightUnit: 'k'
         },
         {
           title: 'Elevaciones laterales',
           sets: 4,
           reps: 10,
           weight: 10,
-          weightUnit: 'lb/mancuerna',
+          weightUnit: 'lb/DB'
         },
         {
           title: 'Press militar con barra',
           sets: 4,
-          reps: 10,
-        },
+          reps: 10
+        }
       ],
       {
         title: 'Elevación frontal con polea',
         sets: 4,
         reps: 12,
         weight: 5,
-        weightUnit: ' discos',
+        weightUnit: ' discos'
       },
       {
         title: 'Battle rope',
         sets: 4,
         weight: 1,
-        weightUnit: ' minuto',
-      },
-    ],
-  },
+        weightUnit: ' minuto'
+      }
+    ]
+  }
 ]

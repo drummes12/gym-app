@@ -33,7 +33,7 @@ export const EXERCISES: Exercises[] = [
     sets: 4,
     repetitions: 12,
     weight: 15,
-    weight_unit: 'kg/mancuerna',
+    weight_unit: 'kg/DB',
     rest_between_sets: 60,
     rest_after_exercise: 120
   },
@@ -169,7 +169,7 @@ export const GROUPED_EXERCISES: GroupedExercises[] = [
     repetitions: 12,
     weight: 20,
     weight_unit: 'kg',
-    additional_info: 'Mancuerna'
+    additional_info: 'DB'
   },
   {
     id: '1be67dac-b029-40dc-bb0d-d294dd54f48a',

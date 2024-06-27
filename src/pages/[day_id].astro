@@ -1,72 +1,94 @@
 ---
 import Layout from '@/layouts/Layout.astro'
 
-import type { Exercises, WorkoutDays, WorkoutSession } from '@/types/GymTracker'
+import type {
+  Exercises,
+  WorkoutDayResponse,
+  WorkoutSession,
+  ExerciseSeriesWorkout,
+  ExercisesSeriesResponse
+} from '@/types/GymTracker'
 import { ExerciseCard } from '@/components/exercise-card/exercise-card'
-
-type WorkoutDayResponse = WorkoutDays | { error?: string }
+import { fetchJson } from '@/services'
+import ZoneTitle from '@/components/zone-title.astro'
 
 const { day_id } = Astro.params
 
-const endpointWorkout = new URL(`/api/workouts/${day_id}.json`, Astro.url)
-const workoutDay: WorkoutDayResponse = await fetch(endpointWorkout).then(
-  (res) => res.json()
-)
+const endpointWorkout = new URL(`/api/workouts/${day_id}`, Astro.url)
+let workoutDay: WorkoutDayResponse
+
+try {
+  workoutDay = await fetchJson(endpointWorkout)
+} catch (error) {
+  return new Response(null, {
+    status: 404,
+    statusText: 'Not Found'
+  })
+}
 
 if (!('workout_sessions' in workoutDay)) {
   return new Response(null, {
     status: 404,
-    statusText: 'Not found'
+    statusText: 'Not Found'
   })
 }
 
-const workoutSessions = []
-for (const workoutSession of workoutDay.workout_sessions) {
-  const { workout_session_id: sessionId } = workoutSession
+const workoutSessionsPromises = workoutDay.workout_sessions.map(
+  async (workoutSession) => {
+    const { workout_session_id: sessionId } = workoutSession
+    const workoutSessionData = await getWorkoutSessions(sessionId)
+    const { exercises_series } = workoutSessionData
+
+    const seriesPromises = exercises_series.map(processExerciseSeries)
+    const series = await Promise.all(seriesPromises)
+
+    return { ...workoutSession, exercises_series: series }
+  }
+)
+
+const workoutSessions = await Promise.all(workoutSessionsPromises)
+
+async function getWorkoutSessions(sessionId: string): Promise<WorkoutSession> {
   const endpointWorkoutSession = new URL(
-    `/api/workouts/sessions/${sessionId}.json`,
+    `/api/workouts/sessions/${sessionId}`,
     Astro.url
   )
-  const workoutSessionData: WorkoutSession = await fetch(
-    endpointWorkoutSession
-  ).then((res) => res.json())
-  const { exercises_series } = workoutSessionData
+  return fetchJson(endpointWorkoutSession)
+}
 
-  const series = []
-  for (const exercise of exercises_series) {
-    const { exercise_series_id, type, ...serie } = exercise
-    if (type === 'series') {
-      const endpointExercise = new URL(
-        `/api/exercises/series/${exercise_series_id}.json`,
-        Astro.url
+async function processExerciseSeries(exercise: ExerciseSeriesWorkout) {
+  const { exercise_series_id, type, ...serie } = exercise
+  if (type === 'series') {
+    const serieData = await getExerciseSeries(exercise_series_id)
+    const exercises = await Promise.all(
+      serieData.exercises.map(({ exercise_id, ...exerciseData }) =>
+        getExercise(exercise_id).then((exercise) => ({
+          ...exercise,
+          ...exerciseData,
+          id: exercise_id
+        }))
       )
-      const serieData = await fetch(endpointExercise).then((res) => res.json())
-
-      let exercises = []
-      for (const serieInfo of serieData.exercises) {
-        const endpointExercise = new URL(
-          `/api/exercises/${serieInfo.exercise_id}.json`,
-          Astro.url
-        )
-        const exerciseData = await fetch(endpointExercise).then((res) =>
-          res.json()
-        )
-        exercises.push({ ...exerciseData, ...serieInfo })
-      }
-      series.push({ ...serieData, ...serie, exercises })
-    }
-    if (type === 'individual') {
-      const endpointExercise = new URL(
-        `/api/exercises/${exercise_series_id}.json`,
-        Astro.url
-      )
-      const exerciseData = await fetch(endpointExercise).then((res) =>
-        res.json()
-      )
-      series.push({ ...exerciseData, ...serie })
-    }
+    )
+    return { ...serieData, ...serie, exercises }
+  } else if (type === 'individual') {
+    const exerciseData = await getExercise(exercise_series_id)
+    return { ...exerciseData, ...serie }
   }
-  workoutSessions.push({ ...workoutSession, exercises_series: series })
+}
+
+async function getExerciseSeries(
+  exerciseSeriesId: string
+): Promise<ExercisesSeriesResponse> {
+  const endpointExerciseSeries = new URL(
+    `/api/exercises/series/${exerciseSeriesId}`,
+    Astro.url
+  )
+  return fetchJson(endpointExerciseSeries)
+}
+
+async function getExercise(exerciseId: string) {
+  const endpointExercise = new URL(`/api/exercises/${exerciseId}`, Astro.url)
+  return fetchJson(endpointExercise)
 }
 ---
 
@@ -74,8 +96,8 @@ for (const workoutSession of workoutDay.workout_sessions) {
   {
     workoutSessions.map((workoutSession) => {
       return (
-        <section class='pt-4 pb-8'>
-          <h1>{workoutSession.zone_id}</h1>
+        <section class='pb-8'>
+          <ZoneTitle zone_id={workoutSession.zone_id} />
           <ul class='flex flex-col gap-2 [&>div]:flex [&>div]:gap-1 [&>div]:flex-col'>
             {workoutSession.exercises_series.map((serie) => {
               if (serie?.mode) {
