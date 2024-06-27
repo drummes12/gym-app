@@ -14,7 +14,7 @@ export function PlayRest() {
   }
   return (
     <button
-      className='bg-neon text-zinc-800 scale-110 sm:bg-zinc-800/70 rounded-full p-4 transition sm:hover:bg-neon sm:hover:text-zinc-800 sm:hover:scale-110'
+      className='bg-neon text-zinc-800 sm:text-white scale-110 sm:bg-zinc-800/70 rounded-full p-4 transition sm:hover:bg-neon sm:hover:text-zinc-800 sm:hover:scale-110'
       onClick={handleClick}
     >
       {isRest ? <Pause /> : <Play />}

@@ -68,6 +68,14 @@ export interface ExerciseSeriesWorkout {
   exercise_series_id: UUID
   sequence: number
   type: 'individual' | 'series'
+  variation?: string
+  zone_id?: UUID
+  sets?: number
+  repetitions?: number
+  weight?: number
+  weight_unit?: string
+  rest_between_sets?: number
+  rest_after_exercise?: number
   additional_info?: string
 }
 

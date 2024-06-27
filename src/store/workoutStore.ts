@@ -3,8 +3,8 @@ import { create } from 'zustand'
 
 import type { CurrentExercise, Exercises } from '@/types/GymTracker'
 
-const REST_BETWEEN_SETS = 5
-const REST_AFTER_EXERCISE = 7
+const REST_BETWEEN_SETS = 60
+const REST_AFTER_EXERCISE = 90
 
 export interface WorkoutStoreState {
   isRest: boolean
