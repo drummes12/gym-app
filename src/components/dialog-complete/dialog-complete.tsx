@@ -34,12 +34,29 @@ export function DialogComplete() {
 
   const isLastSet = currentSet === sets - 1
   const statusTitle = isLastSet ? '¡Última Serie!' : '¡Descanso Terminado!'
+
+  const wordsTitle = title?.split(' ')
+  const wordLargeTitle =
+    wordsTitle?.reduce((a, b) => (a.length > b.length ? a : b)) ?? ''
+
+  let sizeTitle = 'text-7xl'
+
+  if (wordLargeTitle.length > 12) {
+    sizeTitle = 'text-3xl'
+  } else if (wordLargeTitle.length > 9) {
+    sizeTitle = 'text-4xl'
+  } else if (wordLargeTitle.length > 7) {
+    sizeTitle = 'text-5xl'
+  } else if (wordLargeTitle.length > 6) {
+    sizeTitle = 'text-6xl'
+  }
+
   return (
     <dialog>
       <form method='dialog' className={styles.dialog}>
-        <header className='text-lg font-bold'>
+        <header className='text-lg font-bold overflow-hidden'>
           <h1 className='opacity-80'>{statusTitle}</h1>
-          <h2 className='text-7xl uppercase'>{title}</h2>
+          <h2 className={`${sizeTitle} max-w-[20ch] uppercase`}>{title}</h2>
         </header>
 
         <section>
@@ -91,7 +108,7 @@ export function DialogComplete() {
 
         <menu className='pt-8 flex justify-between items-end'>
           <p className='pt-4 text-xs'>Descanso de {timeRest} segundos</p>
-          <PlayRest />
+          <PlayRest size='md' />
         </menu>
 
         <button

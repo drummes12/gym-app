@@ -1,14 +1,3 @@
----
-import { DAYS } from '@/const/days'
-
-const url = Astro.url
-const [, day] = url.pathname.split('/')
-
-const dayName = DAYS[day]?.es
-const dayColor = DAYS[day]?.color
-const accentColor = `var(--accent-${dayColor})`
----
-
 <header class='max-w-3xl h-full px-4 flex items-center justify-between'>
   <div>
     <a href='/'>
@@ -16,14 +5,5 @@ const accentColor = `var(--accent-${dayColor})`
     </a>
     <p class='text-lg text-gray-600'>¡Entrena todos los días!</p>
   </div>
-  <h2 transition:name={`title-page-${day}`}>
-    {dayName}
-  </h2>
+  <h2 transition:name={`title-page`}></h2>
 </header>
-
-<style define:vars={{ accentColor }}>
-  h2 {
-    @apply text-xl font-bold;
-    color: rgb(var(--accentColor));
-  }
-</style>

@@ -2,9 +2,7 @@ import confetti from 'canvas-confetti'
 import { create } from 'zustand'
 
 import type { CurrentExercise, Exercises } from '@/types/GymTracker'
-
-const REST_BETWEEN_SETS = 60
-const REST_AFTER_EXERCISE = 90
+import { REST_AFTER_EXERCISE, REST_BETWEEN_SETS } from '@/constants'
 
 export interface WorkoutStoreState {
   isRest: boolean
