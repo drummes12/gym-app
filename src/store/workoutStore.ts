@@ -1,17 +1,15 @@
 import confetti from 'canvas-confetti'
 import { create } from 'zustand'
 
-import type { CurrentExercise, Workout } from '@/types/Training'
+import type { CurrentExercise, Exercises } from '@/types/GymTracker'
 
-import { TRAINING } from '@/data/training'
-
-const REST = 60
-const BREAK = 90
+const REST_BETWEEN_SETS = 60
+const REST_AFTER_EXERCISE = 90
 
 export interface WorkoutStoreState {
   isRest: boolean
   currentExercise: CurrentExercise | null
-  nextExercise: Workout | null,
+  nextExercise: Exercises | null
   currentRestDuration: number
   timeRest: number
   dialogElement: HTMLDialogElement | null
@@ -20,7 +18,7 @@ export interface WorkoutStoreState {
   setCurrentExercise: (currentExercise: CurrentExercise) => void
   resetCurrentExercise: () => void
   addCurrentSet: () => void
-  
+
   startTimer: () => void
   setCurrentRestDuration: (currentRestDuration: number) => void
   setTimeRest: (timeRest: number) => void
@@ -40,30 +38,25 @@ export const useWorkoutStore = create<WorkoutStoreState>((set, get) => ({
 
   setIsRest: (isRest: boolean) => set({ isRest }),
   setCurrentExercise: (currentExercise: CurrentExercise) => {
-    const flattenedWorkouts = TRAINING.flatMap(training => 
-        training.workouts.flatMap(workout => 
-          Array.isArray(workout) ? { ...workout?.[0], day: training.day } : [{ ...workout, day: training.day }]
-        )
-      )
-    const currentWorkout = flattenedWorkouts.find(workout => workout.title === currentExercise.title)
-    if (!currentWorkout) return
-    const dayWorkouts = flattenedWorkouts.filter(workout => workout.day === currentWorkout.day)
-    const nextWorkoutIndex = dayWorkouts.findIndex(workout => workout.title === currentWorkout.title) + 1
-
-    const restTime = currentExercise.rest || REST
+    const { currentExercise: newCurrentExercise, restTime } =
+      configSelectedExercise(currentExercise)
     set({
-      currentExercise,
+      currentExercise: newCurrentExercise,
       currentRestDuration: restTime,
-      timeRest: restTime,
-      nextExercise: dayWorkouts[nextWorkoutIndex] ?? null
+      timeRest: restTime
     })
   },
   resetCurrentExercise: () => {
     const { currentExercise } = get()
+
     if (currentExercise) {
-      const restTime = currentExercise.rest || REST
+      const { currentExercise: newCurrentExercise, restTime } =
+        configSelectedExercise({ ...currentExercise })
       set({
-        currentExercise: { ...currentExercise, currentSet: 0 },
+        currentExercise: {
+          ...newCurrentExercise,
+          currentSet: 0
+        },
         currentRestDuration: restTime,
         timeRest: restTime
       })
@@ -72,10 +65,23 @@ export const useWorkoutStore = create<WorkoutStoreState>((set, get) => ({
   addCurrentSet: () => {
     const { currentExercise } = get()
     if (currentExercise) {
-      const { currentSet, sets = 0, breakRest = BREAK, rest = REST } = currentExercise
-      const newRestTime = currentSet === sets - 2 ? breakRest ?? rest : rest
+      const {
+        currentSet,
+        sets = 0,
+        rest_after_exercise = REST_AFTER_EXERCISE,
+        rest_between_sets = REST_BETWEEN_SETS
+      } = currentExercise
+      const isLastSet = currentSet === sets - 2
+      const newRestTime = isLastSet
+        ? rest_after_exercise ?? rest_between_sets
+        : rest_between_sets
       set({
-        currentExercise: { ...currentExercise, currentSet: currentExercise.currentSet + 1 },
+        currentExercise: {
+          ...currentExercise,
+          rest_after_exercise,
+          rest_between_sets,
+          currentSet: currentExercise.currentSet + 1
+        },
         timeRest: newRestTime,
         currentRestDuration: newRestTime
       })
@@ -85,7 +91,14 @@ export const useWorkoutStore = create<WorkoutStoreState>((set, get) => ({
   startTimer: () => {
     const intervalId = setInterval(() => {
       set((state) => {
-        const { isRest, timeRest, currentExercise, addCurrentSet, resetCurrentExercise, showDialog } = state
+        const {
+          isRest,
+          timeRest,
+          currentExercise,
+          addCurrentSet,
+          resetCurrentExercise,
+          showDialog
+        } = state
         if (!isRest) {
           clearInterval(intervalId)
           return { isRest: false }
@@ -98,7 +111,8 @@ export const useWorkoutStore = create<WorkoutStoreState>((set, get) => ({
           const { title, currentSet, sets = 0 } = currentExercise
           if (title === '') return { isRest: false }
 
-          if (currentSet === sets - 1) {
+          const isLastSet = currentSet === sets - 1
+          if (isLastSet) {
             resetCurrentExercise()
           } else {
             addCurrentSet()
@@ -111,10 +125,12 @@ export const useWorkoutStore = create<WorkoutStoreState>((set, get) => ({
       })
     }, 1000)
   },
-  setCurrentRestDuration: (currentRestDuration: number) => set({ currentRestDuration }),
+  setCurrentRestDuration: (currentRestDuration: number) =>
+    set({ currentRestDuration }),
   setTimeRest: (timeRest: number) => set({ timeRest }),
 
-  setDialogElement: (dialogElement: HTMLDialogElement | null) => set({ dialogElement }),
+  setDialogElement: (dialogElement: HTMLDialogElement | null) =>
+    set({ dialogElement }),
   showDialog: () => {
     const dialogElement = get().dialogElement
     dialogElement?.showModal()
@@ -124,3 +140,27 @@ export const useWorkoutStore = create<WorkoutStoreState>((set, get) => ({
     dialogElement?.close()
   }
 }))
+
+function configSelectedExercise(currentExercise: CurrentExercise) {
+  const {
+    rest_after_exercise = REST_AFTER_EXERCISE,
+    rest_between_sets = REST_BETWEEN_SETS,
+    sets = 0,
+    currentSet
+  } = currentExercise
+  let restTime = rest_between_sets
+
+  const isLastSet = currentSet === sets - 2 || (currentSet === 0 && sets === 0)
+  if (isLastSet) {
+    restTime = rest_after_exercise
+  }
+
+  return {
+    currentExercise: {
+      ...currentExercise,
+      rest_after_exercise,
+      rest_between_sets
+    },
+    restTime
+  }
+}

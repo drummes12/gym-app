@@ -2,7 +2,7 @@
 import '@fontsource/dseg14-classic/700.css'
 
 import NavBar from '@/components/navbar.astro'
-import { PlayerBar } from '@/components/player-bar.jsx'
+import { PlayerBar } from '@/components/player-bar'
 import { ViewTransitions } from 'astro:transitions'
 import { DialogComplete } from '@/components/dialog-complete/dialog-complete'
 
@@ -36,7 +36,11 @@ const { title } = Astro.props
       </main>
 
       <footer class='[grid-area:footer] h-20'>
-        <PlayerBar client:load transition:name='gym-player' transition:persist />
+        <PlayerBar
+          client:load
+          transition:name='gym-player'
+          transition:persist
+        />
       </footer>
 
       <DialogComplete client:load />
@@ -59,75 +63,20 @@ const { title } = Astro.props
         --accent: 136, 58, 234;
         --accent-light: 224, 204, 250;
         --accent-dark: 49, 10, 101;
-        --accent-gradient: linear-gradient(45deg, rgb(var(--accent)), rgb(var(--accent-light)) 30%, white 60%);
-
-        --accent-red: 234, 58, 58;
-        --accent-light-red: 250, 210, 210;
-        --accent-dark-red: 101, 10, 10;
-        --accent-gradient-red: linear-gradient(
+        --accent-gradient: linear-gradient(
           45deg,
-          rgb(var(--accent-red)),
-          rgb(var(--accent-light-red)) 30%,
+          rgb(var(--accent)),
+          rgb(var(--accent-light)) 30%,
           white 60%
         );
 
-        --accent-green: 92, 123, 30;
-        --accent-light-green: 204, 224, 204;
-        --accent-dark-green: 10, 49, 10;
-        --accent-gradient-green: linear-gradient(
+        --accent-neon: 255, 255, 0;
+        --accent-neon-light: 255, 255, 200;
+        --accent-neon-dark: 30, 30, 0;
+        --accent-neon-gradient: linear-gradient(
           45deg,
-          rgb(var(--accent-green)),
-          rgb(var(--accent-light-green)) 30%,
-          white 60%
-        );
-
-        --accent-blue: 58, 136, 234;
-        --accent-light-blue: 204, 224, 250;
-        --accent-dark-blue: 10, 49, 101;
-        --accent-gradient-blue: linear-gradient(
-          45deg,
-          rgb(var(--accent-blue)),
-          rgb(var(--accent-light-blue)) 30%,
-          white 60%
-        );
-
-        --accent-orange: 234, 136, 58;
-        --accent-light-orange: 250, 224, 204;
-        --accent-dark-orange: 101, 49, 10;
-        --accent-gradient-orange: linear-gradient(
-          45deg,
-          rgb(var(--accent-orange)),
-          rgb(var(--accent-light-orange)) 30%,
-          white 60%
-        );
-
-        --accent-pantone: 80, 158, 17;
-        --accent-light-pantone: 204, 224, 204;
-        --accent-dark-pantone: 10, 49, 10;
-        --accent-gradient-pantone: linear-gradient(
-          45deg,
-          rgb(var(--accent-pantone)),
-          rgb(var(--accent-light-pantone)) 30%,
-          white 60%
-        );
-
-        --accent-purple: 136, 58, 234;
-        --accent-light-purple: 224, 204, 250;
-        --accent-dark-purple: 49, 10, 101;
-        --accent-gradient-purple: linear-gradient(
-          45deg,
-          rgb(var(--accent-purple)),
-          rgb(var(--accent-light-purple)) 30%,
-          white 60%
-        );
-
-        --accent-orion: 234, 58, 136;
-        --accent-light-orion: 250, 204, 224;
-        --accent-dark-orion: 101, 10, 49;
-        --accent-gradient-orion: linear-gradient(
-          45deg,
-          rgb(var(--accent-orion)),
-          rgb(var(--accent-light-orion)) 30%,
+          rgb(var(--accent-neon), 0.5),
+          rgb(var(--accent-neon-light), 0.5) 30%,
           white 60%
         );
       }
@@ -148,6 +97,21 @@ const { title } = Astro.props
           monospace;
       }
 
+      li.current-exercise {
+        background-position: 0;
+        background-image: var(--accent-neon-gradient);
+        box-shadow: inset 0 0 0 2px rgb(var(--accent-neon-light));
+
+        & h3,
+        & p {
+          color: rgb(var(--accent-neon-light));
+        }
+        & h4,
+        & span {
+          color: rgb(var(--accent-neon-dark));
+        }
+      }
+
       #bg-player {
         opacity: 0.3;
         list-style: none;
@@ -160,7 +124,12 @@ const { title } = Astro.props
         background-position: 100%;
         box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
         background-position: 0;
-        background-image: linear-gradient(to right, transparent, #ffff00);
+        background-image: linear-gradient(
+          to right,
+          #ffff00,
+          transparent,
+          #ffff00
+        );
       }
 
       #timer-rest {

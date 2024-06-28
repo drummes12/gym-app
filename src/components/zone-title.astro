@@ -1,0 +1,25 @@
+---
+import { fetchJson } from '@/services'
+
+const { zone_id } = Astro.props
+
+const endpointWorkout = new URL(`/api/zones/${zone_id}`, Astro.url)
+let bodyZone
+
+try {
+  bodyZone = await fetchJson(endpointWorkout)
+} catch (error) {
+  return new Response(null, {
+    status: 404,
+    statusText: 'Not Found'
+  })
+}
+
+const { name } = bodyZone
+---
+
+<h1
+  class='text-7xl text-gray-500 font-bold h-10 pt-1.5 leading-10 overflow-clip'
+>
+  {name.toUpperCase()}
+</h1>

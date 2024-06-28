@@ -1,4 +1,4 @@
-export const Close = ({ className }) => (
+export const Close = ({ className }: { className?: string }) => (
   <svg
     className={className}
     width='24'

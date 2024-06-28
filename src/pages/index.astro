@@ -1,14 +1,22 @@
 ---
 import Layout from '@/layouts/Layout.astro'
 import DayCard from '@/components/day-card.astro'
+import type { WorkoutDays } from '@/types/GymTracker'
+
+const title = 'Gym App'
+
+const endpointWorkout = new URL('/api/workouts', Astro.url)
+const workoutsDay: WorkoutDays[] = await fetch(endpointWorkout).then((res) =>
+  res.json()
+)
 ---
 
-<Layout title='Gym App'>
+<Layout title={title}>
   <section class='flex flex-col gap-4'>
-    <DayCard href='/monday' title='Lunes' body='Empieza la semana con todo' />
-    <DayCard href='/tuesday' title='Martes' body='Sigue con todo' />
-    <DayCard href='/wednesday' title='Miércoles' body='A mitad de semana' />
-    <DayCard href='/thursday' title='Jueves' body='Casi llegamos al fin de semana' />
-    <DayCard href='/friday' title='Viernes' body='Último día de la semana' />
+    {
+      workoutsDay.map((workout) => (
+        <DayCard href={`/${workout.id}`} title={workout.title} />
+      ))
+    }
   </section>
 </Layout>

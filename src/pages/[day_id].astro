@@ -1,0 +1,120 @@
+---
+import Layout from '@/layouts/Layout.astro'
+
+import type {
+  Exercises,
+  WorkoutDayResponse,
+  WorkoutSession,
+  ExerciseSeriesWorkout,
+  ExercisesSeriesResponse
+} from '@/types/GymTracker'
+import { ExerciseCard } from '@/components/exercise-card/exercise-card'
+import { fetchJson } from '@/services'
+import ZoneTitle from '@/components/zone-title.astro'
+
+const { day_id } = Astro.params
+
+const endpointWorkout = new URL(`/api/workouts/${day_id}`, Astro.url)
+let workoutDay: WorkoutDayResponse
+
+try {
+  workoutDay = await fetchJson(endpointWorkout)
+} catch (error) {
+  return new Response(null, {
+    status: 404,
+    statusText: 'Not Found'
+  })
+}
+
+if (!('workout_sessions' in workoutDay)) {
+  return new Response(null, {
+    status: 404,
+    statusText: 'Not Found'
+  })
+}
+
+const workoutSessionsPromises = workoutDay.workout_sessions.map(
+  async (workoutSession) => {
+    const { workout_session_id: sessionId } = workoutSession
+    const workoutSessionData = await getWorkoutSessions(sessionId)
+    const { exercises_series } = workoutSessionData
+
+    const seriesPromises = exercises_series.map(processExerciseSeries)
+    const series = await Promise.all(seriesPromises)
+
+    return { ...workoutSession, exercises_series: series }
+  }
+)
+
+const workoutSessions = await Promise.all(workoutSessionsPromises)
+
+async function getWorkoutSessions(sessionId: string): Promise<WorkoutSession> {
+  const endpointWorkoutSession = new URL(
+    `/api/workouts/sessions/${sessionId}`,
+    Astro.url
+  )
+  return fetchJson(endpointWorkoutSession)
+}
+
+async function processExerciseSeries(exercise: ExerciseSeriesWorkout) {
+  const { exercise_series_id, type, ...serie } = exercise
+  if (type === 'series') {
+    const serieData = await getExerciseSeries(exercise_series_id)
+    const exercises = await Promise.all(
+      serieData.exercises.map(({ exercise_id, ...exerciseData }) =>
+        getExercise(exercise_id).then((exercise) => ({
+          ...exercise,
+          ...exerciseData,
+          id: exercise_id
+        }))
+      )
+    )
+    return { ...serieData, ...serie, exercises }
+  } else if (type === 'individual') {
+    const exerciseData = await getExercise(exercise_series_id)
+    return { ...exerciseData, ...serie }
+  }
+}
+
+async function getExerciseSeries(
+  exerciseSeriesId: string
+): Promise<ExercisesSeriesResponse> {
+  const endpointExerciseSeries = new URL(
+    `/api/exercises/series/${exerciseSeriesId}`,
+    Astro.url
+  )
+  return fetchJson(endpointExerciseSeries)
+}
+
+async function getExercise(exerciseId: string) {
+  const endpointExercise = new URL(`/api/exercises/${exerciseId}`, Astro.url)
+  return fetchJson(endpointExercise)
+}
+---
+
+<Layout title='Gym App'>
+  {
+    workoutSessions.map((workoutSession) => {
+      return (
+        <section class='pb-8'>
+          <ZoneTitle zone_id={workoutSession.zone_id} />
+          <ul class='flex flex-col gap-2 [&>div]:flex [&>div]:gap-1 [&>div]:flex-col'>
+            {workoutSession.exercises_series.map((serie) => {
+              if (serie?.mode) {
+                return (
+                  <div class='flex !flex-row justify-between flex-wrap'>
+                    {serie.exercises.map((exercise: Exercises) => {
+                      return <ExerciseCard client:load exercise={exercise} />
+                    })}
+                  </div>
+                )
+              }
+
+              return <ExerciseCard client:load exercise={serie} />
+            })}
+          </ul>
+        </section>
+      )
+    })
+  }
+</Layout>
