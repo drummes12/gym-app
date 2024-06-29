@@ -9,22 +9,86 @@ import {
 } from '@/types/GymTracker'
 
 export const BODY_ZONES: BodyZones[] = [
-  { id: '352969cd-1884-48cb-9b41-b1193a70346c', name: 'pectoral' },
-  { id: '61d657de-23f6-41e5-a83c-bb50508f8c5c', name: 'dorsal' },
-  { id: 'a5701339-2a28-481e-a8aa-fddf63bebb9c', name: 'hombro' },
-  { id: 'd6265f7c-1441-4610-8def-ad7399874462', name: 'biceps' },
-  { id: 'fa99c362-7dc5-4d43-8af5-ba17baddacc9', name: 'triceps' },
-  { id: '8c7dc157-9aed-480c-a00a-f02871101076', name: 'brazos' },
-  { id: '96cbae65-0445-4101-aca9-40ffc3dd5228', name: 'antebrazo' },
-  { id: '928013b2-83c0-4e85-aa99-66c1269d147b', name: 'abdomen' },
-  { id: 'b9b9e475-0186-4614-8b36-336116252154', name: 'cuadriceps' },
-  { id: '12ca92b1-943f-42f3-a06a-3b5af0176d8b', name: 'isquiotibiales' },
-  { id: '991f4b95-bb3e-4e02-9bd0-4f478623bd4a', name: 'gluteos' },
-  { id: 'de88ff54-8fe8-4258-85ea-62fa7a1c2509', name: 'gemelos' },
-  { id: 'b2189ca6-b529-4e92-81ce-eb2e5183519b', name: 'pierna' },
-  { id: '2e497bc9-7c22-421b-96a4-5913ad3981b7', name: 'cardio' },
-  { id: '566e3ea7-e232-469d-9fab-ed26a6b492d9', name: 'calentamiento' },
-  { id: 'b32308b5-67a5-4138-9933-2dd981b22e84', name: 'estiramiento' }
+  {
+    id: '352969cd-1884-48cb-9b41-b1193a70346c',
+    name: 'pectoral',
+    abbreviation: 'PEC'
+  },
+  {
+    id: '61d657de-23f6-41e5-a83c-bb50508f8c5c',
+    name: 'dorsal',
+    abbreviation: 'ESP'
+  },
+  {
+    id: 'a5701339-2a28-481e-a8aa-fddf63bebb9c',
+    name: 'hombro',
+    abbreviation: 'HOM'
+  },
+  {
+    id: 'd6265f7c-1441-4610-8def-ad7399874462',
+    name: 'biceps',
+    abbreviation: 'BIC'
+  },
+  {
+    id: 'fa99c362-7dc5-4d43-8af5-ba17baddacc9',
+    name: 'triceps',
+    abbreviation: 'TRI'
+  },
+  {
+    id: '8c7dc157-9aed-480c-a00a-f02871101076',
+    name: 'brazos',
+    abbreviation: 'BRA'
+  },
+  {
+    id: '96cbae65-0445-4101-aca9-40ffc3dd5228',
+    name: 'antebrazo',
+    abbreviation: 'ANT'
+  },
+  {
+    id: '928013b2-83c0-4e85-aa99-66c1269d147b',
+    name: 'abdomen',
+    abbreviation: 'ABS'
+  },
+  {
+    id: 'b9b9e475-0186-4614-8b36-336116252154',
+    name: 'cuadriceps',
+    abbreviation: 'QUAD'
+  },
+  {
+    id: '12ca92b1-943f-42f3-a06a-3b5af0176d8b',
+    name: 'isquiotibiales',
+    abbreviation: 'HAM'
+  },
+  {
+    id: '991f4b95-bb3e-4e02-9bd0-4f478623bd4a',
+    name: 'gluteos',
+    abbreviation: 'GLUT'
+  },
+  {
+    id: 'de88ff54-8fe8-4258-85ea-62fa7a1c2509',
+    name: 'pantorrilla',
+    abbreviation: 'CALF'
+  },
+  {
+    id: 'b2189ca6-b529-4e92-81ce-eb2e5183519b',
+    name: 'pierna',
+    abbreviation: 'LEG'
+  },
+  {
+    id: '2e497bc9-7c22-421b-96a4-5913ad3981b7',
+    name: 'cardio',
+    abbreviation: 'CARD'
+  },
+  {
+    id: '566e3ea7-e232-469d-9fab-ed26a6b492d9',
+    name: 'calentamiento',
+    abbreviation: 'WARM'
+  },
+  {
+    id: 'b32308b5-67a5-4138-9933-2dd981b22e84',
+    name: 'estiramiento',
+    abbreviation: 'STRETCH'
+  }
 ]
 
 export const EXERCISES: Exercises[] = [
@@ -227,6 +291,25 @@ export const EXERCISES: Exercises[] = [
     weight: 70,
     weight_unit: 'lb',
     zone_id: 'b9b9e475-0186-4614-8b36-336116252154',
+    rest_between_sets: 60,
+    rest_after_exercise: 90
+  },
+  {
+    id: 'e6689f5b-9947-44cd-8b84-801a48e19c8b',
+    title: 'Curl de pierna',
+    variation: 'Tumbado',
+    sets: 4,
+    repetitions: 12,
+    zone_id: '12ca92b1-943f-42f3-a06a-3b5af0176d8b',
+    rest_between_sets: 60,
+    rest_after_exercise: 90
+  },
+  {
+    id: 'bb10ff3c-2681-46a1-b92f-9014c2a9da4f',
+    title: 'Good Morning',
+    sets: 4,
+    repetitions: 15,
+    zone_id: '12ca92b1-943f-42f3-a06a-3b5af0176d8b',
     rest_between_sets: 60,
     rest_after_exercise: 90
   },
@@ -592,29 +675,43 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight_unit: 'lb/lado'
       },
       {
-        exercise_series_id: '132f4203-ee31-4ab4-abec-f096af2767fe',
+        exercise_series_id: 'e5bd8e97-21b8-4426-94e3-b968b4af5077',
         sequence: 3,
         type: 'individual',
-        weight: undefined,
-        weight_unit: undefined
-      },
+        weight: 70,
+        weight_unit: 'lb'
+      }
+    ]
+  },
+  {
+    id: '71a3d5c6-b067-4fe4-aeff-e06602d21698',
+    exercises_series: [
       {
         exercise_series_id: '965eb539-4541-4d4a-bbd6-d07f90b5bb29',
-        sequence: 4,
+        variation: 'Rumano',
+        sequence: 1,
         type: 'individual',
         weight: 45,
         weight_unit: 'lb/lado'
       },
       {
-        exercise_series_id: 'e5bd8e97-21b8-4426-94e3-b968b4af5077',
-        sequence: 5,
-        type: 'individual',
-        weight: 70,
-        weight_unit: 'lb'
+        exercise_series_id: 'e6689f5b-9947-44cd-8b84-801a48e19c8b',
+        sequence: 2,
+        type: 'individual'
       },
       {
+        exercise_series_id: 'bb10ff3c-2681-46a1-b92f-9014c2a9da4f',
+        sequence: 3,
+        type: 'individual'
+      }
+    ]
+  },
+  {
+    id: '4f802d5a-741a-456d-bf75-3425956be21d',
+    exercises_series: [
+      {
         exercise_series_id: '3e210507-7858-42dc-b70f-c00e03bfe029',
-        sequence: 6,
+        sequence: 1,
         type: 'individual',
         weight: 100,
         weight_unit: 'kg'
@@ -688,7 +785,12 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         type: 'individual',
         weight: 15,
         weight_unit: 'lb/lado'
-      },
+      }
+    ]
+  },
+  {
+    id: 'ebeadb1e-0217-4c16-8bb7-d63c9d6701c7',
+    exercises_series: [
       {
         exercise_series_id: '0578bbef-c43e-464e-90c5-5b1552e4c42d',
         sequence: 4,
@@ -717,7 +819,6 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
 export const WORKOUT_DAY: WorkoutDays[] = [
   {
     id: 'f4e9b3d7-1b1f-4d9b-8f5d-8d4b5f3d8f4d',
-    day: 'day1',
     title: 'Dia 1',
     workout_sessions: [
       {
@@ -728,7 +829,6 @@ export const WORKOUT_DAY: WorkoutDays[] = [
   },
   {
     id: '430d6f9a-9c09-485e-a2fc-b40d90e2e3fd',
-    day: 'day2',
     title: 'Dia 2',
     workout_sessions: [
       {
@@ -739,18 +839,24 @@ export const WORKOUT_DAY: WorkoutDays[] = [
   },
   {
     id: '710eb93c-7714-4414-a6a5-fcf0e5f70cc6',
-    day: 'day3',
     title: 'Dia 3',
     workout_sessions: [
       {
-        zone_id: 'b2189ca6-b529-4e92-81ce-eb2e5183519b',
+        zone_id: 'b9b9e475-0186-4614-8b36-336116252154',
         workout_session_id: '028584d9-7ccb-46cd-b765-a3ae2959bc6c'
+      },
+      {
+        zone_id: '12ca92b1-943f-42f3-a06a-3b5af0176d8b',
+        workout_session_id: '71a3d5c6-b067-4fe4-aeff-e06602d21698'
+      },
+      {
+        zone_id: 'de88ff54-8fe8-4258-85ea-62fa7a1c2509',
+        workout_session_id: '4f802d5a-741a-456d-bf75-3425956be21d'
       }
     ]
   },
   {
     id: '4abc996e-4242-47d6-b712-9f0f752eca15',
-    day: 'day4',
     title: 'Dia 4',
     workout_sessions: [
       {
@@ -761,12 +867,15 @@ export const WORKOUT_DAY: WorkoutDays[] = [
   },
   {
     id: '4b5c7867-078b-4b0e-adaf-34e3e7a632ce',
-    day: 'day5',
     title: 'Dia 5',
     workout_sessions: [
       {
-        zone_id: '8c7dc157-9aed-480c-a00a-f02871101076',
+        zone_id: 'd6265f7c-1441-4610-8def-ad7399874462',
         workout_session_id: 'fafb3d98-4a5e-428e-b8c4-70913c43ff48'
+      },
+      {
+        zone_id: 'fa99c362-7dc5-4d43-8af5-ba17baddacc9',
+        workout_session_id: 'ebeadb1e-0217-4c16-8bb7-d63c9d6701c7'
       }
     ]
   }

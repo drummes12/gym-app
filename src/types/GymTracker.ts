@@ -8,6 +8,7 @@ export const MODE_SERIES = {
 export interface BodyZones {
   id: UUID
   name: string
+  abbreviation: string
 }
 
 export interface Exercises {
@@ -50,7 +51,6 @@ export interface WorkoutSession {
 
 export interface WorkoutDays {
   id: UUID
-  day: string
   title: string
   workout_sessions: {
     zone_id: UUID

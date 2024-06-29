@@ -1,24 +1,14 @@
 .link-card {
-  @apply flex-1 flex flex-col min-w-52 w-full p-3 list-none opacity-80;
+  @apply flex-1 flex flex-col min-w-52 w-full p-3 list-none;
   color: white;
-  background-color: #23262d;
+  background-color: rgb(35, 38, 45, 0.1);
+  backdrop-filter: blur(8px);
   background-image: none;
   background-size: 400%;
   border-radius: 7px;
   background-position: 100%;
   transition: background-position 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-
-  & > a {
-    width: 100%;
-    text-decoration: none;
-    line-height: 1.4;
-    padding: calc(1.5rem - 1px);
-    border-radius: 8px;
-    color: white;
-    background-color: #23262d;
-    opacity: 0.8;
-  }
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
 
   h3,
   h4 {

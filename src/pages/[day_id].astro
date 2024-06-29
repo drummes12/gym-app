@@ -96,7 +96,7 @@ async function getExercise(exerciseId: string) {
   {
     workoutSessions.map((workoutSession) => {
       return (
-        <section class='pb-8'>
+        <section class='pb-4'>
           <ZoneTitle zone_id={workoutSession.zone_id} />
           <ul class='flex flex-col gap-2 [&>div]:flex [&>div]:gap-1 [&>div]:flex-col'>
             {workoutSession.exercises_series.map((serie) => {
