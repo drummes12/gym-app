@@ -5,9 +5,8 @@ import { Close } from '@/icons/close.jsx'
 import { PlayRest } from '@/components/play-rest'
 
 export function DialogComplete() {
-  const { currentExercise, setDialogElement, timeRest } = useWorkoutStore(
-    (state) => state
-  )
+  const { currentExercise, nextExercise, setDialogElement, timeRest } =
+    useWorkoutStore((state) => state)
 
   useEffect(() => {
     const $dialog = document.querySelector('dialog')
@@ -29,8 +28,7 @@ export function DialogComplete() {
     variation,
     weight,
     weight_unit: weightUnit,
-    additional_info,
-    sequence
+    additional_info
   } = currentExercise ?? {}
 
   const isLastSet = currentSet === sets - 1
@@ -55,9 +53,10 @@ export function DialogComplete() {
   return (
     <dialog>
       <form method='dialog' className={styles.dialog}>
-        <header className='text-lg font-bold overflow-hidden'>
+        <header className='relative text-lg font-bold overflow-hidden'>
           <h1 className='opacity-80'>{statusTitle}</h1>
           <h2 className={`${sizeTitle} max-w-[20ch] uppercase`}>{title}</h2>
+          <div className='absolute -right-2 top-0 h-full w-10 bg-gradient-to-l from-zinc-900 from-30% to-transparent'></div>
         </header>
 
         <section>
@@ -103,20 +102,35 @@ export function DialogComplete() {
               {currentSet?.toString().padStart(2, '0')}/
               {sets?.toString().padStart(2, '0')}
             </span>
-            <span className=''>{repetitions}x</span>
+            <span>{repetitions}x</span>
           </p>
         </section>
 
-        <menu className='pt-8 flex justify-between items-end'>
-          <div className='text-base'>
-            <p className=''>Ejercicio #{sequence}</p>
-            <p className='text-xs'>Descanso de {timeRest} segundos</p>
+        <menu className='pt-8 flex h-min gap-4 justify-between items-end'>
+          <div className='flex flex-col'>
+            <h4 className='pb-2'>Siquiente Ejercicio</h4>
+            <div className='flex flex-wrap gap-2 leading-none text-white/50'>
+              <p className='py-1 px-2 border-2 border-white/20 rounded-lg'>
+                {nextExercise?.title}
+                <span className='block opacity-60 text-xs'>Titulo</span>
+              </p>
+              <p className='py-1 px-2 border-2 border-white/20 rounded-lg'>
+                {nextExercise?.weight} {nextExercise?.weight_unit}
+                <span className='block opacity-60 text-xs'>Weight</span>
+              </p>
+              <p className='py-1 px-2 border-2 border-white/20 rounded-lg'>
+                {nextExercise?.sets}x{nextExercise?.repetitions}
+                <span className='block opacity-60 text-xs'>Sets</span>
+              </p>
+            </div>
           </div>
-          <PlayRest size='xl' />
+          <div className='w-min aspect-square'>
+            <PlayRest size='xl' />
+          </div>
         </menu>
 
         <button
-          className='absolute bg-zinc-800 rounded-full p-1 top-0 right-0 translate-x-1/2 -translate-y-1/2 stroke-2 hover:scale-110 transform transition-transform duration-300 focus:outline-none'
+          className='hidden sm:flex absolute bg-zinc-800 rounded-full p-1 top-0 right-0 translate-x-1/2 -translate-y-1/2 stroke-2 hover:scale-110 transform transition-transform duration-300 focus:outline-none'
           type='submit'
         >
           <Close />

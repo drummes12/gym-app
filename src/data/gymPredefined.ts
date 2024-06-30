@@ -516,6 +516,7 @@ export const GROUPED_EXERCISES: GroupedExercises[] = [
 export const WORKOUT_SESSION: WorkoutSession[] = [
   {
     id: '6dedd101-67fc-41c7-9802-d9dfa790cf10',
+    zone_id: '352969cd-1884-48cb-9b41-b1193a70346c',
     exercises_series: [
       {
         exercise_series_id: 'b8160d71-5b5b-45a3-a2b3-477e4fcb45be',
@@ -555,6 +556,7 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
   },
   {
     id: '0168d8f2-c662-4fac-827c-b2cdce81dbba',
+    zone_id: '61d657de-23f6-41e5-a83c-bb50508f8c5c',
     exercises_series: [
       {
         exercise_series_id: 'c02e8827-6bdc-4102-86d9-4d7f4512b53c',
@@ -593,6 +595,7 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
   },
   {
     id: '028584d9-7ccb-46cd-b765-a3ae2959bc6c',
+    zone_id: 'b9b9e475-0186-4614-8b36-336116252154',
     exercises_series: [
       {
         exercise_series_id: '7e402a8a-7c64-4f8a-b571-65f31a0f715a',
@@ -619,6 +622,7 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
   },
   {
     id: '71a3d5c6-b067-4fe4-aeff-e06602d21698',
+    zone_id: '12ca92b1-943f-42f3-a06a-3b5af0176d8b',
     exercises_series: [
       {
         exercise_series_id: '965eb539-4541-4d4a-bbd6-d07f90b5bb29',
@@ -642,6 +646,7 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
   },
   {
     id: '4f802d5a-741a-456d-bf75-3425956be21d',
+    zone_id: '12ca92b1-943f-42f3-a06a-3b5af0176d8b',
     exercises_series: [
       {
         exercise_series_id: '3e210507-7858-42dc-b70f-c00e03bfe029',
@@ -654,6 +659,7 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
   },
   {
     id: 'd22c551a-a266-4fd8-b826-b71c35451472',
+    zone_id: 'de88ff54-8fe8-4258-85ea-62fa7a1c2509',
     exercises_series: [
       {
         exercise_series_id: '4900f0f6-6d98-43e2-8107-497149b50b49',
@@ -695,6 +701,7 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
   },
   {
     id: 'fafb3d98-4a5e-428e-b8c4-70913c43ff48',
+    zone_id: 'a5701339-2a28-481e-a8aa-fddf63bebb9c',
     exercises_series: [
       {
         exercise_series_id: 'f4b76388-4d95-4aa5-9e93-df9b9ce7f021',
@@ -724,6 +731,7 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
   },
   {
     id: 'ebeadb1e-0217-4c16-8bb7-d63c9d6701c7',
+    zone_id: 'fa99c362-7dc5-4d43-8af5-ba17baddacc9',
     exercises_series: [
       {
         exercise_series_id: '0578bbef-c43e-464e-90c5-5b1552e4c42d',
@@ -754,63 +762,33 @@ export const WORKOUT_DAY: WorkoutDays[] = [
   {
     id: 'f4e9b3d7-1b1f-4d9b-8f5d-8d4b5f3d8f4d',
     title: 'Dia 1',
-    workout_sessions: [
-      {
-        zone_id: '352969cd-1884-48cb-9b41-b1193a70346c',
-        workout_session_id: '6dedd101-67fc-41c7-9802-d9dfa790cf10'
-      }
-    ]
+    workout_sessions: ['6dedd101-67fc-41c7-9802-d9dfa790cf10']
   },
   {
     id: '430d6f9a-9c09-485e-a2fc-b40d90e2e3fd',
     title: 'Dia 2',
-    workout_sessions: [
-      {
-        zone_id: '61d657de-23f6-41e5-a83c-bb50508f8c5c',
-        workout_session_id: '0168d8f2-c662-4fac-827c-b2cdce81dbba'
-      }
-    ]
+    workout_sessions: ['0168d8f2-c662-4fac-827c-b2cdce81dbba']
   },
   {
     id: '710eb93c-7714-4414-a6a5-fcf0e5f70cc6',
     title: 'Dia 3',
     workout_sessions: [
-      {
-        zone_id: 'b9b9e475-0186-4614-8b36-336116252154',
-        workout_session_id: '028584d9-7ccb-46cd-b765-a3ae2959bc6c'
-      },
-      {
-        zone_id: '12ca92b1-943f-42f3-a06a-3b5af0176d8b',
-        workout_session_id: '71a3d5c6-b067-4fe4-aeff-e06602d21698'
-      },
-      {
-        zone_id: 'de88ff54-8fe8-4258-85ea-62fa7a1c2509',
-        workout_session_id: '4f802d5a-741a-456d-bf75-3425956be21d'
-      }
+      '028584d9-7ccb-46cd-b765-a3ae2959bc6c',
+      '71a3d5c6-b067-4fe4-aeff-e06602d21698',
+      '4f802d5a-741a-456d-bf75-3425956be21d'
     ]
   },
   {
     id: '4abc996e-4242-47d6-b712-9f0f752eca15',
     title: 'Dia 4',
-    workout_sessions: [
-      {
-        zone_id: 'a5701339-2a28-481e-a8aa-fddf63bebb9c',
-        workout_session_id: 'd22c551a-a266-4fd8-b826-b71c35451472'
-      }
-    ]
+    workout_sessions: ['d22c551a-a266-4fd8-b826-b71c35451472']
   },
   {
     id: '4b5c7867-078b-4b0e-adaf-34e3e7a632ce',
     title: 'Dia 5',
     workout_sessions: [
-      {
-        zone_id: 'd6265f7c-1441-4610-8def-ad7399874462',
-        workout_session_id: 'fafb3d98-4a5e-428e-b8c4-70913c43ff48'
-      },
-      {
-        zone_id: 'fa99c362-7dc5-4d43-8af5-ba17baddacc9',
-        workout_session_id: 'ebeadb1e-0217-4c16-8bb7-d63c9d6701c7'
-      }
+      'fafb3d98-4a5e-428e-b8c4-70913c43ff48',
+      'ebeadb1e-0217-4c16-8bb7-d63c9d6701c7'
     ]
   }
 ]

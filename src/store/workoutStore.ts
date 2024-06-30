@@ -2,27 +2,44 @@ import confetti from 'canvas-confetti'
 import { create } from 'zustand'
 
 import type {
+  BodyZones,
   CurrentExercise,
   UUID,
-  WorkoutSessionDay
+  WorkoutDays,
+  WorkoutSession
 } from '@/types/GymTracker'
 import { REST_AFTER_EXERCISE, REST_BETWEEN_SETS } from '@/constants'
+import { exercises, workouts, zones } from '@/services'
 
 export interface WorkoutStoreState {
   isRest: boolean
   timeRest: number
   dialogElement: HTMLDialogElement | null
-  currentRestDuration: number
-  astroUrl: URL | null
-  workoutSessionDay: WorkoutSessionDay | null
+
+  bodyZone: BodyZones | null
+  workoutDay: WorkoutDays | null
+  workoutSessions: WorkoutSession[] | null
+  currentWorkoutSession: WorkoutSession | null
+
   currentExercise: CurrentExercise | null
+  currentRestDuration: number
+
+  nextExercise: CurrentExercise | null
 
   setIsRest: (isRest: boolean) => void
-  setAstroUrl: (astroUrl: URL) => void
-  setWorkoutSessionDay: (workoutDay: UUID) => void
-  setCurrentExercise: (currentExercise: CurrentExercise) => void
+
+  setBodyZone: (zoneId: UUID) => void
+  setWorkoutDay: (workoutDay: UUID) => void
+  setCurrentWorkoutSession: (workoutSessionId: UUID) => void
+
+  setCurrentExercise: (
+    currentExercise: CurrentExercise,
+    workoutSessionId?: UUID
+  ) => void
   resetCurrentExercise: () => void
   addCurrentSet: () => void
+
+  setNextExercise: (nextExerciseId: UUID, workoutSessionId?: UUID) => void
 
   startTimer: () => void
   setCurrentRestDuration: (currentRestDuration: number) => void
@@ -37,34 +54,77 @@ export const useWorkoutStore = create<WorkoutStoreState>((set, get) => ({
   isRest: false,
   timeRest: 0,
   dialogElement: null,
-  astroUrl: null,
-  currentRestDuration: 0,
-  workoutSessionDay: null,
+
+  bodyZone: null,
+  workoutDay: null,
+  workoutSessions: null,
+  currentWorkoutSession: null,
+
   currentExercise: null,
+  currentRestDuration: 0,
+
+  nextExercise: null,
 
   setIsRest: (isRest: boolean) => set({ isRest }),
-  setAstroUrl: (astroUrl: URL) => set({ astroUrl }),
-  setWorkoutSessionDay: (workoutDayId: UUID) => {
-    const { astroUrl } = get()
-    if (!astroUrl) return
-    const endpoint = new URL(`/api/workouts/${workoutDayId}`, astroUrl)
-    fetch(endpoint)
-      .then((response) => {
-        if (response.ok) {
-          response.json().then((workoutDay) => {
-            console.log(workoutDay)
-          })
-        }
-      })
-      .catch(() => {})
+
+  setBodyZone: (zoneId: UUID) => {
+    zones.getZoneById(zoneId).then((bodyZone) => {
+      set({ bodyZone })
+    })
   },
+  setWorkoutDay: (workoutDayId: UUID) => {
+    workouts.getWorkoutDayById(workoutDayId).then((workoutDay) => {
+      set({ workoutSessions: null })
+      const { workout_sessions } = workoutDay
+      if (workout_sessions.length === 0) return
+      workout_sessions.forEach((workoutSessionId) => {
+        workouts
+          .getWorkoutSessionById(workoutSessionId)
+          .then((workoutSession) => {
+            set((state) => {
+              const { workoutSessions } = state
+              return {
+                workoutDay,
+                workoutSessions: workoutSessions
+                  ? [...workoutSessions, workoutSession]
+                  : [workoutSession]
+              }
+            })
+          })
+      })
+    })
+  },
+  setCurrentWorkoutSession: (workoutSessionId: UUID) => {
+    const { workoutSessions } = get()
+    const currentWorkoutSession = workoutSessions?.find(
+      (session) => session.id === workoutSessionId
+    )
+    set({ currentWorkoutSession })
+  },
+
   setCurrentExercise: (currentExercise: CurrentExercise) => {
+    const { currentWorkoutSession } = get()
+    set({ nextExercise: null })
+
+    const { exercises_series } = currentWorkoutSession ?? {
+      exercises_series: []
+    }
+    const currentSequence = currentExercise.sequence ?? 0
+    const nextExercise = exercises_series.find(
+      (exercise) => exercise.sequence === currentSequence + 1
+    )
+
     const { currentExercise: newCurrentExercise, restTime } =
       configSelectedExercise(currentExercise)
-    set({
-      currentExercise: newCurrentExercise,
-      currentRestDuration: restTime,
-      timeRest: restTime
+
+    set((state) => {
+      const { setNextExercise } = state
+      setNextExercise(nextExercise?.exercise_series_id ?? '')
+      return {
+        currentExercise: newCurrentExercise,
+        currentRestDuration: restTime,
+        timeRest: restTime
+      }
     })
   },
   resetCurrentExercise: () => {
@@ -109,6 +169,28 @@ export const useWorkoutStore = create<WorkoutStoreState>((set, get) => ({
     }
   },
 
+  setNextExercise: (nextExerciseId: UUID) => {
+    const { currentWorkoutSession } = get()
+
+    const { exercises_series } = currentWorkoutSession ?? {
+      exercises_series: []
+    }
+    const nextExercise = exercises_series.find(
+      (exercise) => exercise.exercise_series_id === nextExerciseId
+    )
+    if (!nextExercise) return
+
+    exercises.getExerciseById(nextExerciseId).then((exercise) => {
+      set({
+        nextExercise: {
+          ...exercise,
+          ...nextExercise,
+          currentSet: 0
+        }
+      })
+    })
+  },
+
   startTimer: () => {
     const intervalId = setInterval(() => {
       set((state) => {
@@ -116,6 +198,8 @@ export const useWorkoutStore = create<WorkoutStoreState>((set, get) => ({
           isRest,
           timeRest,
           currentExercise,
+          nextExercise,
+          setCurrentExercise,
           addCurrentSet,
           resetCurrentExercise,
           showDialog
@@ -134,7 +218,8 @@ export const useWorkoutStore = create<WorkoutStoreState>((set, get) => ({
 
           const isLastSet = currentSet === sets - 1
           if (isLastSet) {
-            resetCurrentExercise()
+            if (nextExercise == null) resetCurrentExercise()
+            else setCurrentExercise(nextExercise)
           } else {
             addCurrentSet()
           }

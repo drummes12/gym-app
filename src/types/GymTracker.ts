@@ -46,16 +46,14 @@ export interface ExercisesSeries {
 
 export interface WorkoutSession {
   id: UUID
+  zone_id: UUID
   exercises_series: Array<ExerciseSeriesWorkout>
 }
 
 export interface WorkoutDays {
   id: UUID
   title: string
-  workout_sessions: {
-    zone_id: UUID
-    workout_session_id: UUID
-  }[]
+  workout_sessions: UUID[]
 }
 
 export type WorkoutDayResponse = WorkoutDays | { error?: string }

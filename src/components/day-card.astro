@@ -1,12 +1,10 @@
 ---
-import { fetchJson } from '@/services'
+import { fetchJson, workouts, zones } from '@/services'
+import type { UUID } from '@/types/GymTracker'
 
 interface Props {
   title: string
-  workoutSessions?: {
-    zone_id: string
-    workout_session_id: string
-  }[]
+  workoutSessions: UUID[]
   href: string
 }
 
@@ -14,11 +12,22 @@ const { href, title, workoutSessions } = Astro.props
 
 const [, day] = href.split('/')
 
-const zones = workoutSessions?.map((session) => {
-  const endpointExercise = new URL(`/api/zones/${session.zone_id}`, Astro.url)
-  return fetchJson(endpointExercise).then((zone) => {
-    return zone.abbreviation?.slice(0, 3)
-  })
+const zonesAbbr = workoutSessions?.map((workout_session_id) => {
+  const endpointWorkoutSession = new URL(
+    `/api/workouts/sessions/${workout_session_id}`,
+    Astro.url
+  )
+  return fetchJson(endpointWorkoutSession)
+    .then((workoutSession) => {
+      const endpointZone = new URL(
+        `/api/zones/${workoutSession.zone_id}`,
+        Astro.url
+      )
+      return fetchJson(endpointZone)
+    })
+    .then((zone) => {
+      return zone.abbreviation?.slice(0, 3)
+    })
 })
 ---
 
@@ -34,7 +43,7 @@ const zones = workoutSessions?.map((session) => {
         class='text-[3.25rem] sm:text-7xl font-synemono flex flex-col tabular-nums'
       >
         {
-          zones?.map((zone) => {
+          zonesAbbr?.map((zone) => {
             return (
               <span class='leading-[2.25rem] sm:leading-[3rem] tracking-tighter'>
                 {zone}

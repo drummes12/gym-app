@@ -31,7 +31,7 @@ export function PlayRest({ size = 'sm' }) {
 
   return (
     <button
-      className={`${sizeButton} bg-neon text-zinc-800
+      className={`${sizeButton} aspect-square bg-neon text-zinc-800
       flex items-center justify-center
       sm:text-white sm:bg-zinc-800 sm:border-neon/40 sm:border-2 rounded-full p-4
       transition sm:hover:bg-neon sm:hover:text-zinc-800 sm:hover:scale-110

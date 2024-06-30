@@ -1,32 +1,42 @@
 import { useEffect, useState } from 'react'
 import { useWorkoutStore } from '@/store/workoutStore'
-import type { Exercises, UUID } from '@/types/GymTracker'
+import type { ExerciseSeriesWorkout, Exercises, UUID } from '@/types/GymTracker'
 
 import styles from './exercise-card.module.css'
+import { exercises } from '@/services'
 
 export function ExerciseCard({
-  exercise,
-  workoutDayId
+  exerciseSerie,
+  workoutSessionId
 }: {
-  exercise: Exercises
-  workoutDayId?: UUID
+  exerciseSerie: ExerciseSeriesWorkout
+  workoutSessionId: UUID
 }) {
-  const [isActive, setIsActive] = useState(false)
   const {
-    title,
-    variation,
-    sets,
-    repetitions,
-    weight,
-    weight_unit: weightUnit,
-    additional_info: additionalInfo
-  } = exercise
+    isRest,
+    currentExercise,
+    nextExercise,
+    setCurrentExercise,
+    setCurrentWorkoutSession
+  } = useWorkoutStore((state) => state)
 
-  const { isRest, currentExercise, setCurrentExercise } = useWorkoutStore(
-    (state) => state
-  )
+  const [isActive, setIsActive] = useState(false)
+  const [isNext, setIsNext] = useState(false)
+  const [exercise, setExercise] = useState<Exercises | null>(null)
+
+  useEffect(() => {
+    exercises
+      .getExerciseById(exerciseSerie.exercise_series_id)
+      .then((exercise) => {
+        const { exercise_series_id, ...exerciseSession } = exerciseSerie
+        setExercise({ ...exercise, ...exerciseSession })
+      })
+  }, [])
 
   const handleClick = () => {
+    if (exercise == null) return
+    setCurrentWorkoutSession(workoutSessionId)
+
     if (currentExercise === null) {
       setCurrentExercise({ ...exercise, currentSet: 0 })
       return
@@ -39,12 +49,32 @@ export function ExerciseCard({
   }
 
   useEffect(() => {
-    setIsActive(currentExercise?.id === exercise.id)
-  }, [currentExercise])
+    setIsActive(currentExercise?.id === exerciseSerie.exercise_series_id)
+
+    const { sets = 0, currentSet } = currentExercise ?? {}
+
+    const isLastSet = currentSet === sets - 1
+    if (isLastSet) {
+      setIsNext(nextExercise?.id === exerciseSerie.exercise_series_id)
+    }
+  }, [currentExercise, nextExercise])
+
+  if (exercise == null) return null
+  const {
+    title,
+    variation,
+    sets,
+    repetitions,
+    weight,
+    weight_unit: weightUnit,
+    additional_info: additionalInfo
+  } = exercise
 
   return (
     <li
-      className={`${styles['link-card']} ${isActive ? 'current-exercise' : ''}`}
+      className={`${styles['link-card']} ${
+        isActive ? 'current-exercise' : ''
+      } ${isNext ? 'next-exercise' : ''}`}
     >
       <button className='w-full' onClick={handleClick}>
         <header className='flex gap-2 items-center justify-between'>
