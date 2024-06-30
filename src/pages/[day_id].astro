@@ -1,5 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro'
+import ZoneTitle from '@/components/zone-title.astro'
+import { ExerciseCard } from '@/components/exercise-card'
 
 import type {
   Exercises,
@@ -8,9 +10,7 @@ import type {
   ExerciseSeriesWorkout,
   ExercisesSeriesResponse
 } from '@/types/GymTracker'
-import { ExerciseCard } from '@/components/exercise-card/exercise-card'
 import { fetchJson } from '@/services'
-import ZoneTitle from '@/components/zone-title.astro'
 
 const { day_id } = Astro.params
 
@@ -96,21 +96,33 @@ async function getExercise(exerciseId: string) {
   {
     workoutSessions.map((workoutSession) => {
       return (
-        <section class='pb-4'>
+        <section class='pb-2'>
           <ZoneTitle zone_id={workoutSession.zone_id} />
-          <ul class='flex flex-col gap-2 [&>div]:flex [&>div]:gap-1 [&>div]:flex-col'>
+          <ul class='flex flex-col gap-1 [&>div]:flex [&>div]:gap-1 [&>div]:flex-col'>
             {workoutSession.exercises_series.map((serie) => {
               if (serie?.mode) {
                 return (
                   <div class='flex !flex-row justify-between flex-wrap'>
                     {serie.exercises.map((exercise: Exercises) => {
-                      return <ExerciseCard client:load exercise={exercise} />
+                      return (
+                        <ExerciseCard
+                          client:load
+                          exercise={exercise}
+                          workoutDayId={day_id}
+                        />
+                      )
                     })}
                   </div>
                 )
               }
 
-              return <ExerciseCard client:load exercise={serie} />
+              return (
+                <ExerciseCard
+                  client:load
+                  exercise={serie}
+                  workoutDayId={day_id}
+                />
+              )
             })}
           </ul>
         </section>

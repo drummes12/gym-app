@@ -6,14 +6,8 @@ import { timeFormatted } from '@/lib/time'
 import { PlayRest } from '@/components/play-rest'
 
 export function PlayerBar() {
-  const {
-    timeRest,
-    currentRestDuration,
-    currentExercise,
-    nextExercise,
-    isRest,
-    startTimer
-  } = useWorkoutStore((state) => state)
+  const { timeRest, currentRestDuration, currentExercise, isRest, startTimer } =
+    useWorkoutStore((state) => state)
   const [isVisible, setIsVisible] = useState(currentExercise != null)
 
   useEffect(() => {

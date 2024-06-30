@@ -29,7 +29,8 @@ export function DialogComplete() {
     variation,
     weight,
     weight_unit: weightUnit,
-    additional_info
+    additional_info,
+    sequence
   } = currentExercise ?? {}
 
   const isLastSet = currentSet === sets - 1
@@ -107,8 +108,11 @@ export function DialogComplete() {
         </section>
 
         <menu className='pt-8 flex justify-between items-end'>
-          <p className='pt-4 text-xs'>Descanso de {timeRest} segundos</p>
-          <PlayRest size='md' />
+          <div className='text-base'>
+            <p className=''>Ejercicio #{sequence}</p>
+            <p className='text-xs'>Descanso de {timeRest} segundos</p>
+          </div>
+          <PlayRest size='xl' />
         </menu>
 
         <button

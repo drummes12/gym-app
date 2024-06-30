@@ -81,4 +81,15 @@ export interface ExerciseSeriesWorkout {
 
 export interface CurrentExercise extends Exercises {
   currentSet: number
+  sequence?: number
+}
+
+export interface WorkoutSessionDay {
+  id: UUID
+  title: string
+  workout_sessions: {
+    zone_id: UUID
+    workout_session_id: UUID
+    exercises_series: Array<ExerciseSeriesWorkout>
+  }[]
 }

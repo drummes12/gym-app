@@ -99,9 +99,7 @@ export const EXERCISES: Exercises[] = [
     sets: 4,
     repetitions: 12,
     weight: 15,
-    weight_unit: 'kg/DB',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    weight_unit: 'kg/DB'
   },
   {
     id: '5d704aac-90f6-4a8d-a9be-7f5915a5eb77',
@@ -111,9 +109,7 @@ export const EXERCISES: Exercises[] = [
     sets: 4,
     repetitions: 12,
     weight: 45,
-    weight_unit: 'lb/lado',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    weight_unit: 'lb/lado'
   },
   {
     id: 'b8160d71-5b5b-45a3-a2b3-477e4fcb45be',
@@ -123,9 +119,7 @@ export const EXERCISES: Exercises[] = [
     sets: 4,
     repetitions: 12,
     weight: 15,
-    weight_unit: 'kg/lado',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    weight_unit: 'kg/lado'
   },
   {
     id: '718c2a81-5f70-4589-b5f3-dc7fd860f4a5',
@@ -135,9 +129,7 @@ export const EXERCISES: Exercises[] = [
     sets: 4,
     repetitions: 15,
     weight: 15,
-    weight_unit: 'kg/lado',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    weight_unit: 'kg/lado'
   },
   {
     id: '06a5f310-5b40-4e2a-a51f-b839a316fd04',
@@ -156,9 +148,7 @@ export const EXERCISES: Exercises[] = [
     sets: 4,
     repetitions: 20,
     weight: 4,
-    weight_unit: 'discos',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    weight_unit: 'discos'
   },
   {
     id: '1e8d3353-f51e-49d6-8e02-d1ac1684a7e2',
@@ -173,9 +163,7 @@ export const EXERCISES: Exercises[] = [
     sets: 4,
     repetitions: 24,
     weight: 5,
-    weight_unit: 'kg/lado',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    weight_unit: 'kg/lado'
   },
   {
     id: 'e83e7df5-0c78-4ecb-9042-1ad3043a6061',
@@ -185,9 +173,7 @@ export const EXERCISES: Exercises[] = [
     sets: 4,
     repetitions: 30,
     weight: 10,
-    weight_unit: 'kg',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    weight_unit: 'kg'
   },
   {
     id: 'bff2ccb0-f85f-47e6-b1b4-e481c509b7e9',
@@ -197,9 +183,7 @@ export const EXERCISES: Exercises[] = [
     sets: 4,
     repetitions: 12,
     weight: 25,
-    weight_unit: 'kg',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    weight_unit: 'kg'
   },
   {
     id: '3c05f312-df60-4f16-808b-74439b85a115',
@@ -209,9 +193,7 @@ export const EXERCISES: Exercises[] = [
     sets: 4,
     repetitions: 15,
     weight: 10,
-    weight_unit: 'kg',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    weight_unit: 'kg'
   },
   {
     id: '750b8ed2-ea32-47eb-aa9d-323913bbc89b',
@@ -220,9 +202,7 @@ export const EXERCISES: Exercises[] = [
     repetitions: 12,
     weight: 45,
     weight_unit: 'lb/lado',
-    zone_id: 'b9b9e475-0186-4614-8b36-336116252154',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    zone_id: 'b9b9e475-0186-4614-8b36-336116252154'
   },
   {
     id: '7e402a8a-7c64-4f8a-b571-65f31a0f715a',
@@ -231,9 +211,7 @@ export const EXERCISES: Exercises[] = [
     repetitions: 12,
     weight: 60,
     weight_unit: 'kg/lado',
-    zone_id: 'b9b9e475-0186-4614-8b36-336116252154',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    zone_id: 'b9b9e475-0186-4614-8b36-336116252154'
   },
   {
     id: '887717b9-2d3b-4637-81e0-fe0016237e4b',
@@ -268,9 +246,7 @@ export const EXERCISES: Exercises[] = [
     repetitions: 12,
     weight: 45,
     weight_unit: 'lb/lado',
-    zone_id: '12ca92b1-943f-42f3-a06a-3b5af0176d8b',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    zone_id: '12ca92b1-943f-42f3-a06a-3b5af0176d8b'
   },
   {
     id: '132f4203-ee31-4ab4-abec-f096af2767fe',
@@ -279,9 +255,7 @@ export const EXERCISES: Exercises[] = [
     repetitions: 12,
     weight: 25,
     weight_unit: 'kg/lado',
-    zone_id: '991f4b95-bb3e-4e02-9bd0-4f478623bd4a',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    zone_id: '991f4b95-bb3e-4e02-9bd0-4f478623bd4a'
   },
   {
     id: 'e5bd8e97-21b8-4426-94e3-b968b4af5077',
@@ -290,9 +264,7 @@ export const EXERCISES: Exercises[] = [
     repetitions: 12,
     weight: 70,
     weight_unit: 'lb',
-    zone_id: 'b9b9e475-0186-4614-8b36-336116252154',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    zone_id: 'b9b9e475-0186-4614-8b36-336116252154'
   },
   {
     id: 'e6689f5b-9947-44cd-8b84-801a48e19c8b',
@@ -300,18 +272,14 @@ export const EXERCISES: Exercises[] = [
     variation: 'Tumbado',
     sets: 4,
     repetitions: 12,
-    zone_id: '12ca92b1-943f-42f3-a06a-3b5af0176d8b',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    zone_id: '12ca92b1-943f-42f3-a06a-3b5af0176d8b'
   },
   {
     id: 'bb10ff3c-2681-46a1-b92f-9014c2a9da4f',
     title: 'Good Morning',
     sets: 4,
     repetitions: 15,
-    zone_id: '12ca92b1-943f-42f3-a06a-3b5af0176d8b',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    zone_id: '12ca92b1-943f-42f3-a06a-3b5af0176d8b'
   },
   {
     id: 'c02e8827-6bdc-4102-86d9-4d7f4512b53c',
@@ -326,9 +294,7 @@ export const EXERCISES: Exercises[] = [
     repetitions: 12,
     weight: 70,
     weight_unit: 'lb',
-    zone_id: '61d657de-23f6-41e5-a83c-bb50508f8c5c',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    zone_id: '61d657de-23f6-41e5-a83c-bb50508f8c5c'
   },
   {
     id: 'bdca9fec-86be-45dd-a089-cfdb3b909dc1',
@@ -338,9 +304,7 @@ export const EXERCISES: Exercises[] = [
     repetitions: 12,
     weight: 70,
     weight_unit: 'lb',
-    zone_id: '61d657de-23f6-41e5-a83c-bb50508f8c5c',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    zone_id: '61d657de-23f6-41e5-a83c-bb50508f8c5c'
   },
   {
     id: '962774a5-d6c6-440d-9675-fb90ff66de66',
@@ -350,9 +314,7 @@ export const EXERCISES: Exercises[] = [
     repetitions: 12,
     weight: 80,
     weight_unit: 'lb',
-    zone_id: '61d657de-23f6-41e5-a83c-bb50508f8c5c',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    zone_id: '61d657de-23f6-41e5-a83c-bb50508f8c5c'
   },
   {
     id: '8f7f4942-192a-4711-b322-52a560557626',
@@ -361,9 +323,7 @@ export const EXERCISES: Exercises[] = [
     repetitions: 12,
     weight: 40,
     weight_unit: 'lb',
-    zone_id: '61d657de-23f6-41e5-a83c-bb50508f8c5c',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    zone_id: '61d657de-23f6-41e5-a83c-bb50508f8c5c'
   },
   {
     id: '4900f0f6-6d98-43e2-8107-497149b50b49',
@@ -373,9 +333,7 @@ export const EXERCISES: Exercises[] = [
     repetitions: 12,
     weight: 15,
     weight_unit: 'kg/lado',
-    zone_id: 'a5701339-2a28-481e-a8aa-fddf63bebb9c',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    zone_id: 'a5701339-2a28-481e-a8aa-fddf63bebb9c'
   },
   {
     id: '920f81e7-f209-4397-ba3c-90592e063046',
@@ -384,9 +342,7 @@ export const EXERCISES: Exercises[] = [
     repetitions: 12,
     weight: 80,
     weight_unit: 'lb',
-    zone_id: 'a5701339-2a28-481e-a8aa-fddf63bebb9c',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    zone_id: 'a5701339-2a28-481e-a8aa-fddf63bebb9c'
   },
   {
     id: '0c4d79fa-d0f0-4890-bd87-88f9d3f757e8',
@@ -395,9 +351,7 @@ export const EXERCISES: Exercises[] = [
     repetitions: 12,
     weight: 7.5,
     weight_unit: 'kg/lado',
-    zone_id: 'a5701339-2a28-481e-a8aa-fddf63bebb9c',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    zone_id: 'a5701339-2a28-481e-a8aa-fddf63bebb9c'
   },
   {
     id: '353f7d3d-c31a-43ba-b118-e0f5ec312735',
@@ -406,9 +360,7 @@ export const EXERCISES: Exercises[] = [
     repetitions: 12,
     weight: 7.5,
     weight_unit: 'kg/lado',
-    zone_id: 'a5701339-2a28-481e-a8aa-fddf63bebb9c',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    zone_id: 'a5701339-2a28-481e-a8aa-fddf63bebb9c'
   },
   {
     id: '13d6b396-03af-43a9-a10e-e76d36536608',
@@ -417,9 +369,7 @@ export const EXERCISES: Exercises[] = [
     repetitions: 12,
     weight: 70,
     weight_unit: 'lb/lado',
-    zone_id: 'a5701339-2a28-481e-a8aa-fddf63bebb9c',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    zone_id: 'a5701339-2a28-481e-a8aa-fddf63bebb9c'
   },
   {
     id: 'f4b76388-4d95-4aa5-9e93-df9b9ce7f021',
@@ -428,9 +378,7 @@ export const EXERCISES: Exercises[] = [
     repetitions: 12,
     weight: 10,
     weight_unit: 'kg/lado',
-    zone_id: 'd6265f7c-1441-4610-8def-ad7399874462',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    zone_id: 'd6265f7c-1441-4610-8def-ad7399874462'
   },
   {
     id: '14b2fd9b-4f3f-4b8d-b64b-7c77b20b5eec',
@@ -439,9 +387,7 @@ export const EXERCISES: Exercises[] = [
     repetitions: 12,
     weight: 15,
     weight_unit: 'lb/lado',
-    zone_id: 'd6265f7c-1441-4610-8def-ad7399874462',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    zone_id: 'd6265f7c-1441-4610-8def-ad7399874462'
   },
   {
     id: '0578bbef-c43e-464e-90c5-5b1552e4c42d',
@@ -450,9 +396,7 @@ export const EXERCISES: Exercises[] = [
     repetitions: 12,
     weight: 20,
     weight_unit: 'kg/lado',
-    zone_id: 'fa99c362-7dc5-4d43-8af5-ba17baddacc9',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    zone_id: 'fa99c362-7dc5-4d43-8af5-ba17baddacc9'
   },
   {
     id: 'b210c555-db2b-46d3-94f0-c4c176eabd5c',
@@ -461,9 +405,7 @@ export const EXERCISES: Exercises[] = [
     repetitions: 12,
     weight: 100,
     weight_unit: 'lb',
-    zone_id: 'fa99c362-7dc5-4d43-8af5-ba17baddacc9',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    zone_id: 'fa99c362-7dc5-4d43-8af5-ba17baddacc9'
   },
   {
     id: 'ee96f631-660a-4701-be63-53210b904638',
@@ -471,9 +413,7 @@ export const EXERCISES: Exercises[] = [
     variation: 'Banco',
     sets: 4,
     repetitions: 12,
-    zone_id: 'fa99c362-7dc5-4d43-8af5-ba17baddacc9',
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    zone_id: 'fa99c362-7dc5-4d43-8af5-ba17baddacc9'
   }
 ]
 
@@ -481,22 +421,16 @@ export const EXERCISES_SERIES: ExercisesSeries[] = [
   {
     id: 'ac198865-f463-481e-8e73-f09f7ab20eef',
     mode: MODE_SERIES.SUPER_SETS,
-    sets: 4,
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    sets: 4
   },
   {
     id: '341cae74-3554-4e49-985a-26fb91244dfe',
     mode: MODE_SERIES.SUPER_SETS,
-    sets: 4,
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    sets: 4
   },
   {
     id: '6eec856e-f45b-4596-bf89-b8311ccb5cd3',
-    mode: MODE_SERIES.ALTERNATING_SETS,
-    rest_between_sets: 60,
-    rest_after_exercise: 90
+    mode: MODE_SERIES.ALTERNATING_SETS
   }
 ]
 

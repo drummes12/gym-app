@@ -1,40 +1,69 @@
 ---
+import { fetchJson } from '@/services'
+
 interface Props {
   title: string
-  body?: string
+  workoutSessions?: {
+    zone_id: string
+    workout_session_id: string
+  }[]
   href: string
 }
 
-const { href, title, body } = Astro.props
+const { href, title, workoutSessions } = Astro.props
 
 const [, day] = href.split('/')
+
+const zones = workoutSessions?.map((session) => {
+  const endpointExercise = new URL(`/api/zones/${session.zone_id}`, Astro.url)
+  return fetchJson(endpointExercise).then((zone) => {
+    return zone.abbreviation?.slice(0, 3)
+  })
+})
 ---
 
 <li class='link-card'>
-  <a href={href}>
-    <h2 transition:name={`title-page-${day}`}>
-      {title}
-    </h2>
-    <p>
-      {body}
-    </p>
+  <a href={href} class='flex w-full h-full justify-between'>
+    <div class='p-3'>
+      <h2 transition:name={`title-page-${day}`}>
+        {title}
+      </h2>
+    </div>
+    <div class='h-full flex text-white/30 pr-0.5'>
+      <p
+        class='text-[3.25rem] sm:text-7xl font-synemono flex flex-col tabular-nums'
+      >
+        {
+          zones?.map((zone) => {
+            return (
+              <span class='leading-[2.25rem] sm:leading-[3rem] tracking-tighter'>
+                {zone}
+              </span>
+            )
+          })
+        }
+      </p>
+    </div>
   </a>
 </li>
 <style>
   .link-card {
-    @apply flex-1 flex flex-col min-w-52 w-full p-3 list-none;
+    @apply flex-1 flex flex-col min-w-48 w-full h-20 sm:min-h-28 list-none overflow-clip;
     color: white;
-    background-color: rgb(35, 38, 45, 0.4);
-    backdrop-filter: blur(4px);
+    background-color: rgb(0, 0, 0, 0.3);
+    backdrop-filter: blur(8px);
     background-image: none;
     background-size: 400%;
     border-radius: 7px;
     background-position: 100%;
     transition: background-position 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
 
+    h2,
     h3,
-    h4 {
+    h4,
+    p,
+    span {
       transition: color 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
@@ -44,13 +73,12 @@ const [, day] = href.split('/')
         background-image: var(--accent-gradient);
         box-shadow: inset 0 0 0 2px rgb(var(--accent-light));
       }
-      &:is(:hover, :focus-within) h3,
-      &:is(:hover, :focus-within) p {
-        color: rgb(var(--accent-light));
-      }
-      &:is(:hover, :focus-within) h4,
-      &:is(:hover, :focus-within) span {
+      &:is(:hover, :focus-within) h2,
+      &:is(:hover, :focus-within) h4 {
         color: rgb(var(--accent-dark));
+      }
+      &:is(:hover, :focus-within) span {
+        color: rgb(var(--accent-dark), 0.3);
       }
     }
   }
@@ -61,7 +89,7 @@ const [, day] = href.split('/')
     transition: color 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   }
   p {
-    margin-top: 0.5rem;
-    margin-bottom: 0;
+    writing-mode: vertical-lr;
+    font-kerning: none;
   }
 </style>

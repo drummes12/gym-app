@@ -3,7 +3,6 @@
   list-style: none;
   display: flex;
   padding: 1px;
-  background-color: transparent;
   background-image: none;
   background-size: 100%;
   border-radius: 7px;
@@ -13,7 +12,7 @@
   background-image: radial-gradient(
     circle,
     transparent 0%,
-    transparent 0%,
+    transparent 30%,
     #ffff00 100%
   );
 }

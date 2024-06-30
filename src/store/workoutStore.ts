@@ -1,18 +1,25 @@
 import confetti from 'canvas-confetti'
 import { create } from 'zustand'
 
-import type { CurrentExercise, Exercises } from '@/types/GymTracker'
+import type {
+  CurrentExercise,
+  UUID,
+  WorkoutSessionDay
+} from '@/types/GymTracker'
 import { REST_AFTER_EXERCISE, REST_BETWEEN_SETS } from '@/constants'
 
 export interface WorkoutStoreState {
   isRest: boolean
-  currentExercise: CurrentExercise | null
-  nextExercise: Exercises | null
-  currentRestDuration: number
   timeRest: number
   dialogElement: HTMLDialogElement | null
+  currentRestDuration: number
+  astroUrl: URL | null
+  workoutSessionDay: WorkoutSessionDay | null
+  currentExercise: CurrentExercise | null
 
   setIsRest: (isRest: boolean) => void
+  setAstroUrl: (astroUrl: URL) => void
+  setWorkoutSessionDay: (workoutDay: UUID) => void
   setCurrentExercise: (currentExercise: CurrentExercise) => void
   resetCurrentExercise: () => void
   addCurrentSet: () => void
@@ -27,14 +34,30 @@ export interface WorkoutStoreState {
 }
 
 export const useWorkoutStore = create<WorkoutStoreState>((set, get) => ({
-  currentRestDuration: 0,
-  timeRest: 0,
   isRest: false,
-  currentExercise: null,
-  nextExercise: null,
+  timeRest: 0,
   dialogElement: null,
+  astroUrl: null,
+  currentRestDuration: 0,
+  workoutSessionDay: null,
+  currentExercise: null,
 
   setIsRest: (isRest: boolean) => set({ isRest }),
+  setAstroUrl: (astroUrl: URL) => set({ astroUrl }),
+  setWorkoutSessionDay: (workoutDayId: UUID) => {
+    const { astroUrl } = get()
+    if (!astroUrl) return
+    const endpoint = new URL(`/api/workouts/${workoutDayId}`, astroUrl)
+    fetch(endpoint)
+      .then((response) => {
+        if (response.ok) {
+          response.json().then((workoutDay) => {
+            console.log(workoutDay)
+          })
+        }
+      })
+      .catch(() => {})
+  },
   setCurrentExercise: (currentExercise: CurrentExercise) => {
     const { currentExercise: newCurrentExercise, restTime } =
       configSelectedExercise(currentExercise)

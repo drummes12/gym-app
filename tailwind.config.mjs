@@ -5,7 +5,7 @@ export default {
 		extend: {
 			fontFamily: {
 				dseg14: ['DSEG14 Classic', 'sans-serif'],
-				audiowide: ['Audiowide', 'system-ui']
+				synemono: ['Syne Mono', 'system-ui']
 			},
 			colors: {
 				neon: '#ffff00',

@@ -1,11 +1,46 @@
-<header class='max-w-3xl h-full px-4 flex items-center justify-between'>
+---
+import { fetchJson } from '@/services'
+import type { WorkoutDayResponse } from '@/types/GymTracker'
+
+const url = Astro.url
+const [, dayId] = url.pathname.split('/')
+
+const endpointWorkout = new URL(`/api/workouts/${dayId}`, Astro.url)
+let workoutDay: WorkoutDayResponse
+
+try {
+  workoutDay = await fetchJson(endpointWorkout)
+} catch (error) {
+  return new Response(null, {
+    status: 404,
+    statusText: 'Not Found'
+  })
+}
+
+let title_day = ''
+if ('title' in workoutDay) {
+  title_day = workoutDay.title
+}
+---
+
+<header class='max-w-3xl flex px-2 pt-2 items-end justify-between'>
   <div>
     <a href='/'>
       <h1 class='text-3xl font-bold text-white/70 tracking-tighter'>
         <strong class='text-white'>Fit</strong>Drummes
       </h1>
     </a>
-    <p class='text-lg text-white/20'>¡Entrena todos los días!</p>
+    <p class='text-lg text-white/20'>¡Alcanzando metas!</p>
   </div>
-  <h2 transition:name={`title-page`}></h2>
+  <h2 transition:name={`title-page-${dayId}`}>
+    {title_day}
+  </h2>
 </header>
+
+<style>
+  h2 {
+    color: white;
+    margin: 0;
+    font-size: 1.25rem;
+  }
+</style>

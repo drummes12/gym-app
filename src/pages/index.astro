@@ -1,9 +1,10 @@
 ---
 import Layout from '@/layouts/Layout.astro'
 import DayCard from '@/components/day-card.astro'
+
 import type { WorkoutDays } from '@/types/GymTracker'
 
-const title = 'Gym App'
+const title = 'Fit Drummes'
 
 const endpointWorkout = new URL('/api/workouts', Astro.url)
 const workoutsDay: WorkoutDays[] = await fetch(endpointWorkout).then((res) =>
@@ -12,10 +13,14 @@ const workoutsDay: WorkoutDays[] = await fetch(endpointWorkout).then((res) =>
 ---
 
 <Layout title={title}>
-  <section class='flex flex-col gap-4'>
+  <section class='flex flex-wrap gap-2'>
     {
       workoutsDay.map((workout) => (
-        <DayCard href={`/${workout.id}`} title={workout.title} />
+        <DayCard
+          href={`/${workout.id}`}
+          title={workout.title}
+          workoutSessions={workout.workout_sessions}
+        />
       ))
     }
   </section>
