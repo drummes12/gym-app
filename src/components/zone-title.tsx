@@ -14,7 +14,7 @@ export function ZoneTitle({ zone_id }: { zone_id: string }) {
   if (!zone) return null
 
   return (
-    <h1 className='sticky top-0 text-6xl sm:text-8xl text-right text-white/30 font-synemono !leading-[0.72] tracking-tighter'>
+    <h1 className='sticky top-0 text-6xl sm:text-8xl text-right text-white/30 font-synemono font-bold !leading-[0.72] tracking-tighter'>
       {zone.abbreviation.toUpperCase()}
     </h1>
   )

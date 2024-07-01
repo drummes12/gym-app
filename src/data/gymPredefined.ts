@@ -646,7 +646,7 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
   },
   {
     id: '4f802d5a-741a-456d-bf75-3425956be21d',
-    zone_id: '12ca92b1-943f-42f3-a06a-3b5af0176d8b',
+    zone_id: 'de88ff54-8fe8-4258-85ea-62fa7a1c2509',
     exercises_series: [
       {
         exercise_series_id: '3e210507-7858-42dc-b70f-c00e03bfe029',
@@ -659,7 +659,7 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
   },
   {
     id: 'd22c551a-a266-4fd8-b826-b71c35451472',
-    zone_id: 'de88ff54-8fe8-4258-85ea-62fa7a1c2509',
+    zone_id: 'a5701339-2a28-481e-a8aa-fddf63bebb9c',
     exercises_series: [
       {
         exercise_series_id: '4900f0f6-6d98-43e2-8107-497149b50b49',
@@ -701,7 +701,7 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
   },
   {
     id: 'fafb3d98-4a5e-428e-b8c4-70913c43ff48',
-    zone_id: 'a5701339-2a28-481e-a8aa-fddf63bebb9c',
+    zone_id: 'd6265f7c-1441-4610-8def-ad7399874462',
     exercises_series: [
       {
         exercise_series_id: 'f4b76388-4d95-4aa5-9e93-df9b9ce7f021',

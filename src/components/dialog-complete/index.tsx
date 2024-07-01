@@ -38,16 +38,16 @@ export function DialogComplete() {
   const wordLargeTitle =
     wordsTitle?.reduce((a, b) => (a.length > b.length ? a : b)) ?? ''
 
-  let sizeTitle = 'text-7xl'
+  let sizeTitle = 'text-6xl sm:text-7xl'
 
   if (wordLargeTitle.length > 12) {
-    sizeTitle = 'text-3xl'
+    sizeTitle = 'text-2xl sm:text-3xl'
   } else if (wordLargeTitle.length > 9) {
-    sizeTitle = 'text-4xl'
+    sizeTitle = 'text-3xl sm:text-4xl'
   } else if (wordLargeTitle.length > 7) {
-    sizeTitle = 'text-5xl'
+    sizeTitle = 'text-4xl sm:text-5xl'
   } else if (wordLargeTitle.length > 6) {
-    sizeTitle = 'text-6xl'
+    sizeTitle = 'text-5xl sm:text-6xl'
   }
 
   return (
@@ -56,7 +56,7 @@ export function DialogComplete() {
         <header className='relative text-lg font-bold overflow-hidden'>
           <h1 className='opacity-80'>{statusTitle}</h1>
           <h2 className={`${sizeTitle} max-w-[20ch] uppercase`}>{title}</h2>
-          <div className='absolute -right-2 top-0 h-full w-10 bg-gradient-to-l from-zinc-900 from-30% to-transparent'></div>
+          <div className='absolute -right-2 top-0 h-full w-10 bg-gradient-to-l from-zinc-900/90 from-30% to-transparent'></div>
         </header>
 
         <section>
@@ -107,22 +107,45 @@ export function DialogComplete() {
         </section>
 
         <menu className='pt-8 flex h-min gap-4 justify-between items-end'>
-          <div className='flex flex-col'>
-            <h4 className='pb-2'>Siquiente Ejercicio</h4>
-            <div className='flex flex-wrap gap-2 leading-none text-white/50'>
-              <p className='py-1 px-2 border-2 border-white/20 rounded-lg'>
-                {nextExercise?.title}
-                <span className='block opacity-60 text-xs'>Titulo</span>
-              </p>
-              <p className='py-1 px-2 border-2 border-white/20 rounded-lg'>
-                {nextExercise?.weight} {nextExercise?.weight_unit}
-                <span className='block opacity-60 text-xs'>Weight</span>
-              </p>
-              <p className='py-1 px-2 border-2 border-white/20 rounded-lg'>
-                {nextExercise?.sets}x{nextExercise?.repetitions}
-                <span className='block opacity-60 text-xs'>Sets</span>
-              </p>
-            </div>
+          <div className='flex flex-col text-sm'>
+            {nextExercise ? (
+              <>
+                <h4 className='pb-1'>Siquiente Ejercicio</h4>
+                <div className='flex flex-wrap gap-0.5 leading-none text-white/50 tracking-tighter'>
+                  <p
+                    className={`py-1 px-2 w-min border-2 ${
+                      isLastSet
+                        ? 'border-neon/60 text-neon/60'
+                        : 'border-white/20'
+                    } rounded-lg`}
+                  >
+                    {nextExercise?.title}
+                  </p>
+                  <p
+                    className={`py-1 px-2 border-2 ${
+                      isLastSet
+                        ? 'border-neon/60 text-neon/60'
+                        : 'border-white/20'
+                    } rounded-lg`}
+                  >
+                    {nextExercise?.weight} {nextExercise?.weight_unit}
+                    <span className='block opacity-60 text-xs'>Weight</span>
+                  </p>
+                  <p
+                    className={`py-1 px-2 border-2 ${
+                      isLastSet
+                        ? 'border-neon/60 text-neon/60'
+                        : 'border-white/20'
+                    } rounded-lg`}
+                  >
+                    {nextExercise?.sets}x{nextExercise?.repetitions}
+                    <span className='block opacity-60 text-xs'>Sets</span>
+                  </p>
+                </div>
+              </>
+            ) : (
+              <p className='text-center'>¡Último ejercicio!</p>
+            )}
           </div>
           <div className='w-min aspect-square'>
             <PlayRest size='xl' />
