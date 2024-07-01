@@ -64,10 +64,10 @@ export function PlayerBar() {
             className={`${styles['text-player']} absolute h-full left-0 top-0 opacity-70 flex items-center justify-center font-semibold gap-1 text-4xl leading-none font-dseg14 text-[#ffff00]`}
           >
             <div className='flex flex-col gap-1 relative'>
-              <span className='absolute left-0 text-black/40 text -z-10 [text-shadow:none]'>
+              <span className='absolute left-0 text-black/20 text -z-10 [text-shadow:none]'>
                 00
               </span>
-              <span className='absolute left-0 bottom-0 text-black/40 text -z-10 [text-shadow:none]'>
+              <span className='absolute left-0 bottom-0 text-black/20 text -z-10 [text-shadow:none]'>
                 00
               </span>
               <p className='flex-1'>
