@@ -4,7 +4,7 @@ import DayCard from '@/components/day-card.astro'
 
 import type { WorkoutDays } from '@/types/GymTracker'
 
-const title = 'Fit Drummes'
+const title = 'Fit Drummes | Entrena con nosotros'
 
 const endpointWorkout = new URL('/api/workouts', Astro.url)
 const workoutsDay: WorkoutDays[] = await fetch(endpointWorkout).then((res) =>

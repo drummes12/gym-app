@@ -2,12 +2,14 @@
 import Layout from '@/layouts/Layout.astro'
 import { WorkoutDay } from '@/components/workout-day'
 
+const title = 'Fit Drummes | Entrena con nosotros'
+
 const { day_id } = Astro.params
 if (!day_id) {
   return Astro.redirect('/')
 }
 ---
 
-<Layout title='Gym App'>
+<Layout title={title}>
   <WorkoutDay client:load workoutDayId={day_id} />
 </Layout>

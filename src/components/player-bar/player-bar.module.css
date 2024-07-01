@@ -15,6 +15,7 @@
     transparent 30%,
     #ffff00 100%
   );
+  transition: width 0.5s ease;
 }
 
 .text-player {

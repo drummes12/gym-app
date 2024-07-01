@@ -63,7 +63,13 @@ export function PlayerBar() {
           <div
             className={`${styles['text-player']} absolute h-full left-0 top-0 opacity-70 flex items-center justify-center font-semibold gap-1 text-4xl leading-none font-dseg14 text-[#ffff00]`}
           >
-            <div className='flex flex-col gap-1'>
+            <div className='flex flex-col gap-1 relative'>
+              <span className='absolute left-0 text-black/40 text -z-10 [text-shadow:none]'>
+                00
+              </span>
+              <span className='absolute left-0 bottom-0 text-black/40 text -z-10 [text-shadow:none]'>
+                00
+              </span>
               <p className='flex-1'>
                 {currentSet?.toString().padStart(2, '0')}
               </p>
@@ -77,32 +83,22 @@ export function PlayerBar() {
         className={`${styles['text-player']} absolute h-full right-0 top-0 opacity-70 flex items-center justify-center font-semibold gap-1 text-4xl leading-none font-dseg14 text-[#ffff00]`}
       >
         <div className='flex flex-col gap-1'>
-          <p className='flex-1'>
+          <p className='flex-1 relative'>
             <span className='text-xs leading-none'>min</span>
+            <span className='absolute right-0 text-black/20 text -z-10 [text-shadow:none]'>
+              00
+            </span>
             <span>{timeFormatted(timeRest).minutesFormatted}</span>
           </p>
-          <p className='flex-1 flex'>
+          <p className='flex-1 flex relative'>
             <span className='text-xs leading-none'>seg</span>
+            <span className='absolute right-0 text-black/20 text -z-10 [text-shadow:none]'>
+              00
+            </span>
             <span>{timeFormatted(timeRest).secondsFormatted}</span>
           </p>
         </div>
       </div>
     </div>
   )
-}
-
-function notifyMe() {
-  const messageNotification = '🔔 ¡Dale duro! 🦾'
-
-  if (!('Notification' in window)) {
-    console.error(messageNotification)
-  } else if (Notification.permission === 'granted') {
-    new Notification(messageNotification)
-  } else if (Notification.permission !== 'denied') {
-    Notification.requestPermission().then((permission) => {
-      if (permission === 'granted') {
-        new Notification(messageNotification)
-      }
-    })
-  }
 }

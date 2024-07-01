@@ -10,6 +10,7 @@ import type {
 } from '@/types/GymTracker'
 import { REST_AFTER_EXERCISE, REST_BETWEEN_SETS } from '@/constants'
 import { exercises, workouts, zones } from '@/services'
+import { playSound } from '@/services/audioNotification'
 
 export interface WorkoutStoreState {
   isRest: boolean
@@ -191,7 +192,32 @@ export const useWorkoutStore = create<WorkoutStoreState>((set, get) => ({
     })
   },
 
-  startTimer: () => {
+  startTimer: async () => {
+    let wakeLock: WakeLockSentinel | null = null
+    const requestWakeLock = async () => {
+      try {
+        if ('wakeLock' in navigator) {
+          wakeLock = await navigator.wakeLock.request('screen')
+          console.log('Wake Lock acquired')
+        } else {
+          console.warn('Wake Lock API not supported in this browser.')
+        }
+      } catch (err: any) {
+        console.error(
+          `Failed to acquire Wake Lock: ${err.name}, ${err.message}`
+        )
+      }
+    }
+    const releaseWakeLock = () => {
+      if (wakeLock !== null) {
+        wakeLock.release()
+        wakeLock = null
+        console.log('Wake Lock released')
+      }
+    }
+
+    requestWakeLock()
+
     const intervalId = setInterval(() => {
       set((state) => {
         const {
@@ -206,11 +232,14 @@ export const useWorkoutStore = create<WorkoutStoreState>((set, get) => ({
         } = state
         if (!isRest) {
           clearInterval(intervalId)
+          releaseWakeLock()
           return { isRest: false }
         }
 
         if (timeRest <= 1) {
+          playSound()
           clearInterval(intervalId)
+          releaseWakeLock()
 
           if (currentExercise === null) return { isRest: false }
           const { title, currentSet, sets = 0 } = currentExercise

@@ -60,10 +60,10 @@ export function DialogComplete() {
         </header>
 
         <section>
-          <div className='flex flex-col justify-center items-center my-6'>
+          <div className='flex flex-col gap-2 justify-center items-center my-6'>
             {variation && (
               <p className='w-full flex items-center justify-center gap-2 text-xl font-semibold'>
-                <span className='inline-block flex-1 text-right'>
+                <span className='inline-block flex-1 text-right leading-none'>
                   {variation}
                 </span>
                 <span className='inline-block flex-1 uppercase opacity-60 text-xs'>
@@ -73,7 +73,7 @@ export function DialogComplete() {
             )}
             {weight && (
               <p className='w-full flex items-center justify-center gap-2 text-xl font-semibold'>
-                <span className='inline-block flex-1 text-right'>
+                <span className='inline-block flex-1 text-right leading-none'>
                   {weight} {weightUnit}
                 </span>
                 <span className='inline-block flex-1 uppercase opacity-60 text-xs'>
@@ -83,7 +83,7 @@ export function DialogComplete() {
             )}
             {additional_info && (
               <p className='w-full flex items-center justify-center gap-2 text-xl font-semibold'>
-                <span className='inline-block flex-1 text-right'>
+                <span className='inline-block flex-1 text-right leading-none'>
                   {additional_info}
                 </span>
                 <span className='inline-block flex-1 uppercase opacity-60 text-xs'>
@@ -119,28 +119,32 @@ export function DialogComplete() {
                         : 'border-white/20'
                     } rounded-lg`}
                   >
-                    {nextExercise?.title}
+                    {nextExercise.title}
                   </p>
-                  <p
-                    className={`py-1 px-2 border-2 ${
-                      isLastSet
-                        ? 'border-neon/60 text-neon/60'
-                        : 'border-white/20'
-                    } rounded-lg`}
-                  >
-                    {nextExercise?.weight} {nextExercise?.weight_unit}
-                    <span className='block opacity-60 text-xs'>Weight</span>
-                  </p>
-                  <p
-                    className={`py-1 px-2 border-2 ${
-                      isLastSet
-                        ? 'border-neon/60 text-neon/60'
-                        : 'border-white/20'
-                    } rounded-lg`}
-                  >
-                    {nextExercise?.sets}x{nextExercise?.repetitions}
-                    <span className='block opacity-60 text-xs'>Sets</span>
-                  </p>
+                  {nextExercise.weight && (
+                    <p
+                      className={`py-1 px-2 border-2 ${
+                        isLastSet
+                          ? 'border-neon/60 text-neon/60'
+                          : 'border-white/20'
+                      } rounded-lg`}
+                    >
+                      {nextExercise.weight} {nextExercise.weight_unit}
+                      <span className='block opacity-60 text-xs'>Weight</span>
+                    </p>
+                  )}
+                  {nextExercise.sets && nextExercise.repetitions && (
+                    <p
+                      className={`py-1 px-2 border-2 ${
+                        isLastSet
+                          ? 'border-neon/60 text-neon/60'
+                          : 'border-white/20'
+                      } rounded-lg`}
+                    >
+                      {nextExercise.sets}x{nextExercise.repetitions}
+                      <span className='block opacity-60 text-xs'>Sets</span>
+                    </p>
+                  )}
                 </div>
               </>
             ) : (
