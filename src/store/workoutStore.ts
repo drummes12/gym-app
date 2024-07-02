@@ -12,10 +12,32 @@ import { REST_AFTER_EXERCISE, REST_BETWEEN_SETS } from '@/constants'
 import { exercises, workouts, zones } from '@/services'
 import { playSound } from '@/services/audioNotification'
 
+let wakeLock: WakeLockSentinel | null = null
+const requestWakeLock = async () => {
+  try {
+    if ('wakeLock' in navigator) {
+      wakeLock = await navigator.wakeLock.request('screen')
+    } else {
+      console.warn('Wake Lock API not supported in this browser.')
+    }
+  } catch (err: any) {
+    console.error(`Failed to acquire Wake Lock: ${err.name}, ${err.message}`)
+  }
+}
+const releaseWakeLock = () => {
+  if (wakeLock !== null) {
+    wakeLock.release()
+    wakeLock = null
+  }
+}
+
 export interface WorkoutStoreState {
   isRest: boolean
   timeRest: number
+  controlTime: number
+  intervalIdControlTime: number | null
   dialogElement: HTMLDialogElement | null
+  dialogConfetti: ReturnType<typeof confetti.create> | null
 
   bodyZone: BodyZones | null
   workoutDay: WorkoutDays | null
@@ -47,14 +69,21 @@ export interface WorkoutStoreState {
   setTimeRest: (timeRest: number) => void
 
   setDialogElement: (dialogElement: HTMLDialogElement | null) => void
+  setDialogConfetti: (
+    dialogConfetti: ReturnType<typeof confetti.create>
+  ) => void
   showDialog: () => void
   hideDialog: () => void
+  startControlTime: () => number
 }
 
 export const useWorkoutStore = create<WorkoutStoreState>((set, get) => ({
   isRest: false,
   timeRest: 0,
+  controlTime: 0,
+  intervalIdControlTime: null,
   dialogElement: null,
+  dialogConfetti: null,
 
   bodyZone: null,
   workoutDay: null,
@@ -193,29 +222,6 @@ export const useWorkoutStore = create<WorkoutStoreState>((set, get) => ({
   },
 
   startTimer: async () => {
-    let wakeLock: WakeLockSentinel | null = null
-    const requestWakeLock = async () => {
-      try {
-        if ('wakeLock' in navigator) {
-          wakeLock = await navigator.wakeLock.request('screen')
-          console.log('Wake Lock acquired')
-        } else {
-          console.warn('Wake Lock API not supported in this browser.')
-        }
-      } catch (err: any) {
-        console.error(
-          `Failed to acquire Wake Lock: ${err.name}, ${err.message}`
-        )
-      }
-    }
-    const releaseWakeLock = () => {
-      if (wakeLock !== null) {
-        wakeLock.release()
-        wakeLock = null
-        console.log('Wake Lock released')
-      }
-    }
-
     requestWakeLock()
 
     const intervalId = setInterval(() => {
@@ -252,7 +258,6 @@ export const useWorkoutStore = create<WorkoutStoreState>((set, get) => ({
           } else {
             addCurrentSet()
           }
-          confetti()
           showDialog()
           return { isRest: false }
         }
@@ -266,13 +271,37 @@ export const useWorkoutStore = create<WorkoutStoreState>((set, get) => ({
 
   setDialogElement: (dialogElement: HTMLDialogElement | null) =>
     set({ dialogElement }),
+  setDialogConfetti: (dialogConfetti: ReturnType<typeof confetti.create>) =>
+    set({ dialogConfetti }),
   showDialog: () => {
-    const dialogElement = get().dialogElement
+    const { dialogElement, dialogConfetti, startControlTime } = get()
     dialogElement?.showModal()
+    dialogConfetti &&
+      dialogConfetti({
+        particleCount: 100,
+        spread: 70
+      })
+    startControlTime()
   },
   hideDialog: () => {
-    const { dialogElement } = get()
+    const { dialogElement, intervalIdControlTime } = get()
     dialogElement?.close()
+    if (typeof intervalIdControlTime === 'number') {
+      releaseWakeLock()
+      clearInterval(intervalIdControlTime)
+      set({ intervalIdControlTime: null, controlTime: 0 })
+    }
+  },
+  startControlTime: () => {
+    requestWakeLock()
+    const intervalIdControlTime = setInterval(() => {
+      set((state) => {
+        const { controlTime } = state
+        return { controlTime: controlTime + 1 }
+      })
+    }, 1000)
+    set({ intervalIdControlTime })
+    return intervalIdControlTime
   }
 }))
 

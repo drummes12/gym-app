@@ -3,10 +3,18 @@ import styles from '@/components/dialog-complete/dialog-complete.module.css'
 import { useWorkoutStore } from '@/store/workoutStore'
 import { Close } from '@/icons/close.jsx'
 import { PlayRest } from '@/components/play-rest'
+import { timeFormatted } from '@/lib/time'
+import confetti from 'canvas-confetti'
 
 export function DialogComplete() {
-  const { currentExercise, nextExercise, setDialogElement, timeRest } =
-    useWorkoutStore((state) => state)
+  const {
+    currentExercise,
+    nextExercise,
+    controlTime,
+    setDialogElement,
+    setDialogConfetti,
+    hideDialog
+  } = useWorkoutStore((state) => state)
 
   useEffect(() => {
     const $dialog = document.querySelector('dialog')
@@ -14,10 +22,23 @@ export function DialogComplete() {
 
     $dialog.addEventListener('mousedown', (e) => {
       if (e.target === $dialog) {
-        $dialog.close()
+        hideDialog()
       }
     })
     setDialogElement($dialog)
+  }, [])
+
+  useEffect(() => {
+    const $canvas = document.getElementById(
+      'confettiCanvas'
+    ) as HTMLCanvasElement | null
+    if (!$canvas) return
+
+    const dialogConfetti = confetti.create($canvas, {
+      resize: true,
+      useWorker: true
+    })
+    setDialogConfetti(dialogConfetti)
   }, [])
 
   const {
@@ -52,6 +73,7 @@ export function DialogComplete() {
 
   return (
     <dialog>
+      <canvas id='confettiCanvas'></canvas>
       <form method='dialog' className={styles.dialog}>
         <header className='relative text-lg font-bold overflow-hidden'>
           <h1 className='opacity-80'>{statusTitle}</h1>
@@ -153,6 +175,17 @@ export function DialogComplete() {
           </div>
           <div className='w-min aspect-square'>
             <PlayRest size='xl' />
+            <div className='mt-2 flex justify-center items-center opacity-70'>
+              <p className='h-min text-xs pt-2'>Tiempo de control</p>
+              <div className='flex flex-col gap-1 items-center justify-center relative text-base leading-none font-dseg14 tracking-tighter text-[#fb9f00]'>
+                <p className='flex-1'>
+                  {timeFormatted(controlTime).minutesFormatted}
+                </p>
+                <p className='flex-1'>
+                  {timeFormatted(controlTime).secondsFormatted}
+                </p>
+              </div>
+            </div>
           </div>
         </menu>
 

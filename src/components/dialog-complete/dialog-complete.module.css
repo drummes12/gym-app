@@ -4,4 +4,8 @@ dialog {
   &::backdrop {
     @apply bg-black bg-opacity-20 backdrop-blur-sm backdrop-brightness-50 backdrop-saturate-50;
   }
+
+  canvas {
+    @apply fixed top-0 left-0 w-full h-full pointer-events-none z-50;
+  }
 }

@@ -3,7 +3,7 @@ import { Play } from '@/icons/play'
 import { useWorkoutStore } from '@/store/workoutStore'
 
 export function PlayRest({ size = 'sm' }) {
-  const { currentExercise, isRest, setIsRest, dialogElement } = useWorkoutStore(
+  const { currentExercise, isRest, setIsRest, hideDialog } = useWorkoutStore(
     (state) => state
   )
   const { currentSet, sets, rest_between_sets, rest_after_exercise } =
@@ -13,7 +13,7 @@ export function PlayRest({ size = 'sm' }) {
     if (currentSet && sets && currentSet > sets) return
     if (!rest_between_sets || !rest_after_exercise) return
     setIsRest(!isRest)
-    dialogElement?.close()
+    hideDialog()
   }
 
   let sizeButton = 'size-12'
