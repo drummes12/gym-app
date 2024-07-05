@@ -53,7 +53,10 @@ export interface WorkoutSession {
 export interface WorkoutDays {
   id: UUID
   title: string
-  workout_sessions: UUID[]
+  workout_sessions: {
+    workout_id: UUID
+    sequence?: number
+  }[]
 }
 
 export type WorkoutDayResponse = WorkoutDays | { error?: string }

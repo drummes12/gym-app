@@ -107,20 +107,18 @@ export const useWorkoutStore = create<WorkoutStoreState>((set, get) => ({
       set({ workoutSessions: null })
       const { workout_sessions } = workoutDay
       if (workout_sessions.length === 0) return
-      workout_sessions.forEach((workoutSessionId) => {
-        workouts
-          .getWorkoutSessionById(workoutSessionId)
-          .then((workoutSession) => {
-            set((state) => {
-              const { workoutSessions } = state
-              return {
-                workoutDay,
-                workoutSessions: workoutSessions
-                  ? [...workoutSessions, workoutSession]
-                  : [workoutSession]
-              }
-            })
+      workout_sessions.forEach(({ workout_id }) => {
+        workouts.getWorkoutSessionById(workout_id).then((workoutSession) => {
+          set((state) => {
+            const { workoutSessions } = state
+            return {
+              workoutDay,
+              workoutSessions: workoutSessions
+                ? [...workoutSessions, workoutSession]
+                : [workoutSession]
+            }
           })
+        })
       })
     })
   },

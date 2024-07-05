@@ -26,21 +26,18 @@ if ('title' in workoutDay) {
 <header class='max-w-3xl flex px-2 pt-2 items-end justify-between'>
   <div>
     <a href='/'>
-      <h1 class='text-3xl font-bold text-white/70 tracking-tighter'>
-        <strong class='text-white'>Fit</strong>Drummes
+      <h1
+        class='text-3xl font-bold text-black/50 dark:text-white/70 tracking-tighter'
+      >
+        <strong class='text-black dark:text-white'>Fit</strong>Drummes
       </h1>
     </a>
-    <p class='text-lg text-white/20'>¡Alcanzando metas!</p>
+    <p class='text-lg text-black/60 dark:text-white/20'>¡Por PRs!</p>
   </div>
-  <h2 transition:name={`title-page-${dayId}`}>
+  <h2
+    class='dark:text-white m-0 text-xl'
+    transition:name={`title-page-${dayId}`}
+  >
     {title_day}
   </h2>
 </header>
-
-<style>
-  h2 {
-    color: white;
-    margin: 0;
-    font-size: 1.25rem;
-  }
-</style>

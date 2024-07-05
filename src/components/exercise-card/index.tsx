@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { useWorkoutStore } from '@/store/workoutStore'
 import type { ExerciseSeriesWorkout, Exercises, UUID } from '@/types/GymTracker'
 
-import styles from './exercise-card.module.css'
 import { exercises } from '@/services'
 
 export function ExerciseCard({
@@ -72,29 +71,35 @@ export function ExerciseCard({
 
   return (
     <li
-      className={`${styles['link-card']} ${
-        isActive ? 'current-exercise' : ''
-      } ${isNext ? 'next-exercise' : ''}`}
+      className={`link-card ${isActive ? 'current-exercise' : ''} ${
+        isNext ? 'next-exercise' : ''
+      }`}
     >
       <button className='w-full' onClick={handleClick}>
         <header className='flex gap-2 items-center justify-between'>
-          <h3 className='text-left mr-1 font-semibold text-xl'>{title}</h3>
+          <h3 className='text-l text-left mr-1 font-semibold text-xl'>
+            {title}
+          </h3>
           {variation && (
-            <h4 className='text-right font-medium opacity-70'>{variation}</h4>
+            <h4 className='text-r text-right font-medium opacity-70'>
+              {variation}
+            </h4>
           )}
         </header>
 
         <div className='flex gap-2 items-center justify-between text-sm'>
-          <p>
+          <p className='text-l'>
             {sets && `${sets}x`}
             {repetitions}
           </p>
-          <span className='opacity-90'>
+          <span className='text-r opacity-90'>
             {weight && `${weight} ${weightUnit}`}
           </span>
         </div>
         {additionalInfo && (
-          <p className='text-left text-xs opacity-90'>{additionalInfo}</p>
+          <p className='text-l text-left text-xs opacity-90'>
+            {additionalInfo}
+          </p>
         )}
       </button>
     </li>

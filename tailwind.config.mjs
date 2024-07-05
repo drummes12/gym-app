@@ -9,6 +9,7 @@ export default {
 			},
 			colors: {
 				neon: '#ffff00',
+				'neon-dark': '#555500'
 			}
 		},
 	},

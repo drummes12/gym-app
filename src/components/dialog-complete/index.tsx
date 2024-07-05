@@ -78,7 +78,6 @@ export function DialogComplete() {
         <header className='relative text-lg font-bold overflow-hidden'>
           <h1 className='opacity-80'>{statusTitle}</h1>
           <h2 className={`${sizeTitle} max-w-[20ch] uppercase`}>{title}</h2>
-          <div className='absolute -right-2 top-0 h-full w-10 bg-gradient-to-l from-zinc-900/90 from-30% to-transparent'></div>
         </header>
 
         <section>
@@ -119,7 +118,7 @@ export function DialogComplete() {
             <span>Sets</span>
             <span>Reps</span>
           </p>
-          <p className='flex justify-between font-dseg14 text-[#ffff00] text-3xl'>
+          <p className='flex justify-between font-dseg14 text-neon-dark dark:text-neon text-3xl'>
             <span className='font-dseg14'>
               {currentSet?.toString().padStart(2, '0')}/
               {sets?.toString().padStart(2, '0')}
@@ -132,40 +131,44 @@ export function DialogComplete() {
           <div className='flex flex-col text-sm'>
             {nextExercise ? (
               <>
-                <h4 className='pb-1'>Siquiente Ejercicio</h4>
-                <div className='flex flex-wrap gap-0.5 leading-none text-white/50 tracking-tighter'>
-                  <p
-                    className={`py-1 px-2 w-min border-2 ${
+                <h4 className='pb-1'>Siguiente Ejercicio</h4>
+                <div className='opacity-50 flex flex-wrap gap-0.5 leading-none tracking-tighter'>
+                  <div
+                    className={`w-min flex justify-center items-center py-1 px-2 border-2 ${
                       isLastSet
-                        ? 'border-neon/60 text-neon/60'
-                        : 'border-white/20'
+                        ? 'border-neon-dark/60 text-neon-dark/60 dark:border-neon/60 dark:text-neon/60'
+                        : 'border-black/20 dark:border-white/20'
                     } rounded-lg`}
                   >
-                    {nextExercise.title}
-                  </p>
+                    <p>{nextExercise.title}</p>
+                  </div>
                   {nextExercise.weight && (
-                    <p
-                      className={`py-1 px-2 border-2 ${
+                    <div
+                      className={`flex justify-center items-center py-1 px-2 border-2 ${
                         isLastSet
-                          ? 'border-neon/60 text-neon/60'
-                          : 'border-white/20'
+                          ? 'border-neon-dark/60 text-neon-dark/60 dark:border-neon/60 dark:text-neon/60'
+                          : 'border-black/20 dark:border-white/20'
                       } rounded-lg`}
                     >
-                      {nextExercise.weight} {nextExercise.weight_unit}
-                      <span className='block opacity-60 text-xs'>Weight</span>
-                    </p>
+                      <p>
+                        {nextExercise.weight} {nextExercise.weight_unit}
+                        <span className='block opacity-60 text-xs'>Weight</span>
+                      </p>
+                    </div>
                   )}
                   {nextExercise.sets && nextExercise.repetitions && (
-                    <p
-                      className={`py-1 px-2 border-2 ${
+                    <div
+                      className={`flex justify-center items-center py-1 px-2 border-2 ${
                         isLastSet
-                          ? 'border-neon/60 text-neon/60'
-                          : 'border-white/20'
+                          ? 'border-neon-dark/60 text-neon-dark/60 dark:border-neon/60 dark:text-neon/60'
+                          : 'border-black/20 dark:border-white/20'
                       } rounded-lg`}
                     >
-                      {nextExercise.sets}x{nextExercise.repetitions}
-                      <span className='block opacity-60 text-xs'>Sets</span>
-                    </p>
+                      <p>
+                        {nextExercise.sets}x{nextExercise.repetitions}
+                        <span className='block opacity-60 text-xs'>Sets</span>
+                      </p>
+                    </div>
                   )}
                 </div>
               </>
@@ -177,7 +180,7 @@ export function DialogComplete() {
             <PlayRest size='xl' />
             <div className='mt-2 flex justify-center items-center opacity-70'>
               <p className='h-min text-xs pt-2'>Tiempo de control</p>
-              <div className='flex flex-col gap-1 items-center justify-center relative text-base leading-none font-dseg14 tracking-tighter text-[#fb9f00]'>
+              <div className='flex flex-col gap-1 items-center justify-center relative text-base leading-none font-dseg14 tracking-tighter text-[#b47200] dark:text-[#fb9f00]'>
                 <p className='flex-1'>
                   {timeFormatted(controlTime).minutesFormatted}
                 </p>
@@ -190,7 +193,7 @@ export function DialogComplete() {
         </menu>
 
         <button
-          className='hidden sm:flex absolute bg-zinc-800 rounded-full p-1 top-0 right-0 translate-x-1/2 -translate-y-1/2 stroke-2 hover:scale-110 transform transition-transform duration-300 focus:outline-none'
+          className='hidden sm:flex absolute bg-white dark:bg-zinc-800 rounded-full p-1 top-0 right-0 translate-x-1/2 -translate-y-1/2 stroke-2 hover:scale-110 transform transition-transform duration-300 focus:outline-none'
           type='submit'
         >
           <Close />

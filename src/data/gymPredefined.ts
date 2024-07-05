@@ -762,33 +762,33 @@ export const WORKOUT_DAY: WorkoutDays[] = [
   {
     id: 'f4e9b3d7-1b1f-4d9b-8f5d-8d4b5f3d8f4d',
     title: 'Dia 1',
-    workout_sessions: ['6dedd101-67fc-41c7-9802-d9dfa790cf10']
+    workout_sessions: [{ workout_id: '6dedd101-67fc-41c7-9802-d9dfa790cf10' }]
   },
   {
     id: '430d6f9a-9c09-485e-a2fc-b40d90e2e3fd',
     title: 'Dia 2',
-    workout_sessions: ['0168d8f2-c662-4fac-827c-b2cdce81dbba']
+    workout_sessions: [{ workout_id: '0168d8f2-c662-4fac-827c-b2cdce81dbba' }]
   },
   {
     id: '710eb93c-7714-4414-a6a5-fcf0e5f70cc6',
     title: 'Dia 3',
     workout_sessions: [
-      '028584d9-7ccb-46cd-b765-a3ae2959bc6c',
-      '71a3d5c6-b067-4fe4-aeff-e06602d21698',
-      '4f802d5a-741a-456d-bf75-3425956be21d'
+      { workout_id: '028584d9-7ccb-46cd-b765-a3ae2959bc6c', sequence: 1 },
+      { workout_id: '71a3d5c6-b067-4fe4-aeff-e06602d21698', sequence: 2 },
+      { workout_id: '4f802d5a-741a-456d-bf75-3425956be21d', sequence: 3 }
     ]
   },
   {
     id: '4abc996e-4242-47d6-b712-9f0f752eca15',
     title: 'Dia 4',
-    workout_sessions: ['d22c551a-a266-4fd8-b826-b71c35451472']
+    workout_sessions: [{ workout_id: 'd22c551a-a266-4fd8-b826-b71c35451472' }]
   },
   {
     id: '4b5c7867-078b-4b0e-adaf-34e3e7a632ce',
     title: 'Dia 5',
     workout_sessions: [
-      'fafb3d98-4a5e-428e-b8c4-70913c43ff48',
-      'ebeadb1e-0217-4c16-8bb7-d63c9d6701c7'
+      { workout_id: 'fafb3d98-4a5e-428e-b8c4-70913c43ff48', sequence: 1 },
+      { workout_id: 'ebeadb1e-0217-4c16-8bb7-d63c9d6701c7', sequence: 2 }
     ]
   }
 ]

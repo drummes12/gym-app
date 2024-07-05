@@ -31,10 +31,13 @@ export function PlayRest({ size = 'sm' }) {
 
   return (
     <button
-      className={`${sizeButton} aspect-square bg-neon text-zinc-800
-      flex items-center justify-center
-      sm:text-white sm:bg-zinc-800 sm:border-neon/40 sm:border-2 rounded-full p-4
-      transition sm:hover:bg-neon sm:hover:text-zinc-800 sm:hover:scale-110
+      className={`${sizeButton} aspect-square transition sm:hover:scale-110
+      flex items-center justify-center sm:border-2 rounded-full p-4 backdrop-blur-sm
+      bg-neon-dark text-neon dark:bg-neon dark:text-zinc-800
+      sm:text-neon-dark sm:bg-white/10 sm:border-neon-dark/40
+      sm:hover:bg-neon-dark sm:hover:text-neon
+      dark:sm:text-neon dark:sm:bg-dark/10 dark:sm:border-neon/40 
+      dark:sm:hover:bg-neon dark:sm:hover:text-zinc-800
       `}
       onClick={handleClick}
     >

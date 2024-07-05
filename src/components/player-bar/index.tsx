@@ -33,9 +33,9 @@ export function PlayerBar() {
     <div
       className={`${
         isVisible ? 'flex' : 'hidden'
-      } relative items-center justify-center gap-2 px-4 w-full h-20 rounded-lg overflow-visible text-white/80`}
+      } relative items-center justify-center gap-2 px-4 w-full h-20 rounded-lg overflow-visible dark:text-white/80`}
     >
-      <div className='absolute left-0 top-0 w-full h-full flex -z-10 justify-center bg-gray-600/10 rounded-lg'>
+      <div className='absolute left-0 top-0 w-full h-full flex -z-10 justify-center bg-white/50 dark:bg-black/20 rounded-lg'>
         <div
           className={`${styles['bg-player']} h-full`}
           style={{ width: `${(100 * timeRest) / currentRestDuration}%` }}
@@ -61,13 +61,13 @@ export function PlayerBar() {
         sets > 0 &&
         currentSet < sets && (
           <div
-            className={`${styles['text-player']} absolute h-full left-0 top-0 opacity-70 flex items-center justify-center font-semibold gap-1 text-4xl leading-none font-dseg14 text-[#ffff00]`}
+            className={`${styles['text-player']} absolute h-full left-0 top-0 opacity-70 flex items-center justify-center font-semibold gap-1 text-4xl leading-none font-dseg14 text-neon-dark dark:text-neon`}
           >
             <div className='flex flex-col gap-1 relative'>
-              <span className='absolute left-0 text-black/20 text -z-10 [text-shadow:none]'>
+              <span className='absolute left-0 text-black/5 dark:text-black/20 text -z-10 [text-shadow:none]'>
                 00
               </span>
-              <span className='absolute left-0 bottom-0 text-black/20 text -z-10 [text-shadow:none]'>
+              <span className='absolute left-0 bottom-0 text-black/5 dark:text-black/20 text -z-10 [text-shadow:none]'>
                 00
               </span>
               <p className='flex-1'>
@@ -80,19 +80,19 @@ export function PlayerBar() {
         )}
 
       <div
-        className={`${styles['text-player']} absolute h-full right-0 top-0 opacity-70 flex items-center justify-center font-semibold gap-1 text-4xl leading-none font-dseg14 text-[#ffff00]`}
+        className={`${styles['text-player']} absolute h-full right-0 top-0 opacity-70 flex items-center justify-center font-semibold gap-1 text-4xl leading-none font-dseg14 text-neon-dark dark:text-neon`}
       >
         <div className='flex flex-col gap-1'>
           <p className='flex-1 relative'>
             <span className='text-xs leading-none'>min</span>
-            <span className='absolute right-0 text-black/20 text -z-10 [text-shadow:none]'>
+            <span className='absolute right-0 text-black/5 dark:text-black/20 text -z-10 [text-shadow:none]'>
               00
             </span>
             <span>{timeFormatted(timeRest).minutesFormatted}</span>
           </p>
           <p className='flex-1 flex relative'>
             <span className='text-xs leading-none'>seg</span>
-            <span className='absolute right-0 text-black/20 text -z-10 [text-shadow:none]'>
+            <span className='absolute right-0 text-black/5 dark:text-black/20 text -z-10 [text-shadow:none]'>
               00
             </span>
             <span>{timeFormatted(timeRest).secondsFormatted}</span>
