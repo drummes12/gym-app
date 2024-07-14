@@ -1,0 +1,109 @@
+---
+import Layout from '@/layouts/Layout.astro'
+
+import { fetchJson } from '@/services'
+import type { Exercises } from '@/types/GymTracker'
+
+const title = 'Fit Drummes | Gestiona tus ejercicios'
+
+const { id } = Astro.params
+if (!id) {
+  return Astro.redirect('/exercises')
+}
+
+let exercise: Exercises
+
+try {
+  exercise = await fetchJson(new URL(`/api/exercises/${id}`, Astro.url))
+} catch (error) {
+  return Astro.redirect('/exercises')
+}
+
+const {
+  id: exerciseId,
+  title: exerciseTitle,
+  zone_id,
+  variation,
+  sets,
+  repetitions,
+  additional_info,
+  weight,
+  weight_unit
+} = exercise
+---
+
+<Layout title={title}>
+  <section class='flex flex-wrap gap-2'>
+    <form
+      action='#'
+      class='w-full flex flex-col gap-1 [&>div]:flex [&>div]:gap-1 [&>div]:flex-col'
+    >
+      <label for='id'>ID</label>
+      <input type='text' id='id' name='id' value={exerciseId} readonly />
+      <label for='title'>Título</label>
+      <input
+        type='text'
+        id='title'
+        name='title'
+        value={exerciseTitle}
+        readonly
+      />
+      <label for='zone_id'>Zona ID</label>
+      <input type='text' id='zone_id' name='zone_id' value={zone_id} readonly />
+      <label for='variation'>Variación</label>
+      <input
+        type='text'
+        id='variation'
+        name='variation'
+        value={variation}
+        readonly
+      />
+      <label for='weight'>Peso</label>
+      <input type='text' id='weight' name='weight' value={weight} readonly />
+      <label for='weight_unit'>Unidad de peso</label>
+      <input
+        type='text'
+        id='weight_unit'
+        name='weight_unit'
+        value={weight_unit}
+        readonly
+      />
+      <label for='sets'>Series</label>
+      <input type='text' id='sets' name='sets' value={sets} readonly />
+      <label for='repetitions'>Repeticiones</label>
+      <input
+        type='text'
+        id='repetitions'
+        name='repetitions'
+        value={repetitions}
+        readonly
+      />
+      <label for='additional_info'>Información adicional</label>
+      <input
+        type='text'
+        id='additional_info'
+        name='additional_info'
+        value={additional_info}
+        readonly
+      />
+    </form>
+  </section>
+
+  <style>
+    form {
+      label {
+        font-weight: bold;
+        margin-bottom: -4px;
+      }
+
+      input {
+        padding: 0.5rem;
+        border-radius: 7px;
+        color: white;
+        background-color: rgb(0, 0, 0, 0.3);
+        backdrop-filter: blur(8px);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+      }
+    }
+  </style>
+</Layout>
