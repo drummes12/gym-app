@@ -9,7 +9,7 @@ import type {
   WorkoutSession
 } from '@/types/GymTracker'
 import { REST_AFTER_EXERCISE, REST_BETWEEN_SETS } from '@/constants'
-import { exercises, workouts, zones } from '@/services'
+import { workouts, zones } from '@/services'
 import { playSound } from '@/services/audioNotification'
 
 let wakeLock: WakeLockSentinel | null = null
@@ -32,6 +32,8 @@ const releaseWakeLock = () => {
 }
 
 export interface WorkoutStoreState {
+  loading: boolean
+
   isRest: boolean
   timeRest: number
   controlTime: number
@@ -39,7 +41,7 @@ export interface WorkoutStoreState {
   dialogElement: HTMLDialogElement | null
   dialogConfetti: ReturnType<typeof confetti.create> | null
 
-  bodyZone: BodyZones | null
+  bodyZones: BodyZones[] | null
   workoutDay: WorkoutDays | null
   workoutSessions: WorkoutSession[] | null
   currentWorkoutSession: WorkoutSession | null
@@ -47,11 +49,13 @@ export interface WorkoutStoreState {
   currentExercise: CurrentExercise | null
   currentRestDuration: number
 
+  nextWorkoutSession: WorkoutSession | null
   nextExercise: CurrentExercise | null
 
+  resetSession: () => void
   setIsRest: (isRest: boolean) => void
 
-  setBodyZone: (zoneId: UUID) => void
+  getBodyZone: (bodyZoneId: UUID) => Promise<BodyZones | undefined>
   setWorkoutDay: (workoutDay: UUID) => void
   setCurrentWorkoutSession: (workoutSessionId: UUID) => void
 
@@ -78,6 +82,8 @@ export interface WorkoutStoreState {
 }
 
 export const useWorkoutStore = create<WorkoutStoreState>((set, get) => ({
+  loading: true,
+
   isRest: false,
   timeRest: 0,
   controlTime: 0,
@@ -85,7 +91,7 @@ export const useWorkoutStore = create<WorkoutStoreState>((set, get) => ({
   dialogElement: null,
   dialogConfetti: null,
 
-  bodyZone: null,
+  bodyZones: null,
   workoutDay: null,
   workoutSessions: null,
   currentWorkoutSession: null,
@@ -94,39 +100,77 @@ export const useWorkoutStore = create<WorkoutStoreState>((set, get) => ({
   currentRestDuration: 0,
 
   nextExercise: null,
+  nextWorkoutSession: null,
+
+  resetSession: () => {
+    set({
+      loading: false,
+      isRest: false,
+      timeRest: 0,
+      controlTime: 0,
+      intervalIdControlTime: null,
+      currentWorkoutSession: null,
+      currentExercise: null,
+      currentRestDuration: 0,
+      nextExercise: null,
+      nextWorkoutSession: null
+    })
+  },
 
   setIsRest: (isRest: boolean) => set({ isRest }),
 
-  setBodyZone: (zoneId: UUID) => {
-    zones.getZoneById(zoneId).then((bodyZone) => {
-      set({ bodyZone })
-    })
+  getBodyZone: async (bodyZoneId: UUID) => {
+    const { bodyZones } = get()
+    set({ loading: true })
+    let newBodyZones = bodyZones
+    if (bodyZones === null) {
+      await zones.getZones().then((zones) => {
+        set({ bodyZones: zones })
+        newBodyZones = zones
+      })
+    }
+    set({ loading: false })
+
+    return newBodyZones?.find((zone) => zone.id === bodyZoneId)
   },
   setWorkoutDay: (workoutDayId: UUID) => {
-    workouts.getWorkoutDayById(workoutDayId).then((workoutDay) => {
-      set({ workoutSessions: null })
-      const { workout_sessions } = workoutDay
-      if (workout_sessions.length === 0) return
-      workout_sessions.forEach(({ workout_id }) => {
-        workouts.getWorkoutSessionById(workout_id).then((workoutSession) => {
-          set((state) => {
-            const { workoutSessions } = state
-            return {
-              workoutDay,
-              workoutSessions: workoutSessions
-                ? [...workoutSessions, workoutSession]
-                : [workoutSession]
-            }
-          })
+    set({ loading: true })
+    workouts
+      .getWorkoutDayById(workoutDayId)
+      .then((workoutDay) => {
+        set({ workoutSessions: null })
+        const { workout_sessions } = workoutDay
+        if (workout_sessions.length === 0) return
+        workout_sessions.forEach((workout) => {
+          workouts
+            .getWorkoutSessionById(workout.workout_id)
+            .then((workoutSession) => {
+              set((state) => {
+                const { workoutSessions } = state
+                return {
+                  workoutDay,
+                  workoutSessions: workoutSessions
+                    ? [...workoutSessions, { ...workout, ...workoutSession }]
+                    : [{ ...workout, ...workoutSession }]
+                }
+              })
+            })
         })
       })
-    })
+      .finally(() => set({ loading: false }))
   },
   setCurrentWorkoutSession: (workoutSessionId: UUID) => {
     const { workoutSessions } = get()
     const currentWorkoutSession = workoutSessions?.find(
       (session) => session.id === workoutSessionId
     )
+    const nextSequence = currentWorkoutSession?.sequence
+    if (nextSequence !== undefined) {
+      const nextWorkoutSession = workoutSessions?.find(
+        (session) => session.sequence === nextSequence + 1
+      )
+      if (nextWorkoutSession) set({ nextWorkoutSession })
+    }
     set({ currentWorkoutSession })
   },
 
@@ -208,15 +252,7 @@ export const useWorkoutStore = create<WorkoutStoreState>((set, get) => ({
     )
     if (!nextExercise) return
 
-    exercises.getExerciseById(nextExerciseId).then((exercise) => {
-      set({
-        nextExercise: {
-          ...exercise,
-          ...nextExercise,
-          currentSet: 0
-        }
-      })
-    })
+    set({ nextExercise: { ...nextExercise, currentSet: 0 } })
   },
 
   startTimer: async () => {
@@ -229,9 +265,11 @@ export const useWorkoutStore = create<WorkoutStoreState>((set, get) => ({
           timeRest,
           currentExercise,
           nextExercise,
+          nextWorkoutSession,
+          resetSession,
           setCurrentExercise,
           addCurrentSet,
-          resetCurrentExercise,
+          setCurrentWorkoutSession,
           showDialog
         } = state
         if (!isRest) {
@@ -251,8 +289,20 @@ export const useWorkoutStore = create<WorkoutStoreState>((set, get) => ({
 
           const isLastSet = currentSet === sets - 1
           if (isLastSet) {
-            if (nextExercise == null) resetCurrentExercise()
-            else setCurrentExercise(nextExercise)
+            if (nextExercise == null) {
+              if (nextWorkoutSession == null) {
+                showDialog()
+                resetSession()
+                return { isRest: false }
+              }
+              setCurrentWorkoutSession(nextWorkoutSession?.id ?? '')
+              if (nextWorkoutSession?.exercises_series[0] !== undefined) {
+                setCurrentExercise({
+                  ...nextWorkoutSession?.exercises_series[0],
+                  currentSet: 0
+                })
+              }
+            } else setCurrentExercise(nextExercise)
           } else {
             addCurrentSet()
           }

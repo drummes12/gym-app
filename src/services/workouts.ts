@@ -16,5 +16,5 @@ export function getWorkoutSessions(): Promise<WorkoutSession[]> {
 export function getWorkoutSessionById(
   sessionId: string
 ): Promise<WorkoutSession> {
-  return fetchJson(`/api/workouts/sessions/${sessionId}`)
+  return fetchJson(`/api/workouts/sessions/${sessionId}/exercises`)
 }
