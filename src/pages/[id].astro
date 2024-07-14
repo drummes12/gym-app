@@ -4,12 +4,12 @@ import { WorkoutDay } from '@/components/workout-day'
 
 const title = 'Fit Drummes | Entrena con nosotros'
 
-const { day_id } = Astro.params
-if (!day_id) {
+const { id } = Astro.params
+if (!id) {
   return Astro.redirect('/')
 }
 ---
 
 <Layout title={title}>
-  <WorkoutDay client:load workoutDayId={day_id} />
+  <WorkoutDay client:load workoutDayId={id} />
 </Layout>

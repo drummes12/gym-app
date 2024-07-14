@@ -11,10 +11,8 @@ let workoutDay: WorkoutDayResponse
 try {
   workoutDay = await fetchJson(endpointWorkout)
 } catch (error) {
-  return new Response(null, {
-    status: 404,
-    statusText: 'Not Found'
-  })
+  console.error(error)
+  workoutDay = {}
 }
 
 let title_day = ''

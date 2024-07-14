@@ -1,0 +1,28 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import { ExercisesCard } from '@/components/exercises-card'
+
+import { fetchJson } from '@/services'
+import type { Exercises } from '@/types/GymTracker'
+
+const title = 'Fit Drummes | Gestiona tus ejercicios'
+
+let exercises: Exercises[]
+
+try {
+  exercises = await fetchJson(new URL('/api/exercises', Astro.url))
+} catch (error) {
+  console.error(error)
+  exercises = []
+}
+---
+
+<Layout title={title}>
+  <section class='flex flex-wrap gap-2'>
+    <ul
+      class='w-full flex flex-col gap-1 [&>div]:flex [&>div]:gap-1 [&>div]:flex-col'
+    >
+      {exercises.map((exercise) => <ExercisesCard exercise={exercise} />)}
+    </ul>
+  </section>
+</Layout>
