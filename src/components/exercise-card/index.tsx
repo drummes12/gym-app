@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useWorkoutStore } from '@/store/workoutStore'
-import type { ExerciseSeriesWorkout, Exercises, UUID } from '@/types/GymTracker'
-
-import { exercises } from '@/services'
+import type { ExerciseSeriesWorkout, UUID } from '@/types/GymTracker'
 
 export function ExerciseCard({
   exerciseSerie,
@@ -13,6 +11,7 @@ export function ExerciseCard({
 }) {
   const {
     isRest,
+    workoutSessions,
     currentExercise,
     nextExercise,
     setCurrentExercise,
@@ -21,16 +20,13 @@ export function ExerciseCard({
 
   const [isActive, setIsActive] = useState(false)
   const [isNext, setIsNext] = useState(false)
-  const [exercise, setExercise] = useState<Exercises | null>(null)
 
-  useEffect(() => {
-    exercises
-      .getExerciseById(exerciseSerie.exercise_series_id)
-      .then((exercise) => {
-        const { exercise_series_id, ...exerciseSession } = exerciseSerie
-        setExercise({ ...exercise, ...exerciseSession })
-      })
-  }, [])
+  const exercise = workoutSessions
+    ?.find(({ id }) => id === workoutSessionId)
+    ?.exercises_series.find(
+      ({ exercise_series_id }) =>
+        exercise_series_id === exerciseSerie.exercise_series_id
+    )
 
   const handleClick = () => {
     if (exercise == null) return
@@ -48,13 +44,17 @@ export function ExerciseCard({
   }
 
   useEffect(() => {
-    setIsActive(currentExercise?.id === exerciseSerie.exercise_series_id)
+    setIsActive(
+      currentExercise?.exercise_series_id === exerciseSerie.exercise_series_id
+    )
 
     const { sets = 0, currentSet } = currentExercise ?? {}
 
     const isLastSet = currentSet === sets - 1
     if (isLastSet) {
-      setIsNext(nextExercise?.id === exerciseSerie.exercise_series_id)
+      setIsNext(
+        nextExercise?.exercise_series_id === exerciseSerie.exercise_series_id
+      )
     }
   }, [currentExercise, nextExercise])
 

@@ -47,6 +47,7 @@ export interface ExercisesSeries {
 export interface WorkoutSession {
   id: UUID
   zone_id: UUID
+  sequence?: number
   exercises_series: Array<ExerciseSeriesWorkout>
 }
 
@@ -67,10 +68,10 @@ export interface ExercisesSeriesResponse extends ExercisesSeries {
 
 export interface ExerciseSeriesWorkout {
   exercise_series_id: UUID
+  title?: string
   sequence: number
   type: 'individual' | 'series'
   variation?: string
-  zone_id?: UUID
   sets?: number
   repetitions?: number
   weight?: number
@@ -80,9 +81,8 @@ export interface ExerciseSeriesWorkout {
   additional_info?: string
 }
 
-export interface CurrentExercise extends Exercises {
+export interface CurrentExercise extends ExerciseSeriesWorkout {
   currentSet: number
-  sequence?: number
 }
 
 export interface WorkoutSessionDay {

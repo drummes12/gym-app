@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react'
 import type { BodyZones } from '@/types/GymTracker'
 import { fetchJson } from '@/services'
+import { useWorkoutStore } from '@/store/workoutStore'
 
 export function ZoneTitle({ zone_id }: { zone_id: string }) {
-  const [zone, setZone] = useState<BodyZones | null>(null)
+  const { getBodyZone } = useWorkoutStore()
+  const [zone, setZone] = useState<BodyZones | undefined>()
 
   useEffect(() => {
-    fetchJson(`/api/zones/${zone_id}`)
-      .then(setZone)
+    getBodyZone(zone_id)
+      .then((zoneTitle) => setZone(zoneTitle))
       .catch((error) => console.error(error))
   }, [])
 
