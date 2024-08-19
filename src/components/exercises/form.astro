@@ -1,0 +1,72 @@
+---
+import FormField from '@/components/exercises/form-field.astro'
+import type { BodyZones, Exercises } from '@/types/GymTracker'
+
+interface Props {
+  exercise?: Exercises
+  zones?: BodyZones[]
+}
+
+const { exercise, zones } = Astro.props
+
+const readonly = exercise?.id ? true : false
+---
+
+<form action='#' class='w-full flex flex-col gap-1'>
+  {
+    exercise?.id ? (
+      <>
+        <FormField label='ID' value={exercise?.id} readonly={readonly} />
+        <FormField
+          label='Zona ID'
+          value={exercise?.zone_id}
+          readonly={readonly}
+        />
+      </>
+    ) : (
+      <FormField
+        label='Zona ID'
+        options={zones?.map(({ id, name }) => ({ label: name, value: id }))}
+        type='select'
+      />
+    )
+  }
+  <FormField label='Título' value={exercise?.title} readonly={readonly} />
+  <FormField
+    label='Variación'
+    value={exercise?.variation}
+    readonly={readonly}
+  />
+  <div class='flex flex-row gap-2'>
+    <FormField
+      label='Peso'
+      value={exercise?.weight}
+      type='number'
+      readonly={readonly}
+    />
+    <FormField
+      label='Unidad de peso'
+      value={exercise?.weight_unit}
+      readonly={readonly}
+    />
+  </div>
+  <div class='flex flex-row gap-2'>
+    <FormField
+      label='Series'
+      value={exercise?.sets}
+      type='number'
+      readonly={readonly}
+    />
+    <FormField
+      label='Repeticiones'
+      value={exercise?.repetitions}
+      type='number'
+      readonly={readonly}
+    />
+  </div>
+  <FormField
+    label='Información adicional'
+    value={exercise?.additional_info}
+    readonly={readonly}
+  />
+</form>

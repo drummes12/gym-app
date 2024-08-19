@@ -1,0 +1,71 @@
+---
+import { createIdFromString } from '@/lib/utils'
+
+interface Props {
+  label: string
+  value?: any
+  options?: { label: string; value: any }[]
+  type?: astroHTML.JSX.HTMLInputTypeAttribute | 'select' | 'textarea'
+  readonly?: boolean
+}
+
+const { label, value, options, type = 'text', readonly = false } = Astro.props
+
+const labelId = createIdFromString(label)
+---
+
+<div class='flex flex-col flex-1'>
+  <label for={labelId}>{label}</label>
+  {
+    type === 'select' ? (
+      <select id={labelId} value={value}>
+        {options?.map(({ label, value }) => (
+          <option value={value}>{label}</option>
+        ))}
+      </select>
+    ) : type === 'textarea' ? (
+      <textarea id={labelId} readonly={readonly}>
+        {value}
+      </textarea>
+    ) : (
+      <input type={type} id={labelId} value={value} readonly={readonly} />
+    )
+  }
+</div>
+
+<style>
+  label {
+    @apply block text-xl text-white/60;
+
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    pointer-events: none;
+  }
+  input {
+    @apply p-2 w-full text-white text-3xl bg-black backdrop-blur-sm bg-opacity-30 rounded-md;
+
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+  }
+  input:read-only {
+    outline: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  select {
+    @apply p-2 w-full text-white text-3xl bg-black backdrop-blur-sm bg-opacity-30 rounded-md;
+
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+  }
+  select:read-only {
+    outline: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    pointer-events: none;
+  }
+</style>

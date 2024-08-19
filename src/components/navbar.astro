@@ -7,17 +7,20 @@ const [, dayId] = url.pathname.split('/')
 
 const endpointWorkout = new URL(`/api/workouts/${dayId}`, Astro.url)
 let workoutDay: WorkoutDayResponse
-
-try {
-  workoutDay = await fetchJson(endpointWorkout)
-} catch (error) {
-  console.error(error)
-  workoutDay = {}
-}
-
 let title_day = ''
-if ('title' in workoutDay) {
-  title_day = workoutDay.title
+
+const uuidRegex =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+if (uuidRegex.test(dayId)) {
+  try {
+    workoutDay = await fetchJson(endpointWorkout)
+  } catch (error) {
+    console.error(error)
+    workoutDay = {}
+  }
+  if ('title' in workoutDay) {
+    title_day = workoutDay.title
+  }
 }
 ---
 
