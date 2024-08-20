@@ -11,18 +11,27 @@ export interface BodyZones {
   abbreviation: string
 }
 
+export interface Sets {
+  reps: number
+  weight?: number
+}
+
 export interface Exercises {
   id: UUID
   title: string
   variation?: string
   zone_id: UUID
-  sets?: number
-  repetitions?: number
-  weight?: number
+  sets: Sets[]
   weight_unit?: string
   rest_between_sets?: number
   rest_after_exercise?: number
   additional_info?: string
+}
+
+export interface CurrentSet extends Exercises {
+  numberSet: number
+  reps: number
+  weight?: number
 }
 
 export interface GroupedExercises {

@@ -1,38 +1,38 @@
 import { useEffect, useState } from 'react'
 
 import styles from './player-bar.module.css'
-import { useWorkoutStore } from '@/store/workoutStore'
 import { timeFormatted } from '@/lib/time'
 import { PlayRest } from '@/components/play-rest'
+import { useTrainingStore } from '@/store/trainingStore'
 
 export function PlayerBar() {
-  const { timeRest, currentRestDuration, currentExercise, isRest, startTimer } =
-    useWorkoutStore((state) => state)
-  const [isVisible, setIsVisible] = useState(currentExercise != null)
-
-  useEffect(() => {
-    if (isRest) startTimer()
-  }, [isRest, startTimer])
-
-  useEffect(() => {
-    setIsVisible(currentExercise != null)
-  }, [currentExercise])
+  const { isPlayerBarVisible, currentSet } = useTrainingStore()
 
   const {
     title,
     variation,
-    repetitions,
-    currentSet,
-    sets,
     weight,
     weight_unit: weightUnit,
-    additional_info: additionalInfo
-  } = currentExercise ?? {}
+    additional_info: additionalInfo,
+    sets,
+    numberSet = 1,
+    reps
+  } = currentSet || {}
+  const timeRest = 30
+  const currentRestDuration = 30
+  const totalSets = sets?.length ?? 0
 
+  if (!isPlayerBarVisible) {
+    return (
+      <p className='text-center text-xs text-black/50 dark:text-white/20'>
+        &copy; {new Date().getFullYear()} Fit Drummes
+      </p>
+    )
+  }
   return (
     <div
       className={`${
-        isVisible ? 'flex' : 'hidden'
+        isPlayerBarVisible ? 'flex' : 'hidden'
       } relative items-center justify-center gap-2 px-4 w-full h-20 rounded-lg overflow-visible dark:text-white/80`}
     >
       <div className='absolute left-0 top-0 w-full h-full flex -z-10 justify-center bg-white/50 dark:bg-black/20 rounded-lg'>
@@ -58,8 +58,8 @@ export function PlayerBar() {
 
       {currentSet !== undefined &&
         sets !== undefined &&
-        sets > 0 &&
-        currentSet < sets && (
+        totalSets > 0 &&
+        numberSet < totalSets && (
           <div
             className={`${styles['text-player']} absolute h-full left-0 top-0 opacity-70 flex items-center justify-center font-semibold gap-1 text-4xl leading-none font-dseg14 text-neon-dark dark:text-neon`}
           >
@@ -70,12 +70,10 @@ export function PlayerBar() {
               <span className='absolute left-0 bottom-0 text-black/5 dark:text-black/20 text -z-10 [text-shadow:none]'>
                 00
               </span>
-              <p className='flex-1'>
-                {currentSet?.toString().padStart(2, '0')}
-              </p>
-              <p className='flex-1'>{sets?.toString().padStart(2, '0')}</p>
+              <p className='flex-1'>{numberSet?.toString().padStart(2, '0')}</p>
+              <p className='flex-1'>{totalSets?.toString().padStart(2, '0')}</p>
             </div>
-            <p className='text-xs'>{repetitions}x</p>
+            <p className='text-xs'>{reps}x</p>
           </div>
         )}
 

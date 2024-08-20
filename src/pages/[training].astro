@@ -1,0 +1,37 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import { Workout } from '@/components/workout'
+
+import type { Exercises } from '@/types/GymTracker'
+import { ExerciseInfo } from '@/components/exercise-info'
+
+const title = 'Fit Drummes | Entrena con nosotros'
+
+const { training = '' } = Astro.params
+
+if (training == null || training === '') {
+  return new Response(null, {
+    status: 404,
+    statusText: 'No se encontró el entrenamiento'
+  })
+}
+
+const trainingDecode = atob(training)
+
+let exercise: Exercises[] = []
+try {
+  exercise = JSON.parse(trainingDecode)
+} catch (error) {
+  return new Response(null, {
+    status: 404,
+    statusText: 'No se encontró el entrenamiento'
+  })
+}
+---
+
+<Layout title={title}>
+  <section class='pb-2 relative h-full overflow-x-clip'>
+    <Workout client:load exercises={exercise} />
+    <ExerciseInfo client:load />
+  </section>
+</Layout>

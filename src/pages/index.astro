@@ -1,26 +1,20 @@
 ---
 import Layout from '@/layouts/Layout.astro'
-import DayCard from '@/components/day-card.astro'
-
-import type { WorkoutDays } from '@/types/GymTracker'
 
 const title = 'Fit Drummes | Entrena con nosotros'
 
-const endpointWorkout = new URL('/api/workouts', Astro.url)
-const workoutsDay: WorkoutDays[] = await fetch(endpointWorkout).then((res) =>
-  res.json()
-)
+const trainings = [
+  'W3siaWQiOiJkOGFjNjIzZS1jOGRlLTQ3OWQtYjJiZS0wYjgxODNiYzRlZWQiLCJ0aXRsZSI6IlByZXNzIGRlIGJhbmNhIiwiem9uZV9pZCI6IjM1Mjk2OWNkLTE4ODQtNDhjYi05YjQxLWIxMTkzYTcwMzQ2YyIsInNldHMiOlt7InJlcHMiOjEyLCJ3ZWlnaHQiOjE1fSx7InJlcHMiOjEyLCJ3ZWlnaHQiOjE1fSx7InJlcHMiOjEyLCJ3ZWlnaHQiOjE1fSx7InJlcHMiOjEyLCJ3ZWlnaHQiOjE1fV0sIndlaWdodF91bml0Ijoia2cvREIifSx7ImlkIjoiNWQ3MDRhYWMtOTBmNi00YThkLWE5YmUtN2Y1OTE1YTVlYjc3IiwidGl0bGUiOiJQcmVzcyBkZSBiYW5jYSIsInZhcmlhdGlvbiI6IlBsYW5vIiwiem9uZV9pZCI6IjM1Mjk2OWNkLTE4ODQtNDhjYi05YjQxLWIxMTkzYTcwMzQ2YyIsInNldHMiOlt7InJlcHMiOjEyLCJ3ZWlnaHQiOjQ1fSx7InJlcHMiOjEyLCJ3ZWlnaHQiOjQ1fSx7InJlcHMiOjEyLCJ3ZWlnaHQiOjQ1fSx7InJlcHMiOjEyLCJ3ZWlnaHQiOjQ1fV0sIndlaWdodF91bml0IjoibGIvbGFkbyJ9LHsiaWQiOiJiODE2MGQ3MS01YjViLTQ1YTMtYTJiMy00NzdlNGZjYjQ1YmUiLCJ0aXRsZSI6IlByZXNzIGRlIGJhbmNhIiwidmFyaWF0aW9uIjoiSW5jbGluYWRvIiwiem9uZV9pZCI6IjM1Mjk2OWNkLTE4ODQtNDhjYi05YjQxLWIxMTkzYTcwMzQ2YyIsInNldHMiOlt7InJlcHMiOjEyLCJ3ZWlnaHQiOjE1fSx7InJlcHMiOjEyLCJ3ZWlnaHQiOjE1fSx7InJlcHMiOjEyLCJ3ZWlnaHQiOjE1fSx7InJlcHMiOjEyLCJ3ZWlnaHQiOjE1fV0sIndlaWdodF91bml0Ijoia2cvbGFkbyJ9LHsiaWQiOiI3MThjMmE4MS01ZjcwLTQ1ODktYjVmMy1kYzdmZDg2MGY0YTUiLCJ0aXRsZSI6IlByZXNzIGRlIGJhbmNhIiwidmFyaWF0aW9uIjoiRGVjbGluYWRvIiwiem9uZV9pZCI6IjM1Mjk2OWNkLTE4ODQtNDhjYi05YjQxLWIxMTkzYTcwMzQ2YyIsInNldHMiOlt7InJlcHMiOjEyLCJ3ZWlnaHQiOjE1fSx7InJlcHMiOjEyLCJ3ZWlnaHQiOjE1fSx7InJlcHMiOjEyLCJ3ZWlnaHQiOjE1fSx7InJlcHMiOjEyLCJ3ZWlnaHQiOjE1fV0sIndlaWdodF91bml0Ijoia2cvbGFkbyJ9LHsiaWQiOiIwNmE1ZjMxMC01YjQwLTRlMmEtYTUxZi1iODM5YTMxNmZkMDQiLCJ0aXRsZSI6IkNydWNlcyBlbiBwb2xlYSIsInZhcmlhdGlvbiI6IkFsdG8iLCJ6b25lX2lkIjoiMzUyOTY5Y2QtMTg4NC00OGNiLTliNDEtYjExOTNhNzAzNDZjIiwic2V0cyI6W3sicmVwcyI6MTIsIndlaWdodCI6NjB9LHsicmVwcyI6MTIsIndlaWdodCI6NjB9LHsicmVwcyI6MTIsIndlaWdodCI6NjB9LHsicmVwcyI6MTIsIndlaWdodCI6NjB9XSwid2VpZ2h0X3VuaXQiOiJsYi9sYWRvIn0seyJpZCI6ImVkOTliYzZhLWQ5YzgtNGFjZS04ZTBjLWZhZWI2ODUwOWUwYyIsInRpdGxlIjoiUGVjIERlY2sgKFAmRCkiLCJ6b25lX2lkIjoiMzUyOTY5Y2QtMTg4NC00OGNiLTliNDEtYjExOTNhNzAzNDZjIiwic2V0cyI6W3sicmVwcyI6MjAsIndlaWdodCI6NH0seyJyZXBzIjoxNSwid2VpZ2h0Ijo2fSx7InJlcHMiOjEwLCJ3ZWlnaHQiOjh9LHsicmVwcyI6OCwid2VpZ2h0IjoxMH1dLCJ3ZWlnaHRfdW5pdCI6ImRpc2NvcyJ9LHsiaWQiOiIxZThkMzM1My1mNTFlLTQ5ZDYtOGUwMi1kMWFjMTY4NGE3ZTIiLCJ0aXRsZSI6IlB1c2ggVXBzIiwiem9uZV9pZCI6IjM1Mjk2OWNkLTE4ODQtNDhjYi05YjQxLWIxMTkzYTcwMzQ2YyIsInNldHMiOlt7InJlcHMiOjIwfSx7InJlcHMiOjE1fSx7InJlcHMiOjEwfSx7InJlcHMiOjh9XSwiYWRkaXRpb25hbF9pbmZvIjoiSGFzdGEgZWwgZmFsbG8ifV0='
+]
 ---
 
 <Layout title={title}>
   <section class='flex flex-wrap gap-2'>
     {
-      workoutsDay.map((workout) => (
-        <DayCard
-          href={`/${workout.id}`}
-          title={workout.title}
-          workoutSessions={workout.workout_sessions}
-        />
+      trainings.map((training) => (
+        <a class='link-card' href={`/${training}`}>
+          <span class='w-full p-3'>Test Training</span>
+        </a>
       ))
     }
   </section>

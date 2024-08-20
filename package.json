@@ -15,6 +15,7 @@
     "@astrojs/vercel": "7.7.0",
     "@fontsource/dseg14-classic": "5.0.11",
     "@fontsource/syne-mono": "5.0.13",
+    "@formkit/drag-and-drop": "0.1.6",
     "astro": "4.10.2",
     "canvas-confetti": "1.9.3",
     "react": "18.3.1",

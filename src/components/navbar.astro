@@ -1,28 +1,3 @@
----
-import { fetchJson } from '@/services'
-import type { WorkoutDayResponse } from '@/types/GymTracker'
-
-const url = Astro.url
-const [, dayId] = url.pathname.split('/')
-
-const endpointWorkout = new URL(`/api/workouts/${dayId}`, Astro.url)
-let workoutDay: WorkoutDayResponse
-
-try {
-  workoutDay = await fetchJson(endpointWorkout)
-} catch (error) {
-  return new Response(null, {
-    status: 404,
-    statusText: 'Not Found'
-  })
-}
-
-let title_day = ''
-if ('title' in workoutDay) {
-  title_day = workoutDay.title
-}
----
-
 <header class='max-w-3xl flex px-2 pt-2 items-end justify-between'>
   <div>
     <a href='/'>
@@ -34,10 +9,4 @@ if ('title' in workoutDay) {
     </a>
     <p class='text-lg text-black/60 dark:text-white/20'>¡Por PRs!</p>
   </div>
-  <h2
-    class='dark:text-white m-0 text-xl'
-    transition:name={`title-page-${dayId}`}
-  >
-    {title_day}
-  </h2>
 </header>

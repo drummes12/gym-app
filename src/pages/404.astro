@@ -1,0 +1,12 @@
+---
+import Layout from '@/layouts/Layout.astro'
+
+const { error } = Astro.props
+const message = error instanceof Error ? error.message : 'Pagina no encontrada'
+
+const title = `Fit Drummes | ${message}`
+---
+
+<Layout title={title}>
+  <p>{message}</p>
+</Layout>
