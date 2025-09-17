@@ -8,7 +8,7 @@ import { REST_AFTER_EXERCISE, REST_BETWEEN_SETS } from '@/constants'
 export function PlayRest({ size = 'sm' }) {
   const { isRest, isPaused, startTimer, pauseTimer, resumeTimer } =
     useTimerStore()
-  const { currentExercise, nextSet } = useWorkoutSessionStore()
+  const { currentExercise, nextSet, currentWorkoutSession, currentExerciseIndex } = useWorkoutSessionStore()
   const { closeAllDialogs, openDialog } = useUIStore()
 
   const { currentSet, completedSets, exercise } = currentExercise ?? {}
@@ -39,8 +39,15 @@ export function PlayRest({ size = 'sm' }) {
 
       // Start timer with completion callback
       startTimer(restTime, () => {
+        // Detectar si es el último set del último ejercicio
+        const isLastExercise = currentWorkoutSession && 
+          currentExerciseIndex >= currentWorkoutSession.exercises_series.length - 1
+        
         // Open dialog when timer completes
         openDialog('exerciseDetails')
+        
+        // Si es el último set del último ejercicio, nextSet() limpiará currentExercise
+        // lo que cerrará automáticamente el player
         nextSet()
       })
     }

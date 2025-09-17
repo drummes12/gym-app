@@ -99,7 +99,9 @@ export function DialogComplete() {
     additional_info
   } = currentExercise?.exercise ?? {}
 
-  const isLastSet = currentSet === totalSets - 1
+  const isLastSet = currentSet === totalSets
+  const isLastExercise = !nextExercise
+  const isLastSetOfLastExercise = isLastSet && isLastExercise
   const statusTitle = isLastSet ? '¡Última Serie!' : '¡Descanso Terminado!'
 
   const wordsTitle = title?.split(' ')
@@ -225,23 +227,30 @@ export function DialogComplete() {
                 </div>
               </>
             ) : (
-              <p className='text-center'>¡Último ejercicio!</p>
+              <p className='text-center'>
+                {isLastSetOfLastExercise
+                  ? '¡Entrenamiento completado!' 
+                  : '¡Último ejercicio!'
+                }
+              </p>
             )}
           </div>
-          <div className='w-min aspect-square'>
-            <PlayRest size='xl' />
-            <div className='mt-2 flex justify-center items-center opacity-70'>
-              <p className='h-min text-xs pt-2'>Tiempo de control</p>
-              <div className='flex flex-col gap-1 items-center justify-center relative text-base leading-none font-dseg14 tracking-tighter text-[#b47200] dark:text-[#fb9f00]'>
-                <p className='flex-1'>
-                  {timeFormatted(controlTime).minutesFormatted}
-                </p>
-                <p className='flex-1'>
-                  {timeFormatted(controlTime).secondsFormatted}
-                </p>
+          {!isLastSetOfLastExercise && (
+            <div className='w-min aspect-square'>
+              <PlayRest size='xl' />
+              <div className='mt-2 flex justify-center items-center opacity-70'>
+                <p className='h-min text-xs pt-2'>Tiempo de control</p>
+                <div className='flex flex-col gap-1 items-center justify-center relative text-base leading-none font-dseg14 tracking-tighter text-[#b47200] dark:text-[#fb9f00]'>
+                  <p className='flex-1'>
+                    {timeFormatted(controlTime).minutesFormatted}
+                  </p>
+                  <p className='flex-1'>
+                    {timeFormatted(controlTime).secondsFormatted}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </menu>
 
         <button

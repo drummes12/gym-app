@@ -112,6 +112,9 @@ export const useWorkoutSessionStore = create<WorkoutSessionStoreState>(
       const nextIndex = currentExerciseIndex + 1
       if (nextIndex < currentWorkoutSession.exercises_series.length) {
         get().setCurrentExercise(nextIndex)
+      } else {
+        // Si ya no hay más ejercicios, limpiar currentExercise para cerrar el player
+        set({ currentExercise: null })
       }
     },
 
