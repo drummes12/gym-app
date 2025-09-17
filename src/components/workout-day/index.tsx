@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { ZoneTitle } from '@/components/zone-title'
 
-import type { UUID } from '@/types/GymTracker'
+import type { UUID, WorkoutSession } from '@/types/GymTracker'
 import { ExerciseCard } from '@/components/exercise-card'
 import { useDataStore } from '@/store/dataStore'
 import { useWorkoutSessionStore } from '@/store/workoutSessionStore'
@@ -9,12 +9,30 @@ import { useWorkoutSessionStore } from '@/store/workoutSessionStore'
 export function WorkoutDay({ workoutDayId }: { workoutDayId: UUID }) {
   const { loading, setWorkoutDay, workoutSessions, currentWorkoutDay } =
     useDataStore()
-  const { currentExercise } = useWorkoutSessionStore()
+  const { currentExercise, setWorkoutDay: setWorkoutSessionDay } = useWorkoutSessionStore()
 
   useEffect(() => {
     // Only load new day data, don't reset active session
     setWorkoutDay(workoutDayId)
   }, [workoutDayId, setWorkoutDay])
+
+  // When currentWorkoutDay and sessions are loaded, update the workout session store
+  useEffect(() => {
+    if (currentWorkoutDay && workoutSessions) {
+      const allDaySessions = currentWorkoutDay.workout_sessions
+        .map((daySession) => workoutSessions.get(daySession.workout_id))
+        .filter((session) => session !== undefined)
+        .sort((a, b) => {
+          const seqA = currentWorkoutDay.workout_sessions.find(s => s.workout_id === a!.id)?.sequence || 0
+          const seqB = currentWorkoutDay.workout_sessions.find(s => s.workout_id === b!.id)?.sequence || 0
+          return seqA - seqB
+        }) as WorkoutSession[]
+
+      if (allDaySessions.length > 0) {
+        setWorkoutSessionDay(currentWorkoutDay, allDaySessions)
+      }
+    }
+  }, [currentWorkoutDay, workoutSessions, setWorkoutSessionDay])
 
   // Show message if user has active session but is viewing different day
   const hasActiveSession = currentExercise !== null

@@ -9,7 +9,12 @@ import { timeFormatted } from '@/lib/time'
 import confetti from 'canvas-confetti'
 
 export function DialogComplete() {
-  const { currentExercise, currentWorkoutSession, currentExerciseIndex } = useWorkoutSessionStore()
+  const {
+    currentExercise,
+    currentWorkoutSession,
+    currentExerciseIndex,
+    isLastSessionOfDay
+  } = useWorkoutSessionStore()
   const {
     isRest,
     controlTime,
@@ -101,7 +106,7 @@ export function DialogComplete() {
 
   const isLastSet = currentSet === totalSets
   const isLastExercise = !nextExercise
-  const isLastSetOfLastExercise = isLastSet && isLastExercise
+  const isLastSetOfLastExercise = isLastSet && isLastExercise && isLastSessionOfDay()
   const statusTitle = isLastSet ? '¡Última Serie!' : '¡Descanso Terminado!'
 
   const wordsTitle = title?.split(' ')

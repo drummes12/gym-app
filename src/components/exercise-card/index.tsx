@@ -20,7 +20,9 @@ export function ExerciseCard({
     setCurrentWorkoutSession,
     setCurrentExercise,
     currentExerciseIndex,
-    currentWorkoutSession
+    currentWorkoutSession,
+    syncSessionIndex,
+    validateSessionConsistency
   } = useWorkoutSessionStore()
 
   const [isActive, setIsActive] = useState(false)
@@ -42,6 +44,10 @@ export function ExerciseCard({
       const workoutSession = workoutSessions?.get(workoutSessionId)
       if (workoutSession) {
         setCurrentWorkoutSession(workoutSession)
+        // Sync the session index to maintain consistency
+        syncSessionIndex(workoutSessionId)
+        // Validate that everything is consistent
+        validateSessionConsistency()
       }
     }
 
