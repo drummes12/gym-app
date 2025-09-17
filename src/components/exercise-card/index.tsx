@@ -98,11 +98,7 @@ export function ExerciseCard({
   } = exercise
 
   return (
-    <li
-      className={`link-card ${isActive ? 'current-exercise' : ''} ${
-        isNext ? 'next-exercise' : ''
-      }`}
-    >
+    <li className={`link-card ${isActive ? 'current-exercise' : ''}`}>
       <button className='w-full' onClick={handleClick}>
         <header className='flex gap-2 items-center justify-between'>
           <h3 className='text-l text-left mr-1 font-semibold text-xl'>

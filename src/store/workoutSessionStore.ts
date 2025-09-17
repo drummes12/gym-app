@@ -39,6 +39,7 @@ interface WorkoutSessionStoreState {
   isLastSessionOfDay: () => boolean
   syncSessionIndex: (sessionId: UUID) => void
   validateSessionConsistency: () => void
+  getNextExerciseInfo: () => { exercise: ExerciseSeriesWorkout; nextSessionZoneId?: string } | null
 
   // Exercise navigation
   nextExercise: () => void
@@ -157,6 +158,32 @@ export const useWorkoutSessionStore = create<WorkoutSessionStoreState>(
           set({ currentSessionIndex: correctIndex })
         }
       }
+    },
+
+    getNextExerciseInfo: () => {
+      const { currentWorkoutSession, currentExerciseIndex, currentSessionIndex, allDaySessions } = get()
+      
+      if (!currentWorkoutSession) return null
+      
+      // Primero verificar si hay un siguiente ejercicio en la sesión actual
+      const nextExerciseInCurrentSession = currentWorkoutSession.exercises_series[currentExerciseIndex + 1]
+      
+      if (nextExerciseInCurrentSession) {
+        return { exercise: nextExerciseInCurrentSession }
+      }
+      
+      // Si no hay más ejercicios en la sesión actual, buscar en la siguiente sesión
+      const nextSessionIndex = currentSessionIndex + 1
+      const nextSession = allDaySessions[nextSessionIndex]
+      
+      if (nextSession && nextSession.exercises_series.length > 0) {
+        return { 
+          exercise: nextSession.exercises_series[0],
+          nextSessionZoneId: nextSession.zone_id 
+        }
+      }
+      
+      return null
     },
 
     setCurrentExercise: (exerciseIndex: number) => {

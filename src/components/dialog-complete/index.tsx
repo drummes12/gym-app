@@ -3,6 +3,7 @@ import styles from '@/components/dialog-complete/dialog-complete.module.css'
 import { useWorkoutSessionStore } from '@/store/workoutSessionStore'
 import { useTimerStore } from '@/store/timerStore'
 import { useUIStore } from '@/store/uiStore'
+import { useDataStore } from '@/store/dataStore'
 import { Close } from '@/icons/close.jsx'
 import { PlayRest } from '@/components/play-rest'
 import { timeFormatted } from '@/lib/time'
@@ -13,7 +14,8 @@ export function DialogComplete() {
     currentExercise,
     currentWorkoutSession,
     currentExerciseIndex,
-    isLastSessionOfDay
+    isLastSessionOfDay,
+    getNextExerciseInfo
   } = useWorkoutSessionStore()
   const {
     isRest,
@@ -24,6 +26,7 @@ export function DialogComplete() {
     stopControlTimer
   } = useTimerStore()
   const { dialogs, closeAllDialogs } = useUIStore()
+  const { bodyZones } = useDataStore()
 
   useEffect(() => {
     if (!dialogs.exerciseDetails) {
@@ -91,9 +94,12 @@ export function DialogComplete() {
   const currentSet = currentExercise?.currentSet ?? 0
   const totalSets = currentExercise?.exercise?.sets ?? 0
 
-  // Get next exercise
-  const nextExercise =
-    currentWorkoutSession?.exercises_series[currentExerciseIndex + 1]
+  // Get next exercise info (puede ser de la sesión actual o siguiente)
+  const nextExerciseInfo = getNextExerciseInfo()
+  const nextExercise = nextExerciseInfo?.exercise
+  const nextSessionZone = nextExerciseInfo?.nextSessionZoneId 
+    ? bodyZones?.get(nextExerciseInfo.nextSessionZoneId)
+    : null
 
   const {
     title,
@@ -190,7 +196,14 @@ export function DialogComplete() {
           <div className='flex flex-col text-sm'>
             {nextExercise ? (
               <>
-                <h4 className='pb-1'>Siguiente Ejercicio</h4>
+                <h4 className='pb-1'>
+                  Siguiente Ejercicio
+                  {nextSessionZone && (
+                    <span className='text-xs opacity-60 block'>
+                      Nueva sesión: {nextSessionZone.abbreviation}
+                    </span>
+                  )}
+                </h4>
                 <div className='opacity-50 flex flex-wrap gap-0.5 leading-none tracking-tighter'>
                   <div
                     className={`w-min flex justify-center items-center py-1 px-2 border-2 ${
