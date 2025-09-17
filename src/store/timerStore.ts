@@ -7,12 +7,12 @@ interface TimerStoreState {
   isRest: boolean
   isPaused: boolean
   timeRest: number
-  intervalId: NodeJS.Timeout | null
+  intervalId: number | null
   onCompleteCallback: (() => void) | null
 
   // Control timer state (independent background timer)
   controlTime: number
-  controlIntervalId: NodeJS.Timeout | null
+  controlIntervalId: number | null
   isControlPaused: boolean
 
   // Timer actions
@@ -71,7 +71,7 @@ export const useTimerStore = create<TimerStoreState>((set, get) => ({
       onCompleteCallback: onComplete || null
     })
 
-    const intervalId = setInterval(() => {
+    const intervalId = window.setInterval(() => {
       const { timeRest, onCompleteCallback } = get()
 
       if (timeRest <= 1) {
@@ -123,7 +123,7 @@ export const useTimerStore = create<TimerStoreState>((set, get) => ({
 
     if (!isPaused) return
 
-    const intervalId = setInterval(() => {
+    const intervalId = window.setInterval(() => {
       const { timeRest, onCompleteCallback } = get()
 
       if (timeRest <= 1) {
@@ -173,7 +173,7 @@ export const useTimerStore = create<TimerStoreState>((set, get) => ({
       isControlPaused: false
     })
 
-    const intervalId = setInterval(() => {
+    const intervalId = window.setInterval(() => {
       const { isControlPaused } = get()
       
       if (!isControlPaused) {
