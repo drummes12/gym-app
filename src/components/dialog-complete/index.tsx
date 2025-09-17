@@ -79,6 +79,7 @@ export function DialogComplete() {
       useWorker: true
     })
     // Store confetti instance if needed later
+    dialogConfetti()
   }, [])
 
   // Extract exercise data from currentExercise
