@@ -52,9 +52,10 @@ export function WorkoutDay({ workoutDayId }: { workoutDayId: UUID }) {
                 {workoutSession.exercises_series.map((exercise) => {
                   return (
                     <ExerciseCard
-                      key={exercise.exercise_series_id}
+                      key={exercise.exercise_series_id + exercise.sequence}
                       workoutSessionId={workoutSession.id}
                       exerciseSerie={exercise}
+                      sequence={exercise.sequence}
                     />
                   )
                 })}

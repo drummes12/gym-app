@@ -6,16 +6,18 @@ import type { ExerciseSeriesWorkout, UUID } from '@/types/GymTracker'
 
 export function ExerciseCard({
   exerciseSerie,
-  workoutSessionId
+  workoutSessionId,
+  sequence
 }: {
   exerciseSerie: ExerciseSeriesWorkout
   workoutSessionId: UUID
+  sequence: number
 }) {
   const { isRest } = useTimerStore()
   const { workoutSessions } = useDataStore()
-  const { 
-    currentExercise, 
-    setCurrentWorkoutSession, 
+  const {
+    currentExercise,
+    setCurrentWorkoutSession,
     setCurrentExercise,
     currentExerciseIndex,
     currentWorkoutSession
@@ -24,14 +26,17 @@ export function ExerciseCard({
   const [isActive, setIsActive] = useState(false)
   const [isNext, setIsNext] = useState(false)
 
-  const exercise = workoutSessions?.get(workoutSessionId)
+  const exercise = workoutSessions
+    ?.get(workoutSessionId)
     ?.exercises_series.find(
-      (ex) => ex.exercise_series_id === exerciseSerie.exercise_series_id
+      (ex) =>
+        ex.exercise_series_id === exerciseSerie.exercise_series_id &&
+        ex.sequence === sequence
     )
 
   const handleClick = () => {
     if (exercise == null) return
-    
+
     // Set the workout session if it's different
     if (currentWorkoutSession?.id !== workoutSessionId) {
       const workoutSession = workoutSessions?.get(workoutSessionId)
@@ -41,9 +46,10 @@ export function ExerciseCard({
     }
 
     // Find the exercise index in the current workout session
-    const exerciseIndex = currentWorkoutSession?.exercises_series.findIndex(
-      (ex) => ex.exercise_series_id === exerciseSerie.exercise_series_id
-    ) ?? -1
+    const exerciseIndex =
+      currentWorkoutSession?.exercises_series.findIndex(
+        (ex) => ex.exercise_series_id === exerciseSerie.exercise_series_id
+      ) ?? -1
 
     if (exerciseIndex >= 0) {
       setCurrentExercise(exerciseIndex)
@@ -52,17 +58,22 @@ export function ExerciseCard({
 
   useEffect(() => {
     setIsActive(
-      currentExercise?.exercise.exercise_series_id === exerciseSerie.exercise_series_id
+      currentExercise?.exercise.exercise_series_id ===
+        exerciseSerie.exercise_series_id
     )
 
-    const totalSets = currentExercise?.exercise.sets || currentExercise?.completedSets?.length || 0
+    const totalSets =
+      currentExercise?.exercise.sets ||
+      currentExercise?.completedSets?.length ||
+      0
     const currentSet = currentExercise?.currentSet || 0
 
     const isLastSet = currentSet === totalSets - 1
     if (isLastSet) {
       // Check if this is the next exercise in the sequence
       const nextExerciseIndex = currentExerciseIndex + 1
-      const nextExercise = currentWorkoutSession?.exercises_series[nextExerciseIndex]
+      const nextExercise =
+        currentWorkoutSession?.exercises_series[nextExerciseIndex]
       setIsNext(
         nextExercise?.exercise_series_id === exerciseSerie.exercise_series_id
       )
