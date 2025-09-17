@@ -632,7 +632,9 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight_unit: 'kg/lado',
         additional_info: 'DB',
         sets: 4,
-        repetitions: 10
+        repetitions: 10,
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       },
       {
         exercise_series_id: '5d704aac-90f6-4a8d-a9be-7f5915a5eb77',
@@ -642,7 +644,9 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight_unit: 'kg/lado',
         additional_info: 'DB',
         sets: 3,
-        repetitions: 10
+        repetitions: 10,
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       },
       {
         exercise_series_id: 'ed99bc6a-d9c8-4ace-8e0c-faeb68509e0c',
@@ -651,14 +655,18 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight: 10,
         weight_unit: 'discos',
         sets: 3,
-        repetitions: 10
+        repetitions: 10,
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       },
       {
         exercise_series_id: 'ee96f631-660a-4701-be63-53210b904638',
         sequence: 4,
         type: 'individual',
         sets: 4,
-        additional_info: 'Hasta el fallo'
+        additional_info: 'Hasta el fallo',
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       }
     ]
   },
@@ -674,7 +682,9 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight_unit: 'kg/lado',
         sets: 3,
         repetitions: 12,
-        additional_info: 'Rest pause - 12/8/6'
+        additional_info: 'Rest pause - 12/8/6',
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       },
       {
         exercise_series_id: '920f81e7-f209-4397-ba3c-90592e063046',
@@ -683,7 +693,9 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight: 80,
         weight_unit: 'lb',
         sets: 3,
-        repetitions: 10
+        repetitions: 10,
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       }
     ]
   },
@@ -698,7 +710,9 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight: 80,
         weight_unit: 'lb',
         sets: 3,
-        repetitions: 10
+        repetitions: 10,
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       },
       {
         exercise_series_id: '16101591-ab70-47ab-97ee-90c4e337119d',
@@ -708,7 +722,9 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight: 60,
         weight_unit: 'lb',
         sets: 3,
-        repetitions: 10
+        repetitions: 10,
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       }
     ]
   },
@@ -725,7 +741,9 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight_unit: 'lb',
         sets: 3,
         repetitions: 12,
-        additional_info: 'Rest pause - 12/8/6'
+        additional_info: 'Rest pause - 12/8/6',
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       },
       {
         exercise_series_id: '39dee112-e05b-4f3a-9012-386e75e8a6e4',
@@ -735,7 +753,9 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight_unit: 'lb',
         sets: 3,
         repetitions: 10,
-        additional_info: 'Unilateral'
+        additional_info: 'Unilateral',
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       },
       {
         exercise_series_id: '55fd93b1-4b8c-48be-af83-c4850734f76a',
@@ -746,7 +766,9 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight_unit: 'lb',
         sets: 3,
         repetitions: 10,
-        additional_info: 'Agarre abierto'
+        additional_info: 'Agarre abierto',
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       },
       {
         exercise_series_id: '17d5a147-150c-4008-b8ea-6ac3d282c5ad',
@@ -755,7 +777,9 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight: 20,
         weight_unit: 'lb',
         sets: 3,
-        repetitions: 8
+        repetitions: 8,
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       }
     ]
   },
@@ -772,7 +796,9 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight_unit: 'kg',
         sets: 3,
         repetitions: 12,
-        additional_info: 'Rest pause - 12/8/6'
+        additional_info: 'Rest pause - 12/8/6',
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       },
       {
         exercise_series_id: 'aa7793dc-786e-497c-8658-dbcd9e5fef32',
@@ -782,7 +808,9 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight: 20,
         weight_unit: 'kg',
         sets: 3,
-        repetitions: 10
+        repetitions: 10,
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       },
       {
         exercise_series_id: '3c05f312-df60-4f16-808b-74439b85a115',
@@ -792,7 +820,9 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight_unit: 'kg',
         sets: 3,
         repetitions: 10,
-        additional_info: '2seg apretar'
+        additional_info: '2seg apretar',
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       }
     ]
   },
@@ -807,7 +837,9 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight: 60,
         weight_unit: 'lb',
         sets: 4,
-        repetitions: 15
+        repetitions: 15,
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       },
       {
         exercise_series_id: '887717b9-2d3b-4637-81e0-fe0016237e4b',
@@ -816,7 +848,9 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight: 100,
         weight_unit: 'lb',
         sets: 3,
-        repetitions: 10
+        repetitions: 10,
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       },
       {
         exercise_series_id: '750b8ed2-ea32-47eb-aa9d-323913bbc89b',
@@ -825,7 +859,9 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight: 50,
         weight_unit: 'lb',
         sets: 3,
-        repetitions: 10
+        repetitions: 10,
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       }
     ]
   },
@@ -841,7 +877,9 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight_unit: 'lb',
         sets: 3,
         repetitions: 10,
-        additional_info: '3 segundos arriba'
+        additional_info: '3 segundos arriba',
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       }
     ]
   },
@@ -857,7 +895,9 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight_unit: 'lb',
         sets: 3,
         repetitions: 12,
-        additional_info: 'Rest pause - 12/8/6'
+        additional_info: 'Rest pause - 12/8/6',
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       }
     ]
   },
@@ -872,7 +912,9 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight: 15,
         weight_unit: 'kg/lado',
         sets: 3,
-        repetitions: 10
+        repetitions: 10,
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       },
       {
         exercise_series_id: '557b1d89-5b7e-450b-9998-42587d027732',
@@ -882,7 +924,9 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight_unit: 'kg/lado',
         sets: 3,
         repetitions: 12,
-        additional_info: 'Rest pause - 12/8/6'
+        additional_info: 'Rest pause - 12/8/6',
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       },
       {
         exercise_series_id: '920f81e7-f209-4397-ba3c-90592e063046',
@@ -891,7 +935,9 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight: 80,
         weight_unit: 'lb',
         sets: 3,
-        repetitions: 10
+        repetitions: 10,
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       }
     ]
   },
@@ -908,7 +954,9 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight_unit: 'lb',
         sets: 3,
         repetitions: 10,
-        additional_info: 'Semi inclinado'
+        additional_info: 'Semi inclinado',
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       },
       {
         exercise_series_id: 'ee96f631-660a-4701-be63-53210b904638',
@@ -916,7 +964,9 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         type: 'individual',
         variation: 'Agarre cerrado',
         sets: 4,
-        additional_info: 'Hasta el fallo'
+        additional_info: 'Hasta el fallo',
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       }
     ]
   },
@@ -933,7 +983,9 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight_unit: 'kg/lado',
         sets: 3,
         repetitions: 12,
-        additional_info: 'Rest pause - 12/8/6'
+        additional_info: 'Rest pause - 12/8/6',
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       }
     ]
   },
@@ -948,7 +1000,9 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight: 50,
         weight_unit: 'lb',
         sets: 3,
-        repetitions: 10
+        repetitions: 10,
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       },
       {
         exercise_series_id: '5d423e50-cf0b-4ef0-b542-a1e1496f5583',
@@ -958,7 +1012,9 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight_unit: 'lb',
         sets: 3,
         repetitions: 10,
-        additional_info: 'Rest pause - 10/8'
+        additional_info: 'Rest pause - 10/8',
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       },
       {
         exercise_series_id: 'e6689f5b-9947-44cd-8b84-801a48e19c8b',
@@ -967,7 +1023,9 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight: 80,
         weight_unit: 'lb',
         sets: 3,
-        repetitions: 10
+        repetitions: 10,
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       },
       {
         exercise_series_id: '965eb539-4541-4d4a-bbd6-d07f90b5bb29',
@@ -976,7 +1034,9 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight: 100,
         weight_unit: 'lb',
         sets: 3,
-        repetitions: 10
+        repetitions: 10,
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       }
     ]
   },
@@ -992,7 +1052,9 @@ export const WORKOUT_SESSION: WorkoutSession[] = [
         weight_unit: 'lb',
         sets: 3,
         repetitions: 12,
-        additional_info: 'Rest pause - 12/8/6'
+        additional_info: 'Rest pause - 12/8/6',
+        rest_between_sets: 120,
+        rest_after_exercise: 120
       }
     ]
   }
