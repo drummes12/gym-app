@@ -1,19 +1,51 @@
 import { Pause } from '@/icons/pause'
 import { Play } from '@/icons/play'
-import { useWorkoutStore } from '@/store/workoutStore'
+import { useTimerStore } from '@/store/timerStore'
+import { useWorkoutSessionStore } from '@/store/workoutSessionStore'
+import { useUIStore } from '@/store/uiStore'
+import { REST_AFTER_EXERCISE, REST_BETWEEN_SETS } from '@/constants'
 
 export function PlayRest({ size = 'sm' }) {
-  const { currentExercise, isRest, setIsRest, hideDialog } = useWorkoutStore(
-    (state) => state
-  )
-  const { currentSet, sets, rest_between_sets, rest_after_exercise } =
-    currentExercise ?? {}
+  const { isRest, isPaused, startTimer, pauseTimer, resumeTimer } =
+    useTimerStore()
+  const { currentExercise, nextSet } = useWorkoutSessionStore()
+  const { closeAllDialogs, openDialog } = useUIStore()
+
+  const { currentSet, completedSets, exercise } = currentExercise ?? {}
+  const { rest_between_sets, rest_after_exercise } = exercise ?? {}
 
   const handleClick = () => {
-    if (currentSet && sets && currentSet > sets) return
-    if (!rest_between_sets || !rest_after_exercise) return
-    setIsRest(!isRest)
-    hideDialog()
+    if (!currentExercise || !exercise) return
+
+    const totalSets = exercise.sets || completedSets?.length || 0
+    if (currentSet !== undefined && currentSet >= totalSets) return
+
+    if (!rest_between_sets && !rest_after_exercise) return
+
+    if (isRest) {
+      if (isPaused) {
+        resumeTimer()
+      } else {
+        pauseTimer()
+      }
+    } else {
+      // Determine which rest time to use based on current set
+      const totalSets = exercise.sets || completedSets?.length || 0
+      const isLastSet = currentSet !== undefined && currentSet >= totalSets - 1
+
+      const restTime = isLastSet
+        ? rest_after_exercise || REST_AFTER_EXERCISE
+        : rest_between_sets || REST_BETWEEN_SETS
+
+      // Start timer with completion callback
+      startTimer(restTime, () => {
+        // Open dialog when timer completes
+        openDialog('exerciseDetails')
+        nextSet()
+      })
+    }
+
+    closeAllDialogs()
   }
 
   let sizeButton = 'size-12'
@@ -31,17 +63,20 @@ export function PlayRest({ size = 'sm' }) {
 
   return (
     <button
-      className={`${sizeButton} aspect-square transition sm:hover:scale-110
-      flex items-center justify-center sm:border-2 rounded-full p-4 backdrop-blur-sm
-      bg-neon-dark text-neon dark:bg-neon dark:text-zinc-800
-      sm:text-neon-dark sm:bg-white/10 sm:border-neon-dark/40
-      sm:hover:bg-neon-dark sm:hover:text-neon
-      dark:sm:text-neon dark:sm:bg-dark/10 dark:sm:border-neon/40 
-      dark:sm:hover:bg-neon dark:sm:hover:text-zinc-800
+      className={`${sizeButton} aspect-square transition-all duration-200 sm:hover:scale-110
+      flex items-center justify-center border-2 rounded-full p-4 backdrop-blur-sm
+      bg-neon-dark text-neon border-neon-dark/40
+      dark:bg-neon dark:text-zinc-800 dark:border-neon/40
+      sm:hover:bg-neon-dark sm:hover:text-neon sm:hover:border-neon-dark
+      dark:sm:hover:bg-neon dark:sm:hover:text-zinc-800 dark:sm:hover:border-neon
       `}
       onClick={handleClick}
     >
-      {isRest ? <Pause className={sizeIcon} /> : <Play className={sizeIcon} />}
+      {isRest && !isPaused ? (
+        <Pause className={sizeIcon} />
+      ) : (
+        <Play className={sizeIcon} />
+      )}
     </button>
   )
 }

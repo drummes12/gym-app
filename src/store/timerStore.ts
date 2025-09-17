@@ -1,15 +1,20 @@
 import { REST_BETWEEN_SETS } from '@/constants'
 import { create } from 'zustand'
+import { playSound } from '@/services/audioNotification'
 
 interface TimerStoreState {
   // Timer state
   isRest: boolean
+  isPaused: boolean
   timeRest: number
   intervalId: NodeJS.Timeout | null
+  onCompleteCallback: (() => void) | null
 
   // Timer actions
   setIsRest: (isRest: boolean) => void
-  startTimer: (duration?: number) => void
+  startTimer: (duration?: number, onComplete?: () => void) => void
+  pauseTimer: () => void
+  resumeTimer: () => void
   stopTimer: () => void
   resetTimer: () => void
 
@@ -21,8 +26,10 @@ interface TimerStoreState {
 export const useTimerStore = create<TimerStoreState>((set, get) => ({
   // Initial state
   isRest: false,
+  isPaused: false,
   timeRest: REST_BETWEEN_SETS,
   intervalId: null,
+  onCompleteCallback: null,
 
   // Actions
   setIsRest: (isRest: boolean) => {
@@ -35,7 +42,7 @@ export const useTimerStore = create<TimerStoreState>((set, get) => ({
     set({ isRest })
   },
 
-  startTimer: (duration = REST_BETWEEN_SETS) => {
+  startTimer: (duration = REST_BETWEEN_SETS, onComplete?: () => void) => {
     const { stopTimer } = get()
 
     // Clear any existing timer
@@ -43,13 +50,27 @@ export const useTimerStore = create<TimerStoreState>((set, get) => ({
 
     set({
       timeRest: duration,
-      isRest: true
+      isRest: true,
+      onCompleteCallback: onComplete || null
     })
 
     const intervalId = setInterval(() => {
-      const { timeRest } = get()
+      const { timeRest, onCompleteCallback } = get()
 
       if (timeRest <= 1) {
+        try {
+          playSound()
+        } catch (error) {
+          console.warn('Could not play sound:', error)
+        }
+
+        // Execute custom completion callback if provided
+        if (onCompleteCallback) {
+          onCompleteCallback()
+        } else {
+          console.warn('⚠️ No completion callback provided')
+        }
+
         get().stopTimer()
         set({ isRest: false })
         return
@@ -68,6 +89,47 @@ export const useTimerStore = create<TimerStoreState>((set, get) => ({
       clearInterval(intervalId)
       set({ intervalId: null })
     }
+    set({ isPaused: false, onCompleteCallback: null })
+  },
+
+  pauseTimer: () => {
+    const { intervalId } = get()
+
+    if (intervalId) {
+      clearInterval(intervalId)
+      set({ intervalId: null, isPaused: true })
+    }
+  },
+
+  resumeTimer: () => {
+    const { isPaused, timeRest } = get()
+
+    if (!isPaused) return
+
+    const intervalId = setInterval(() => {
+      const { timeRest, onCompleteCallback } = get()
+
+      if (timeRest <= 1) {
+        try {
+          playSound()
+        } catch (error) {
+          console.warn('Could not play sound:', error)
+        }
+
+        // Execute custom completion callback if provided
+        if (onCompleteCallback) {
+          onCompleteCallback()
+        }
+
+        get().stopTimer()
+        set({ isRest: false })
+        return
+      }
+
+      set({ timeRest: timeRest - 1 })
+    }, 1000)
+
+    set({ intervalId, isPaused: false })
   },
 
   resetTimer: () => {
@@ -76,7 +138,9 @@ export const useTimerStore = create<TimerStoreState>((set, get) => ({
     stopTimer()
     set({
       timeRest: REST_BETWEEN_SETS,
-      isRest: false
+      isRest: false,
+      isPaused: false,
+      onCompleteCallback: null
     })
   },
 

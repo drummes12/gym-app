@@ -1,32 +1,45 @@
 import { useEffect } from 'react'
 import styles from '@/components/dialog-complete/dialog-complete.module.css'
-import { useWorkoutStore } from '@/store/workoutStore'
+import { useWorkoutSessionStore } from '@/store/workoutSessionStore'
+import { useTimerStore } from '@/store/timerStore'
+import { useUIStore } from '@/store/uiStore'
 import { Close } from '@/icons/close.jsx'
 import { PlayRest } from '@/components/play-rest'
 import { timeFormatted } from '@/lib/time'
 import confetti from 'canvas-confetti'
 
 export function DialogComplete() {
-  const {
-    currentExercise,
-    nextExercise,
-    controlTime,
-    setDialogElement,
-    setDialogConfetti,
-    hideDialog
-  } = useWorkoutStore((state) => state)
+  const { currentExercise, currentWorkoutSession, currentExerciseIndex } = useWorkoutSessionStore()
+  const { timeRest } = useTimerStore()
+  const { dialogs, closeAllDialogs } = useUIStore()
 
   useEffect(() => {
+    if (!dialogs.exerciseDetails) return
+    
     const $dialog = document.querySelector('dialog')
-    if (!$dialog) return
+    if (!$dialog) {
+      return
+    }
+
+    // Open the dialog when exerciseDetails becomes true
+    if (!$dialog.open) {
+      $dialog.showModal()
+    } else {
+    }
 
     $dialog.addEventListener('mousedown', (e) => {
       if (e.target === $dialog) {
-        hideDialog()
+        closeAllDialogs()
       }
     })
-    setDialogElement($dialog)
-  }, [])
+
+    // Close dialog when component unmounts
+    return () => {
+      if ($dialog.open) {
+        $dialog.close()
+      }
+    }
+  }, [dialogs.exerciseDetails, closeAllDialogs])
 
   useEffect(() => {
     const $canvas = document.getElementById(
@@ -38,21 +51,26 @@ export function DialogComplete() {
       resize: true,
       useWorker: true
     })
-    setDialogConfetti(dialogConfetti)
+    // Store confetti instance if needed later
   }, [])
+
+  // Extract exercise data from currentExercise
+  const currentSet = currentExercise?.currentSet ?? 0
+  const totalSets = currentExercise?.exercise?.sets ?? 0
+
+  // Get next exercise
+  const nextExercise = currentWorkoutSession?.exercises_series[currentExerciseIndex + 1]
 
   const {
     title,
-    currentSet,
-    sets = 0,
     repetitions,
     variation,
     weight,
     weight_unit: weightUnit,
     additional_info
-  } = currentExercise ?? {}
+  } = currentExercise?.exercise ?? {}
 
-  const isLastSet = currentSet === sets - 1
+  const isLastSet = currentSet === totalSets - 1
   const statusTitle = isLastSet ? '¡Última Serie!' : '¡Descanso Terminado!'
 
   const wordsTitle = title?.split(' ')
@@ -69,6 +87,11 @@ export function DialogComplete() {
     sizeTitle = 'text-4xl sm:text-5xl'
   } else if (wordLargeTitle.length > 6) {
     sizeTitle = 'text-5xl sm:text-6xl'
+  }
+
+  // Don't render if dialog is not open
+  if (!dialogs.exerciseDetails) {
+    return null
   }
 
   return (
@@ -121,7 +144,7 @@ export function DialogComplete() {
           <p className='flex justify-between font-dseg14 text-neon-dark dark:text-neon text-3xl'>
             <span className='font-dseg14'>
               {currentSet?.toString().padStart(2, '0')}/
-              {sets?.toString().padStart(2, '0')}
+              {totalSets?.toString().padStart(2, '0')}
             </span>
             <span>{repetitions}x</span>
           </p>
@@ -182,10 +205,10 @@ export function DialogComplete() {
               <p className='h-min text-xs pt-2'>Tiempo de control</p>
               <div className='flex flex-col gap-1 items-center justify-center relative text-base leading-none font-dseg14 tracking-tighter text-[#b47200] dark:text-[#fb9f00]'>
                 <p className='flex-1'>
-                  {timeFormatted(controlTime).minutesFormatted}
+                  {timeFormatted(timeRest).minutesFormatted}
                 </p>
                 <p className='flex-1'>
-                  {timeFormatted(controlTime).secondsFormatted}
+                  {timeFormatted(timeRest).secondsFormatted}
                 </p>
               </div>
             </div>

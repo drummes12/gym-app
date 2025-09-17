@@ -1,33 +1,54 @@
 import { useEffect, useState } from 'react'
 
 import styles from './player-bar.module.css'
-import { useWorkoutStore } from '@/store/workoutStore'
+import { useTimerStore } from '@/store/timerStore'
+import { useWorkoutSessionStore } from '@/store/workoutSessionStore'
 import { timeFormatted } from '@/lib/time'
 import { PlayRest } from '@/components/play-rest'
+import { REST_AFTER_EXERCISE, REST_BETWEEN_SETS } from '@/constants'
 
 export function PlayerBar() {
-  const { timeRest, currentRestDuration, currentExercise, isRest, startTimer } =
-    useWorkoutStore((state) => state)
+  const { timeRest, isRest, resetTimer } = useTimerStore()
+  const { currentExercise } = useWorkoutSessionStore()
   const [isVisible, setIsVisible] = useState(currentExercise != null)
 
+  // Initialize timer display with correct duration when exercise changes
   useEffect(() => {
-    if (isRest) startTimer()
-  }, [isRest, startTimer])
+    if (currentExercise && !isRest) {
+      resetTimer()
+    }
+  }, [currentExercise, isRest, resetTimer])
 
   useEffect(() => {
     setIsVisible(currentExercise != null)
   }, [currentExercise])
 
+  const exercise = currentExercise?.exercise
   const {
     title,
     variation,
     repetitions,
-    currentSet,
-    sets,
     weight,
     weight_unit: weightUnit,
-    additional_info: additionalInfo
-  } = currentExercise ?? {}
+    additional_info: additionalInfo,
+    sets
+  } = exercise ?? {}
+
+  const { currentSet, completedSets } = currentExercise ?? {}
+  const totalSets = sets || completedSets?.length || 0
+
+  // Calculate current rest duration based on current set (same logic as PlayRest)
+  const isLastSet = currentSet !== undefined && currentSet >= totalSets - 1
+  const currentRestDuration = isLastSet
+    ? exercise?.rest_after_exercise || REST_BETWEEN_SETS
+    : exercise?.rest_between_sets || REST_AFTER_EXERCISE
+
+  // Update timer display when currentRestDuration changes
+  useEffect(() => {
+    if (currentExercise && !isRest) {
+      useTimerStore.setState({ timeRest: currentRestDuration })
+    }
+  }, [currentExercise, currentRestDuration, isRest])
 
   return (
     <div
@@ -57,9 +78,9 @@ export function PlayerBar() {
       </div>
 
       {currentSet !== undefined &&
-        sets !== undefined &&
-        sets > 0 &&
-        currentSet < sets && (
+        totalSets !== undefined &&
+        totalSets > 0 &&
+        currentSet < totalSets && (
           <div
             className={`${styles['text-player']} absolute h-full left-0 top-0 opacity-70 flex items-center justify-center font-semibold gap-1 text-4xl leading-none font-dseg14 text-neon-dark dark:text-neon`}
           >
@@ -73,7 +94,7 @@ export function PlayerBar() {
               <p className='flex-1'>
                 {currentSet?.toString().padStart(2, '0')}
               </p>
-              <p className='flex-1'>{sets?.toString().padStart(2, '0')}</p>
+              <p className='flex-1'>{totalSets?.toString().padStart(2, '0')}</p>
             </div>
             <p className='text-xs'>{repetitions}x</p>
           </div>

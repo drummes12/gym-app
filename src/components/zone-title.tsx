@@ -1,17 +1,29 @@
 import { useEffect, useState } from 'react'
 import type { BodyZones } from '@/types/GymTracker'
 import { fetchJson } from '@/services'
-import { useWorkoutStore } from '@/store/workoutStore'
+import { useDataStore } from '@/store/dataStore'
 
 export function ZoneTitle({ zone_id }: { zone_id: string }) {
-  const { getBodyZone } = useWorkoutStore()
+  const { bodyZones, getBodyZones, getBodyZone } = useDataStore()
   const [zone, setZone] = useState<BodyZones | undefined>()
 
   useEffect(() => {
+    // Check if zone is already in cache
+    const cachedZone = bodyZones?.get(zone_id)
+    if (cachedZone) {
+      setZone(cachedZone)
+      return
+    }
+
+    // Try to get the specific zone first
     getBodyZone(zone_id)
-      .then((zoneTitle) => setZone(zoneTitle))
-      .catch((error) => console.error(error))
-  }, [])
+      .then((loadedZone) => {
+        if (loadedZone) {
+          setZone(loadedZone)
+        }
+      })
+      .catch((error: unknown) => console.error(error))
+  }, [zone_id, bodyZones, getBodyZone])
 
   if (!zone) return null
 

@@ -3,21 +3,24 @@ import { ZoneTitle } from '@/components/zone-title'
 
 import type { UUID } from '@/types/GymTracker'
 import { ExerciseCard } from '@/components/exercise-card'
-import { useWorkoutStore } from '@/store/workoutStore'
+import { useDataStore } from '@/store/dataStore'
 
 export function WorkoutDay({ workoutDayId }: { workoutDayId: UUID }) {
-  const { loading, setWorkoutDay, workoutSessions } = useWorkoutStore()
+  const { loading, setWorkoutDay, workoutSessions } = useDataStore()
 
   useEffect(() => {
     setWorkoutDay(workoutDayId)
-  }, [workoutDayId])
+  }, [workoutDayId, setWorkoutDay])
+
+  // Convert Map to Array and sort
+  const workoutSessionsArray = workoutSessions ? Array.from(workoutSessions.values()) : []
 
   return (
     <>
-      {loading && <div className='loader mx-auto mt-20'></div>}
-      {!loading &&
-        Array.isArray(workoutSessions) &&
-        workoutSessions
+      {loading.workoutSessions && <div className='loader mx-auto mt-20'></div>}
+      {!loading.workoutSessions &&
+        workoutSessionsArray.length > 0 &&
+        workoutSessionsArray
           .sort((a, b) => {
             if (a.sequence != null && b.sequence != null) {
               return a.sequence - b.sequence

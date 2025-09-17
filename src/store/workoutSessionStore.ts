@@ -183,6 +183,9 @@ export const useWorkoutSessionStore = create<WorkoutSessionStoreState>(
             currentSet: nextSetIndex
           }
         })
+      } else {
+        // Si ya estamos en el último set, pasar al siguiente ejercicio
+        get().nextExercise()
       }
     },
 
