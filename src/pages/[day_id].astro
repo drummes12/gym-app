@@ -11,5 +11,5 @@ if (!day_id) {
 ---
 
 <Layout title={title}>
-  <WorkoutDay client:load workoutDayId={day_id} />
+  <WorkoutDay client:load workoutDayId={day_id} transition:name={`workout-day-${day_id}`} />
 </Layout>

@@ -10,7 +10,7 @@ import { REST_AFTER_EXERCISE, REST_BETWEEN_SETS } from '@/constants'
 export function PlayerBar() {
   const { timeRest, isRest, resetTimer } = useTimerStore()
   const { currentExercise } = useWorkoutSessionStore()
-  const [isVisible, setIsVisible] = useState(currentExercise != null)
+  const [isVisible, setIsVisible] = useState(false)
 
   // Initialize timer display with correct duration when exercise changes
   useEffect(() => {
@@ -19,6 +19,7 @@ export function PlayerBar() {
     }
   }, [currentExercise, isRest, resetTimer])
 
+  // Update visibility immediately when currentExercise changes
   useEffect(() => {
     setIsVisible(currentExercise != null)
   }, [currentExercise])
