@@ -10,12 +10,23 @@ import confetti from 'canvas-confetti'
 
 export function DialogComplete() {
   const { currentExercise, currentWorkoutSession, currentExerciseIndex } = useWorkoutSessionStore()
-  const { timeRest } = useTimerStore()
+  const {
+    isRest,
+    controlTime,
+    startControlTimer,
+    pauseControlTimer,
+    resumeControlTimer,
+    stopControlTimer
+  } = useTimerStore()
   const { dialogs, closeAllDialogs } = useUIStore()
 
   useEffect(() => {
-    if (!dialogs.exerciseDetails) return
-    
+    if (!dialogs.exerciseDetails) {
+      // Stop control timer when dialog closes
+      stopControlTimer()
+      return
+    }
+
     const $dialog = document.querySelector('dialog')
     if (!$dialog) {
       return
@@ -24,7 +35,8 @@ export function DialogComplete() {
     // Open the dialog when exerciseDetails becomes true
     if (!$dialog.open) {
       $dialog.showModal()
-    } else {
+      // Start control timer when dialog opens
+      startControlTimer()
     }
 
     $dialog.addEventListener('mousedown', (e) => {
@@ -38,8 +50,23 @@ export function DialogComplete() {
       if ($dialog.open) {
         $dialog.close()
       }
+      stopControlTimer()
     }
-  }, [dialogs.exerciseDetails, closeAllDialogs])
+  }, [
+    dialogs.exerciseDetails,
+    closeAllDialogs,
+    startControlTimer,
+    stopControlTimer
+  ])
+
+  // Control timer pause/resume based on rest state
+  useEffect(() => {
+    if (isRest) {
+      pauseControlTimer()
+    } else {
+      resumeControlTimer()
+    }
+  }, [isRest, pauseControlTimer, resumeControlTimer])
 
   useEffect(() => {
     const $canvas = document.getElementById(
@@ -59,7 +86,8 @@ export function DialogComplete() {
   const totalSets = currentExercise?.exercise?.sets ?? 0
 
   // Get next exercise
-  const nextExercise = currentWorkoutSession?.exercises_series[currentExerciseIndex + 1]
+  const nextExercise =
+    currentWorkoutSession?.exercises_series[currentExerciseIndex + 1]
 
   const {
     title,
@@ -205,10 +233,10 @@ export function DialogComplete() {
               <p className='h-min text-xs pt-2'>Tiempo de control</p>
               <div className='flex flex-col gap-1 items-center justify-center relative text-base leading-none font-dseg14 tracking-tighter text-[#b47200] dark:text-[#fb9f00]'>
                 <p className='flex-1'>
-                  {timeFormatted(timeRest).minutesFormatted}
+                  {timeFormatted(controlTime).minutesFormatted}
                 </p>
                 <p className='flex-1'>
-                  {timeFormatted(timeRest).secondsFormatted}
+                  {timeFormatted(controlTime).secondsFormatted}
                 </p>
               </div>
             </div>

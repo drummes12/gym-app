@@ -10,6 +10,11 @@ interface TimerStoreState {
   intervalId: NodeJS.Timeout | null
   onCompleteCallback: (() => void) | null
 
+  // Control timer state (independent background timer)
+  controlTime: number
+  controlIntervalId: NodeJS.Timeout | null
+  isControlPaused: boolean
+
   // Timer actions
   setIsRest: (isRest: boolean) => void
   startTimer: (duration?: number, onComplete?: () => void) => void
@@ -17,6 +22,13 @@ interface TimerStoreState {
   resumeTimer: () => void
   stopTimer: () => void
   resetTimer: () => void
+
+  // Control timer actions
+  startControlTimer: () => void
+  pauseControlTimer: () => void
+  resumeControlTimer: () => void
+  stopControlTimer: () => void
+  resetControlTimer: () => void
 
   // Timer utilities
   formatTime: (seconds: number) => string
@@ -30,6 +42,11 @@ export const useTimerStore = create<TimerStoreState>((set, get) => ({
   timeRest: REST_BETWEEN_SETS,
   intervalId: null,
   onCompleteCallback: null,
+
+  // Control timer initial state
+  controlTime: 0,
+  controlIntervalId: null,
+  isControlPaused: false,
 
   // Actions
   setIsRest: (isRest: boolean) => {
@@ -141,6 +158,62 @@ export const useTimerStore = create<TimerStoreState>((set, get) => ({
       isRest: false,
       isPaused: false,
       onCompleteCallback: null
+    })
+  },
+
+  // Control timer actions
+  startControlTimer: () => {
+    const { stopControlTimer } = get()
+    
+    // Clear any existing control timer
+    stopControlTimer()
+    
+    set({ 
+      controlTime: 0,
+      isControlPaused: false
+    })
+
+    const intervalId = setInterval(() => {
+      const { isControlPaused } = get()
+      
+      if (!isControlPaused) {
+        set((state) => ({ 
+          controlTime: state.controlTime + 1 
+        }))
+      }
+    }, 1000)
+
+    set({ controlIntervalId: intervalId })
+  },
+
+  pauseControlTimer: () => {
+    set({ isControlPaused: true })
+  },
+
+  resumeControlTimer: () => {
+    set({ isControlPaused: false })
+  },
+
+  stopControlTimer: () => {
+    const { controlIntervalId } = get()
+    
+    if (controlIntervalId) {
+      clearInterval(controlIntervalId)
+    }
+    
+    set({ 
+      controlIntervalId: null,
+      isControlPaused: false
+    })
+  },
+
+  resetControlTimer: () => {
+    const { stopControlTimer } = get()
+    
+    stopControlTimer()
+    set({ 
+      controlTime: 0,
+      isControlPaused: false
     })
   },
 
