@@ -37,7 +37,7 @@ export interface WorkoutStoreState {
   isRest: boolean
   timeRest: number
   controlTime: number
-  intervalIdControlTime: number | null
+  intervalIdControlTime: NodeJS.Timeout | null
   dialogElement: HTMLDialogElement | null
   dialogConfetti: ReturnType<typeof confetti.create> | null
 
@@ -78,7 +78,7 @@ export interface WorkoutStoreState {
   ) => void
   showDialog: () => void
   hideDialog: () => void
-  startControlTime: () => number
+  startControlTime: () => NodeJS.Timeout
 }
 
 export const useWorkoutStore = create<WorkoutStoreState>((set, get) => ({
