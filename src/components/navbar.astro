@@ -3,23 +3,27 @@ import { fetchJson } from '@/services'
 import type { WorkoutDayResponse } from '@/types/GymTracker'
 
 const url = Astro.url
-const [, dayId] = url.pathname.split('/')
-
-const endpointWorkout = new URL(`/api/workouts/${dayId}`, Astro.url)
-let workoutDay: WorkoutDayResponse
-
-try {
-  workoutDay = await fetchJson(endpointWorkout)
-} catch (error) {
-  return new Response(null, {
-    status: 404,
-    statusText: 'Not Found'
-  })
-}
+const pathSegments = url.pathname.split('/')
+const isWorkoutPage = pathSegments[1] === 'workouts'
+const dayId = isWorkoutPage ? pathSegments[2] : null
 
 let title_day = ''
-if ('title' in workoutDay) {
-  title_day = workoutDay.title
+
+if (isWorkoutPage && dayId) {
+  const endpointWorkout = new URL(`/api/workouts/${dayId}`, Astro.url)
+  let workoutDay: WorkoutDayResponse
+
+  try {
+    workoutDay = await fetchJson(endpointWorkout)
+    if ('title' in workoutDay) {
+      title_day = workoutDay.title
+    }
+  } catch (error) {
+    return new Response(null, {
+      status: 404,
+      statusText: 'Not Found'
+    })
+  }
 }
 ---
 

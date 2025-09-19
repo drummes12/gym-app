@@ -13,7 +13,7 @@ interface Props {
 
 const { href, title, workoutSessions } = Astro.props
 
-const [, day] = href.split('/')
+const [, , day] = href.split('/')
 
 const zonesAbbr = workoutSessions?.map(({ workout_id }) => {
   const endpointWorkoutSession = new URL(

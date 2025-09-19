@@ -17,7 +17,7 @@ const workoutsDay: WorkoutDays[] = await fetch(endpointWorkout).then((res) =>
     {
       workoutsDay.map((workout) => (
         <DayCard
-          href={`/${workout.id}`}
+          href={`/workouts/${workout.id}`}
           title={workout.title}
           workoutSessions={workout.workout_sessions}
         />

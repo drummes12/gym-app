@@ -9,7 +9,7 @@ import { useWorkoutSessionStore } from '@/store/workoutSessionStore'
 export function WorkoutDay({ workoutDayId }: { workoutDayId: UUID }) {
   const { loading, setWorkoutDay, workoutSessions, currentWorkoutDay } =
     useDataStore()
-  const { currentExercise, setWorkoutDay: setWorkoutSessionDay } = useWorkoutSessionStore()
+  const { setWorkoutDay: setWorkoutSessionDay } = useWorkoutSessionStore()
 
   useEffect(() => {
     // Only load new day data, don't reset active session
@@ -23,8 +23,14 @@ export function WorkoutDay({ workoutDayId }: { workoutDayId: UUID }) {
         .map((daySession) => workoutSessions.get(daySession.workout_id))
         .filter((session) => session !== undefined)
         .sort((a, b) => {
-          const seqA = currentWorkoutDay.workout_sessions.find(s => s.workout_id === a!.id)?.sequence || 0
-          const seqB = currentWorkoutDay.workout_sessions.find(s => s.workout_id === b!.id)?.sequence || 0
+          const seqA =
+            currentWorkoutDay.workout_sessions.find(
+              (s) => s.workout_id === a!.id
+            )?.sequence || 0
+          const seqB =
+            currentWorkoutDay.workout_sessions.find(
+              (s) => s.workout_id === b!.id
+            )?.sequence || 0
           return seqA - seqB
         }) as WorkoutSession[]
 
@@ -33,9 +39,6 @@ export function WorkoutDay({ workoutDayId }: { workoutDayId: UUID }) {
       }
     }
   }, [currentWorkoutDay, workoutSessions, setWorkoutSessionDay])
-
-  // Show message if user has active session but is viewing different day
-  const hasActiveSession = currentExercise !== null
 
   // Filter and sort workout sessions to show only those belonging to current day
   const workoutSessionsArray =
@@ -52,13 +55,6 @@ export function WorkoutDay({ workoutDayId }: { workoutDayId: UUID }) {
 
   return (
     <>
-      {hasActiveSession && (
-        <div className='absolute top-4 right-0 bg-green-500/20 border border-green-400/50 rounded-lg px-3 py-1 mb-4 text-green-100'>
-          <p className='text-sm text-green-400'>
-            &bull; Tienes una sesión activa
-          </p>
-        </div>
-      )}
       {loading.workoutSessions && <div className='loader mx-auto mt-20'></div>}
       {!loading.workoutSessions &&
         workoutSessionsArray.length > 0 &&
