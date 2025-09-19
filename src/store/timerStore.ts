@@ -9,11 +9,21 @@ interface TimerStoreState {
   timeRest: number
   intervalId: number | null
   onCompleteCallback: (() => void) | null
+  
+  // Timestamp validation for rest timer
+  restStartTime: number | null
+  restDuration: number
+  restPausedTime: number // Total time paused
 
   // Control timer state (independent background timer)
   controlTime: number
   controlIntervalId: number | null
   isControlPaused: boolean
+  
+  // Timestamp validation for control timer
+  controlStartTime: number | null
+  controlPausedTime: number // Total time paused
+  controlLastPauseTime: number | null
 
   // Timer actions
   setIsRest: (isRest: boolean) => void
@@ -33,6 +43,10 @@ interface TimerStoreState {
   // Timer utilities
   formatTime: (seconds: number) => string
   getTimeRemaining: () => number
+  
+  // Validation utilities
+  validateRestTimer: () => void
+  validateControlTimer: () => void
 }
 
 export const useTimerStore = create<TimerStoreState>((set, get) => ({
@@ -42,11 +56,21 @@ export const useTimerStore = create<TimerStoreState>((set, get) => ({
   timeRest: REST_BETWEEN_SETS,
   intervalId: null,
   onCompleteCallback: null,
+  
+  // Timestamp validation initial state
+  restStartTime: null,
+  restDuration: 0,
+  restPausedTime: 0,
 
   // Control timer initial state
   controlTime: 0,
   controlIntervalId: null,
   isControlPaused: false,
+  
+  // Control timer timestamp validation initial state
+  controlStartTime: null,
+  controlPausedTime: 0,
+  controlLastPauseTime: null,
 
   // Actions
   setIsRest: (isRest: boolean) => {
@@ -65,16 +89,25 @@ export const useTimerStore = create<TimerStoreState>((set, get) => ({
     // Clear any existing timer
     stopTimer()
 
+    const now = Date.now()
     set({
       timeRest: duration,
       isRest: true,
-      onCompleteCallback: onComplete || null
+      onCompleteCallback: onComplete || null,
+      restStartTime: now,
+      restDuration: duration,
+      restPausedTime: 0
     })
 
     const intervalId = window.setInterval(() => {
-      const { timeRest, onCompleteCallback } = get()
+      const { validateRestTimer, timeRest, onCompleteCallback } = get()
+      
+      // Validate timer against real time
+      validateRestTimer()
+      
+      const currentState = get()
 
-      if (timeRest <= 1) {
+      if (currentState.timeRest <= 1) {
         try {
           playSound()
         } catch (error) {
@@ -93,7 +126,10 @@ export const useTimerStore = create<TimerStoreState>((set, get) => ({
         return
       }
 
-      set({ timeRest: timeRest - 1 })
+      // Only decrement if we haven't already updated via validation
+      if (currentState.timeRest === timeRest) {
+        set({ timeRest: timeRest - 1 })
+      }
     }, 1000)
 
     set({ intervalId })
@@ -106,15 +142,33 @@ export const useTimerStore = create<TimerStoreState>((set, get) => ({
       clearInterval(intervalId)
       set({ intervalId: null })
     }
-    set({ isPaused: false, onCompleteCallback: null })
+    set({ 
+      isPaused: false, 
+      onCompleteCallback: null,
+      restStartTime: null,
+      restDuration: 0,
+      restPausedTime: 0
+    })
   },
 
   pauseTimer: () => {
-    const { intervalId } = get()
+    const { intervalId, restStartTime } = get()
 
     if (intervalId) {
       clearInterval(intervalId)
-      set({ intervalId: null, isPaused: true })
+      
+      // Calculate and store paused time
+      if (restStartTime) {
+        const now = Date.now()
+        const { restPausedTime } = get()
+        set({ 
+          intervalId: null, 
+          isPaused: true,
+          restPausedTime: restPausedTime + (now - restStartTime)
+        })
+      } else {
+        set({ intervalId: null, isPaused: true })
+      }
     }
   },
 
@@ -123,10 +177,19 @@ export const useTimerStore = create<TimerStoreState>((set, get) => ({
 
     if (!isPaused) return
 
-    const intervalId = window.setInterval(() => {
-      const { timeRest, onCompleteCallback } = get()
+    // Reset start time to current time when resuming
+    const now = Date.now()
+    set({ restStartTime: now })
 
-      if (timeRest <= 1) {
+    const intervalId = window.setInterval(() => {
+      const { validateRestTimer, timeRest, onCompleteCallback } = get()
+      
+      // Validate timer against real time
+      validateRestTimer()
+      
+      const currentState = get()
+
+      if (currentState.timeRest <= 1) {
         try {
           playSound()
         } catch (error) {
@@ -143,7 +206,10 @@ export const useTimerStore = create<TimerStoreState>((set, get) => ({
         return
       }
 
-      set({ timeRest: timeRest - 1 })
+      // Only decrement if we haven't already updated via validation
+      if (currentState.timeRest === timeRest) {
+        set({ timeRest: timeRest - 1 })
+      }
     }, 1000)
 
     set({ intervalId, isPaused: false })
@@ -157,7 +223,10 @@ export const useTimerStore = create<TimerStoreState>((set, get) => ({
       timeRest: REST_BETWEEN_SETS,
       isRest: false,
       isPaused: false,
-      onCompleteCallback: null
+      onCompleteCallback: null,
+      restStartTime: null,
+      restDuration: 0,
+      restPausedTime: 0
     })
   },
 
@@ -168,18 +237,29 @@ export const useTimerStore = create<TimerStoreState>((set, get) => ({
     // Clear any existing control timer
     stopControlTimer()
     
+    const now = Date.now()
     set({ 
       controlTime: 0,
-      isControlPaused: false
+      isControlPaused: false,
+      controlStartTime: now,
+      controlPausedTime: 0,
+      controlLastPauseTime: null
     })
 
     const intervalId = window.setInterval(() => {
-      const { isControlPaused } = get()
+      const { isControlPaused, validateControlTimer } = get()
       
       if (!isControlPaused) {
-        set((state) => ({ 
-          controlTime: state.controlTime + 1 
-        }))
+        // Validate timer against real time
+        validateControlTimer()
+        
+        const currentState = get()
+        // Only increment if we haven't already updated via validation
+        if (currentState.controlTime === get().controlTime) {
+          set((state) => ({ 
+            controlTime: state.controlTime + 1 
+          }))
+        }
       }
     }, 1000)
 
@@ -187,11 +267,27 @@ export const useTimerStore = create<TimerStoreState>((set, get) => ({
   },
 
   pauseControlTimer: () => {
-    set({ isControlPaused: true })
+    const now = Date.now()
+    set({ 
+      isControlPaused: true,
+      controlLastPauseTime: now
+    })
   },
 
   resumeControlTimer: () => {
-    set({ isControlPaused: false })
+    const { controlLastPauseTime } = get()
+    const now = Date.now()
+    
+    if (controlLastPauseTime) {
+      const pauseDuration = now - controlLastPauseTime
+      set((state) => ({ 
+        isControlPaused: false,
+        controlPausedTime: state.controlPausedTime + pauseDuration,
+        controlLastPauseTime: null
+      }))
+    } else {
+      set({ isControlPaused: false })
+    }
   },
 
   stopControlTimer: () => {
@@ -203,7 +299,10 @@ export const useTimerStore = create<TimerStoreState>((set, get) => ({
     
     set({ 
       controlIntervalId: null,
-      isControlPaused: false
+      isControlPaused: false,
+      controlStartTime: null,
+      controlPausedTime: 0,
+      controlLastPauseTime: null
     })
   },
 
@@ -213,7 +312,10 @@ export const useTimerStore = create<TimerStoreState>((set, get) => ({
     stopControlTimer()
     set({ 
       controlTime: 0,
-      isControlPaused: false
+      isControlPaused: false,
+      controlStartTime: null,
+      controlPausedTime: 0,
+      controlLastPauseTime: null
     })
   },
 
@@ -227,6 +329,51 @@ export const useTimerStore = create<TimerStoreState>((set, get) => ({
 
   getTimeRemaining: () => {
     return get().timeRest
+  },
+
+  // Validation functions
+  validateRestTimer: () => {
+    const { restStartTime, restDuration, restPausedTime, isPaused } = get()
+    
+    if (!restStartTime || isPaused) return
+    
+    const now = Date.now()
+    const elapsedMs = now - restStartTime - restPausedTime
+    const elapsedSeconds = Math.floor(elapsedMs / 1000)
+    const expectedTimeRemaining = Math.max(0, restDuration - elapsedSeconds)
+    
+    // If there's a significant difference (more than 2 seconds), sync with real time
+    const currentTimeRest = get().timeRest
+    if (Math.abs(currentTimeRest - expectedTimeRemaining) > 2) {
+      console.warn(`Timer sync: Expected ${expectedTimeRemaining}s, had ${currentTimeRest}s`)
+      set({ timeRest: expectedTimeRemaining })
+    }
+  },
+
+  validateControlTimer: () => {
+    const { controlStartTime, controlPausedTime, isControlPaused } = get()
+    
+    if (!controlStartTime) return
+    
+    const now = Date.now()
+    let elapsedMs = now - controlStartTime - controlPausedTime
+    
+    // If currently paused, don't count time since last pause
+    if (isControlPaused) {
+      const { controlLastPauseTime } = get()
+      if (controlLastPauseTime) {
+        elapsedMs = controlLastPauseTime - controlStartTime - controlPausedTime
+      }
+    }
+    
+    const elapsedSeconds = Math.floor(elapsedMs / 1000)
+    const currentControlTime = get().controlTime
+    
+    // If there's a significant difference (more than 2 seconds), sync with real time
+    if (Math.abs(currentControlTime - elapsedSeconds) > 2) {
+      console.warn(`Control timer sync: Expected ${elapsedSeconds}s, had ${currentControlTime}s`)
+      set({ controlTime: elapsedSeconds })
+    }
   }
 }))
 
